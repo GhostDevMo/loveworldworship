@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Poppins-Bold.otf">
+            <string>Poppins-Bold</string>
+        </array>
+        <array key="Poppins-Regular.otf">
+            <string>Poppins-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="" id="fZP-id-ksh" customClass="SearchPlaylist_TableCell" customModule="DeepSoundiOS" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="350" height="160"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="350" height="160"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dlD-8y-uNw">
+                        <rect key="frame" x="0.0" y="0.0" width="350" height="160"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ImagePlacholder" translatesAutoresizingMaskIntoConstraints="NO" id="SJ3-cI-xaU">
+                                <rect key="frame" x="0.0" y="0.0" width="350" height="160"/>
+                            </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kgx-36-VAp">
+                                <rect key="frame" x="0.0" y="0.0" width="350" height="160"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6mP-Qu-CEj">
+                                        <rect key="frame" x="16" y="21" width="326" height="18.5"/>
+                                        <fontDescription key="fontDescription" name="Poppins-Bold" family="Poppins" pointSize="13"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="kj5-YD-oJz">
+                                        <rect key="frame" x="16" y="73.5" width="73" height="15"/>
+                                        <subviews>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="playlist_Music" translatesAutoresizingMaskIntoConstraints="NO" id="yea-cv-5J5">
+                                                <rect key="frame" x="0.0" y="0.0" width="15" height="15"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="15" id="It1-B9-0sB"/>
+                                                    <constraint firstAttribute="width" constant="15" id="OWs-YM-dyA"/>
+                                                </constraints>
+                                            </imageView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="P6R-eK-QTh">
+                                                <rect key="frame" x="20" y="0.0" width="53" height="15"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="08S-lk-tFi">
+                                                        <rect key="frame" x="0.0" y="0.0" width="8" height="15"/>
+                                                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="12"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Songs" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gYb-JB-vUj">
+                                                        <rect key="frame" x="13" y="0.0" width="40" height="15"/>
+                                                        <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="13"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                    </stackView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="NameLabel" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hCS-D7-BgO">
+                                        <rect key="frame" x="16" y="47" width="326" height="18.5"/>
+                                        <fontDescription key="fontDescription" name="Poppins-Bold" family="Poppins" pointSize="13"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.33333333329999998" alpha="0.25837435790000002" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="hCS-D7-BgO" firstAttribute="trailing" secondItem="6mP-Qu-CEj" secondAttribute="trailing" id="32h-ko-wcX"/>
+                                    <constraint firstItem="6mP-Qu-CEj" firstAttribute="leading" secondItem="Kgx-36-VAp" secondAttribute="leading" constant="16" id="6gd-j3-Ied"/>
+                                    <constraint firstItem="hCS-D7-BgO" firstAttribute="leading" secondItem="6mP-Qu-CEj" secondAttribute="leading" id="D3n-8a-hUL"/>
+                                    <constraint firstItem="hCS-D7-BgO" firstAttribute="top" secondItem="6mP-Qu-CEj" secondAttribute="bottom" constant="7.5" id="FJJ-7d-Aec"/>
+                                    <constraint firstAttribute="trailing" secondItem="6mP-Qu-CEj" secondAttribute="trailing" constant="8" id="PsP-3z-upT"/>
+                                    <constraint firstItem="kj5-YD-oJz" firstAttribute="leading" secondItem="6mP-Qu-CEj" secondAttribute="leading" id="RLh-id-fRe"/>
+                                    <constraint firstItem="kj5-YD-oJz" firstAttribute="top" secondItem="hCS-D7-BgO" secondAttribute="bottom" constant="8" id="XlU-Mr-QlB"/>
+                                    <constraint firstItem="6mP-Qu-CEj" firstAttribute="top" secondItem="Kgx-36-VAp" secondAttribute="top" constant="21" id="yEx-6a-I7V"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="SJ3-cI-xaU" firstAttribute="width" secondItem="dlD-8y-uNw" secondAttribute="width" id="H1V-f0-xUx"/>
+                            <constraint firstItem="SJ3-cI-xaU" firstAttribute="centerX" secondItem="dlD-8y-uNw" secondAttribute="centerX" id="HDO-4X-15k"/>
+                            <constraint firstItem="SJ3-cI-xaU" firstAttribute="centerY" secondItem="dlD-8y-uNw" secondAttribute="centerY" id="MNb-vu-9IV"/>
+                            <constraint firstItem="Kgx-36-VAp" firstAttribute="width" secondItem="SJ3-cI-xaU" secondAttribute="width" id="Nhw-Kt-fDy"/>
+                            <constraint firstItem="Kgx-36-VAp" firstAttribute="centerX" secondItem="SJ3-cI-xaU" secondAttribute="centerX" id="eLX-yR-dDX"/>
+                            <constraint firstItem="Kgx-36-VAp" firstAttribute="height" secondItem="SJ3-cI-xaU" secondAttribute="height" id="kp0-Pr-MLz"/>
+                            <constraint firstItem="Kgx-36-VAp" firstAttribute="centerY" secondItem="SJ3-cI-xaU" secondAttribute="centerY" id="vu4-4t-Zeq"/>
+                            <constraint firstItem="SJ3-cI-xaU" firstAttribute="height" secondItem="dlD-8y-uNw" secondAttribute="height" id="yRg-Bw-g4t"/>
+                        </constraints>
+                    </view>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="C74-j8-Utc"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="dlD-8y-uNw" secondAttribute="bottom" id="63D-PZ-Pn5"/>
+                <constraint firstAttribute="trailing" secondItem="dlD-8y-uNw" secondAttribute="trailing" id="RTH-h7-Bla"/>
+                <constraint firstItem="dlD-8y-uNw" firstAttribute="top" secondItem="fZP-id-ksh" secondAttribute="top" id="UQ6-Xt-8cy"/>
+                <constraint firstItem="dlD-8y-uNw" firstAttribute="leading" secondItem="fZP-id-ksh" secondAttribute="leading" id="gs3-Xo-oh8"/>
+            </constraints>
+            <size key="customSize" width="81" height="134"/>
+            <connections>
+                <outlet property="nameLabel" destination="hCS-D7-BgO" id="XgY-MY-J7k"/>
+                <outlet property="songsCountLabel" destination="08S-lk-tFi" id="ykc-Uc-uZ3"/>
+                <outlet property="thumbnailImage" destination="SJ3-cI-xaU" id="Sdc-J6-swr"/>
+                <outlet property="titleLabel" destination="6mP-Qu-CEj" id="6PS-pB-RHj"/>
+            </connections>
+            <point key="canvasLocation" x="88" y="36.881559220389811"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="ImagePlacholder" width="800" height="600"/>
+        <image name="playlist_Music" width="24" height="24"/>
+    </resources>
+</document>

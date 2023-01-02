@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Poppins-Regular.otf">
+            <string>Poppins-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="" id="wow-rG-mgt" customClass="Artist_CollectionCell" customModule="DeepSoundiOS" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vqY-zW-mII">
+                        <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ImagePlacholder" translatesAutoresizingMaskIntoConstraints="NO" id="At8-e6-2Wh">
+                                <rect key="frame" x="25" y="0.0" width="100" height="100"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="AJx-SA-4xw"/>
+                                    <constraint firstAttribute="height" constant="100" id="pox-KX-WC2"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadiusV">
+                                        <real key="value" value="50"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3S6-CI-76N">
+                                <rect key="frame" x="8" y="108" width="134" height="18.5"/>
+                                <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="13"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="3S6-CI-76N" firstAttribute="top" secondItem="At8-e6-2Wh" secondAttribute="bottom" constant="8" id="Lcw-yn-z7A"/>
+                            <constraint firstItem="At8-e6-2Wh" firstAttribute="top" secondItem="vqY-zW-mII" secondAttribute="top" id="aaA-r9-zUJ"/>
+                            <constraint firstItem="3S6-CI-76N" firstAttribute="leading" secondItem="vqY-zW-mII" secondAttribute="leading" constant="8" id="cVj-oo-moz"/>
+                            <constraint firstItem="At8-e6-2Wh" firstAttribute="centerX" secondItem="vqY-zW-mII" secondAttribute="centerX" id="jgA-xP-qrY"/>
+                            <constraint firstAttribute="trailing" secondItem="3S6-CI-76N" secondAttribute="trailing" constant="8" id="ulG-vp-mO2"/>
+                        </constraints>
+                    </view>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="bDx-Eo-vgD"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="vqY-zW-mII" firstAttribute="leading" secondItem="wow-rG-mgt" secondAttribute="leading" id="53B-T8-pVw"/>
+                <constraint firstAttribute="bottom" secondItem="vqY-zW-mII" secondAttribute="bottom" id="Dpy-LM-k6X"/>
+                <constraint firstAttribute="trailing" secondItem="vqY-zW-mII" secondAttribute="trailing" id="cuU-Sp-i5T"/>
+                <constraint firstItem="vqY-zW-mII" firstAttribute="top" secondItem="wow-rG-mgt" secondAttribute="top" id="eyI-86-zqa"/>
+            </constraints>
+            <size key="customSize" width="231" height="271"/>
+            <connections>
+                <outlet property="thumbnailimage" destination="At8-e6-2Wh" id="HGR-EO-wUL"/>
+                <outlet property="titleLabel" destination="3S6-CI-76N" id="Yp8-Bn-0S1"/>
+            </connections>
+            <point key="canvasLocation" x="245.59999999999999" y="-13.043478260869566"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="ImagePlacholder" width="800" height="600"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

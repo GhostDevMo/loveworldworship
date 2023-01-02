@@ -1,0 +1,20 @@
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/R.swift/Sources/RswiftResources/Integrations/SegueIdentifier+Integrations.swift":
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/SegueIdentifier+Integrations.dia"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/SegueIdentifier+Integrations.d"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/SegueIdentifier+Integrations.o"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/SegueIdentifier+Integrations.swiftdeps"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/R.swift/Sources/RswiftResources/Shared/StoryboardReference.swift":
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/StoryboardReference.d"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/StoryboardReference.swiftdeps"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/StoryboardReference.dia"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/StoryboardReference.o"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/R.swift/Sources/RswiftResources/Integrations/StoryboardReference+Integrations.swift":
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/StoryboardReference+Integrations.swiftdeps"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/StoryboardReference+Integrations.d"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/StoryboardReference+Integrations.o"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/StoryboardReference+Integrations.dia"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/R.swift/Sources/RswiftResources/StoryboardResource.swift":
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/StoryboardResource.o"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/StoryboardResource.dia"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/StoryboardResource.swiftdeps"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/StoryboardResource.d"

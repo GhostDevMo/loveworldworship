@@ -1,0 +1,6 @@
+version: "Apple Swift version 5.7.1 (swiftlang-5.7.1.135.3 clang-1400.0.29.51)"
+options: "6e3a4f5fa440aa7dc6bbdc3aec8e224c8ce5032713949d695d546c642e6ef579"
+build_start_time: [1670568383, 846149921]
+build_end_time: [1670568383, 867415904]
+inputs:
+  "/Users/ojo/Downloads/DeepsoundiOSApp/OneSignalNotificationServiceExtension/NotificationService.swift": !private [1657976418, 0]

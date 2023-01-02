@@ -1,0 +1,20 @@
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/Alamofire/Source/ResponseSerialization.swift":
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/ResponseSerialization.o"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/ResponseSerialization.swiftdeps"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/ResponseSerialization.dia"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/ResponseSerialization.d"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/Alamofire/Source/ServerTrustEvaluation.swift":
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/ServerTrustEvaluation.o"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/ServerTrustEvaluation.d"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/ServerTrustEvaluation.swiftdeps"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/ServerTrustEvaluation.dia"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/Alamofire/Source/RetryPolicy.swift":
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/RetryPolicy.swiftdeps"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/RetryPolicy.d"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/RetryPolicy.o"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/RetryPolicy.dia"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/Alamofire/Source/Result+Alamofire.swift":
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/Result+Alamofire.dia"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/Result+Alamofire.o"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/Result+Alamofire.d"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/Result+Alamofire.swiftdeps"

@@ -1,0 +1,25 @@
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/R.swift/Sources/RswiftResources/AssetCatalog.swift":
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/AssetCatalog.d"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/AssetCatalog.dia"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/AssetCatalog.o"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/AssetCatalog.swiftdeps"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/R.swift/Sources/RswiftResources/ColorResource.swift":
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/ColorResource.dia"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/ColorResource.swiftdeps"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/ColorResource.d"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/ColorResource.o"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/R.swift/Sources/RswiftResources/Integrations/Bundle+Extensions.swift":
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/Bundle+Extensions.d"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/Bundle+Extensions.dia"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/Bundle+Extensions.swiftdeps"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/Bundle+Extensions.o"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/R.swift/Sources/RswiftResources/Integrations/ColorResource+Integrations.swift":
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/ColorResource+Integrations.swiftdeps"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/ColorResource+Integrations.dia"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/ColorResource+Integrations.o"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/ColorResource+Integrations.d"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/R.swift/Sources/RswiftResources/DataResource.swift":
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/DataResource.dia"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/DataResource.swiftdeps"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/DataResource.d"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/DataResource.o"

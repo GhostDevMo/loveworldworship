@@ -1,0 +1,6 @@
+version: "Apple Swift version 5.7.1 (swiftlang-5.7.1.135.3 clang-1400.0.29.51)"
+options: "8737519e6af6effdc3cdfc573ac6f33508e2275110d837a93be4daeb351b3ee8"
+build_start_time: [1670568385, 272472858]
+build_end_time: [1670568386, 791620969]
+inputs:
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/EzPopup/EzPopup/Classes/PopupViewController.swift": [1670007711, 431356906]

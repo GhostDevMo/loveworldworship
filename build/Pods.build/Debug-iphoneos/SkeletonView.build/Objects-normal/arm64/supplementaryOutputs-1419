@@ -1,0 +1,35 @@
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/UIKitExtensions/UITableView+CollectionSkeleton.swift":
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/UITableView+CollectionSkeleton.dia"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/UITableView+CollectionSkeleton.swiftdeps"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/UITableView+CollectionSkeleton.d"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/UITableView+CollectionSkeleton.o"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/UIKitExtensions/UITableView+Extensions.swift":
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/UITableView+Extensions.swiftdeps"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/UITableView+Extensions.o"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/UITableView+Extensions.dia"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/UITableView+Extensions.d"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/API/UIKitExtensions/UILabel+SKExtensions.swift":
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/UILabel+SKExtensions.o"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/UILabel+SKExtensions.swiftdeps"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/UILabel+SKExtensions.dia"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/UILabel+SKExtensions.d"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/UIKitExtensions/UIView+AssociatedObjects.swift":
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/UIView+AssociatedObjects.o"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/UIView+AssociatedObjects.swiftdeps"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/UIView+AssociatedObjects.dia"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/UIView+AssociatedObjects.d"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/API/UIKitExtensions/UITextView+SKExtensions.swift":
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/UITextView+SKExtensions.o"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/UITextView+SKExtensions.swiftdeps"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/UITextView+SKExtensions.d"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/UITextView+SKExtensions.dia"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/UIKitExtensions/UIView+AppLifecycleNotifications.swift":
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/UIView+AppLifecycleNotifications.o"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/UIView+AppLifecycleNotifications.d"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/UIView+AppLifecycleNotifications.swiftdeps"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/UIView+AppLifecycleNotifications.dia"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/API/UIKitExtensions/UITextView+IBInspectable.swift":
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/UITextView+IBInspectable.swiftdeps"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/UITextView+IBInspectable.dia"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/UITextView+IBInspectable.d"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/UITextView+IBInspectable.o"

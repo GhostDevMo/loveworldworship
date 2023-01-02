@@ -1,0 +1,10 @@
+framework module PaystackCheckout {
+  umbrella header "PaystackCheckout-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module PaystackCheckout.__Swift {
+  exclude header "PaystackCheckout-Swift.h"
+}

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Poppins-Medium.otf">
+            <string>Poppins-Medium</string>
+        </array>
+        <array key="Poppins-Regular.otf">
+            <string>Poppins-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="88" id="oka-Ws-pcB" customClass="Popular_TableCell" customModule="DeepSoundiOS" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="88"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="oka-Ws-pcB" id="9TL-r0-XCC">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="88"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="na6-uY-6an">
+                        <rect key="frame" x="8" y="33.5" width="21" height="21"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="NsM-5G-PAm">
+                        <rect key="frame" x="37" y="14" width="60" height="60"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="60" id="0tQ-bt-Mtp"/>
+                            <constraint firstAttribute="width" constant="60" id="AxQ-X5-uRQ"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadiusV">
+                                <real key="value" value="10"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6t1-Qe-gUg">
+                        <rect key="frame" x="105" y="14" width="40.5" height="21"/>
+                        <fontDescription key="fontDescription" name="Poppins-Medium" family="Poppins" pointSize="15"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D55-ph-nPX">
+                        <rect key="frame" x="105" y="58.5" width="29.5" height="15.5"/>
+                        <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="11"/>
+                        <color key="textColor" red="0.66666666669999997" green="0.66666666669999997" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P8k-Ow-5cP">
+                        <rect key="frame" x="286" y="14" width="25" height="25"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="25" id="XaQ-BA-WHj"/>
+                            <constraint firstAttribute="height" constant="25" id="wLV-MI-EQa"/>
+                        </constraints>
+                        <color key="tintColor" red="0.66666666669999997" green="0.66666666669999997" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <state key="normal" image="ic_more"/>
+                        <connections>
+                            <action selector="morePressed:" destination="oka-Ws-pcB" eventType="touchUpInside" id="vro-ga-lWj"/>
+                        </connections>
+                    </button>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QRk-hj-vdb">
+                        <rect key="frame" x="258" y="19" width="25" height="15.5"/>
+                        <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="11"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kGl-XO-HFq">
+                        <rect key="frame" x="268" y="59" width="15" height="15"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="15" id="9xy-iZ-hkT"/>
+                            <constraint firstAttribute="width" constant="15" id="NX7-2z-sp6"/>
+                        </constraints>
+                        <color key="tintColor" red="0.66666666669999997" green="0.66666666669999997" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <state key="normal" image="heart"/>
+                        <connections>
+                            <action selector="heartPresserd:" destination="oka-Ws-pcB" eventType="touchUpInside" id="wAq-iv-tEV"/>
+                        </connections>
+                    </button>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="D55-ph-nPX" firstAttribute="leading" secondItem="NsM-5G-PAm" secondAttribute="trailing" constant="8" id="5HB-r9-oeS"/>
+                    <constraint firstItem="kGl-XO-HFq" firstAttribute="trailing" secondItem="QRk-hj-vdb" secondAttribute="trailing" id="FPN-kJ-6aI"/>
+                    <constraint firstItem="NsM-5G-PAm" firstAttribute="centerY" secondItem="na6-uY-6an" secondAttribute="centerY" id="Ins-pZ-dgK"/>
+                    <constraint firstItem="QRk-hj-vdb" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6t1-Qe-gUg" secondAttribute="trailing" constant="16" id="Jw7-Wt-DCi"/>
+                    <constraint firstItem="na6-uY-6an" firstAttribute="leading" secondItem="9TL-r0-XCC" secondAttribute="leading" constant="8" id="Ksp-ou-8Cg"/>
+                    <constraint firstItem="NsM-5G-PAm" firstAttribute="leading" secondItem="na6-uY-6an" secondAttribute="trailing" constant="8" id="Qbq-Cz-Oqs"/>
+                    <constraint firstItem="P8k-Ow-5cP" firstAttribute="top" secondItem="6t1-Qe-gUg" secondAttribute="top" id="RWL-2q-DxO"/>
+                    <constraint firstItem="na6-uY-6an" firstAttribute="centerY" secondItem="9TL-r0-XCC" secondAttribute="centerY" id="Upi-eA-Je0"/>
+                    <constraint firstItem="kGl-XO-HFq" firstAttribute="centerY" secondItem="D55-ph-nPX" secondAttribute="centerY" id="Viw-np-Hrp"/>
+                    <constraint firstItem="D55-ph-nPX" firstAttribute="bottom" secondItem="NsM-5G-PAm" secondAttribute="bottom" id="bd9-Tu-KOE"/>
+                    <constraint firstItem="QRk-hj-vdb" firstAttribute="centerY" secondItem="P8k-Ow-5cP" secondAttribute="centerY" id="dbj-zO-GHe"/>
+                    <constraint firstAttribute="trailing" secondItem="P8k-Ow-5cP" secondAttribute="trailing" constant="9" id="e6s-QI-OY0"/>
+                    <constraint firstItem="P8k-Ow-5cP" firstAttribute="leading" secondItem="QRk-hj-vdb" secondAttribute="trailing" constant="3" id="hU5-ii-6MN"/>
+                    <constraint firstItem="6t1-Qe-gUg" firstAttribute="top" secondItem="NsM-5G-PAm" secondAttribute="top" id="j1F-tt-VwT"/>
+                    <constraint firstItem="6t1-Qe-gUg" firstAttribute="leading" secondItem="NsM-5G-PAm" secondAttribute="trailing" constant="8" id="oOF-ZI-CMJ"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="PGa-6l-Qot"/>
+            <connections>
+                <outlet property="categoryLabel" destination="D55-ph-nPX" id="u5c-W9-nTI"/>
+                <outlet property="countLabel" destination="na6-uY-6an" id="bqk-FL-gB0"/>
+                <outlet property="heartBtn" destination="kGl-XO-HFq" id="rcC-kp-vek"/>
+                <outlet property="thumbnailImage" destination="NsM-5G-PAm" id="5XW-5V-Abk"/>
+                <outlet property="timeDurationlabel" destination="QRk-hj-vdb" id="uzv-K9-bUd"/>
+                <outlet property="titleLabel" destination="6t1-Qe-gUg" id="i1w-oV-fRQ"/>
+            </connections>
+            <point key="canvasLocation" x="113" y="78"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="heart" width="256" height="256"/>
+        <image name="ic_more" width="68" height="68"/>
+    </resources>
+</document>

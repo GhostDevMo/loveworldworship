@@ -1,0 +1,120 @@
+"/Users/ojo/Downloads/DeepsoundiOSApp/DeepSoundiOS/Controller/UI/Controllers/Chat/ChatScreenVC.swift":
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/ChatScreenVC.d"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/ChatScreenVC.dia"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/ChatScreenVC.swiftdeps"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/ChatScreenVC.o"
+"/Users/ojo/Downloads/DeepsoundiOSApp/DeepSoundiOS/External Dependencies/MiniToLargeViewAnimator.swift":
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/MiniToLargeViewAnimator.d"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/MiniToLargeViewAnimator.dia"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/MiniToLargeViewAnimator.swiftdeps"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/MiniToLargeViewAnimator.o"
+"/Users/ojo/Downloads/DeepsoundiOSApp/DeepSoundiOS/Controller/UI/Controllers/NotLoggedInDashboard/NotLoggedInTabbar.swift":
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/NotLoggedInTabbar.swiftdeps"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/NotLoggedInTabbar.o"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/NotLoggedInTabbar.d"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/NotLoggedInTabbar.dia"
+"/Users/ojo/Downloads/DeepsoundiOSApp/DeepSoundiOS/Controller/UI/Cells/TableViews/Settings /SettingNotification/SettingNotificationItem.swift":
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/SettingNotificationItem.dia"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/SettingNotificationItem.d"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/SettingNotificationItem.swiftdeps"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/SettingNotificationItem.o"
+"/Users/ojo/Downloads/DeepsoundiOSApp/DeepSoundiOS/Model/Network/Models/UserModel.swift":
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/UserModel.dia"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/UserModel.swiftdeps"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/UserModel.o"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/UserModel.d"
+"/Users/ojo/Downloads/DeepsoundiOSApp/DeepSoundiOS/Controller/UI/Cells/TableViews/UpgrradePro/UpgradeSixMonth/UpgradeSixMonthCell.swift":
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/UpgradeSixMonthCell.o"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/UpgradeSixMonthCell.dia"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/UpgradeSixMonthCell.d"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/UpgradeSixMonthCell.swiftdeps"
+"/Users/ojo/Downloads/DeepsoundiOSApp/DeepSoundiOS/Controller/UI/Cells/TableViews/Settings /Subcription/PremiumSubcriptionCell.swift":
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/PremiumSubcriptionCell.o"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/PremiumSubcriptionCell.swiftdeps"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/PremiumSubcriptionCell.d"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/PremiumSubcriptionCell.dia"
+"/Users/ojo/Downloads/DeepsoundiOSApp/DeepSoundiOS/Controller/UI/Controllers/Search/SearchSongsVC.swift":
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/SearchSongsVC.d"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/SearchSongsVC.dia"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/SearchSongsVC.swiftdeps"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/SearchSongsVC.o"
+"/Users/ojo/Downloads/DeepsoundiOSApp/DeepSoundiOS/Controller/UI/Controllers/Settings/WebViewVC.swift":
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/WebViewVC.o"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/WebViewVC.d"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/WebViewVC.dia"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/WebViewVC.swiftdeps"
+"/Users/ojo/Downloads/DeepsoundiOSApp/DeepSoundiOS/Controller/UI/Cells/TableViews/Shared_TableCell/Shared-TableCell.swift":
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/Shared-TableCell.d"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/Shared-TableCell.dia"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/Shared-TableCell.o"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/Shared-TableCell.swiftdeps"
+"/Users/ojo/Downloads/DeepsoundiOSApp/DeepSoundiOS/Controller/UI/Controllers/Settings/SettingNotificationVC.swift":
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/SettingNotificationVC.dia"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/SettingNotificationVC.swiftdeps"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/SettingNotificationVC.d"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/SettingNotificationVC.o"
+"/Users/ojo/Downloads/DeepsoundiOSApp/DeepSoundiOS/Controller/UI/Cells/TableViews/Browser/BrowserSectionOneTableItem/BrowserSectionOneTableItem.swift":
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/BrowserSectionOneTableItem.dia"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/BrowserSectionOneTableItem.d"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/BrowserSectionOneTableItem.o"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/BrowserSectionOneTableItem.swiftdeps"
+"/Users/ojo/Downloads/DeepsoundiOSApp/DeepSoundiOS/Controller/UI/Cells/TableViews/PaymentOption/PaymentOptionCell.swift":
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/PaymentOptionCell.d"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/PaymentOptionCell.swiftdeps"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/PaymentOptionCell.dia"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/PaymentOptionCell.o"
+"/Users/ojo/Downloads/DeepsoundiOSApp/DeepSoundiOS/Model/Network/Managers/ProfileManager.swift":
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/ProfileManager.o"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/ProfileManager.swiftdeps"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/ProfileManager.d"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/ProfileManager.dia"
+"/Users/ojo/Downloads/DeepsoundiOSApp/DeepSoundiOS/External Dependencies/GradientView.swift":
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/GradientView.d"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/GradientView.o"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/GradientView.dia"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/GradientView.swiftdeps"
+"/Users/ojo/Downloads/DeepsoundiOSApp/DeepSoundiOS/Controller/UI/Cells/TableViews/ProfileSongTableItem/ProfileSongTableItem.swift":
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/ProfileSongTableItem.d"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/ProfileSongTableItem.swiftdeps"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/ProfileSongTableItem.o"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/ProfileSongTableItem.dia"
+"/Users/ojo/Downloads/DeepsoundiOSApp/DeepSoundiOS/Model/Network/Models/DiscoverModel.swift":
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/DiscoverModel.o"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/DiscoverModel.swiftdeps"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/DiscoverModel.d"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/DiscoverModel.dia"
+"/Users/ojo/Downloads/DeepsoundiOSApp/DeepSoundiOS/Controller/UI/Controllers/Popups/SelectTimeZoneVC.swift":
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/SelectTimeZoneVC.dia"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/SelectTimeZoneVC.o"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/SelectTimeZoneVC.d"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/SelectTimeZoneVC.swiftdeps"
+"/Users/ojo/Downloads/DeepsoundiOSApp/DeepSoundiOS/Controller/UI/Cells/TableViews/Stations/StationsTableItem.swift":
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/StationsTableItem.swiftdeps"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/StationsTableItem.o"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/StationsTableItem.d"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/StationsTableItem.dia"
+"/Users/ojo/Downloads/DeepsoundiOSApp/DeepSoundiOS/Controller/UI/Cells/TableViews/Products/CreateProductTableItem/CreateProductTableItem.swift":
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/CreateProductTableItem.d"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/CreateProductTableItem.o"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/CreateProductTableItem.dia"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/CreateProductTableItem.swiftdeps"
+"/Users/ojo/Downloads/DeepsoundiOSApp/DeepSoundiOS/Controller/UI/Cells/TableViews/SelectFilter-TableCell/SelectFilter-TableCell.swift":
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/SelectFilter-TableCell.swiftdeps"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/SelectFilter-TableCell.d"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/SelectFilter-TableCell.dia"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/SelectFilter-TableCell.o"
+"/Users/ojo/Downloads/DeepsoundiOSApp/DeepSoundiOS/Controller/UI/Controllers/Playlist/ShowPlaylistDetailsVC.swift":
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/ShowPlaylistDetailsVC.dia"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/ShowPlaylistDetailsVC.d"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/ShowPlaylistDetailsVC.o"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/ShowPlaylistDetailsVC.swiftdeps"
+"/Users/ojo/Downloads/DeepsoundiOSApp/DeepSoundiOS/Controller/UI/Controllers/Search/SearchAlbumsVC.swift":
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/SearchAlbumsVC.dia"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/SearchAlbumsVC.d"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/SearchAlbumsVC.swiftdeps"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/SearchAlbumsVC.o"
+"/Users/ojo/Downloads/DeepsoundiOSApp/DeepSoundiOS/Controller/UI/Cells/TableViews/PaymentOption/AddNewCardCell.swift":
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/AddNewCardCell.d"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/AddNewCardCell.swiftdeps"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/AddNewCardCell.dia"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/DeepSoundiOS.build/Debug-iphoneos/DeepSoundiOS.build/Objects-normal/arm64/AddNewCardCell.o"

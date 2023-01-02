@@ -1,0 +1,6 @@
+version: "Apple Swift version 5.7.1 (swiftlang-5.7.1.135.3 clang-1400.0.29.51)"
+options: "7e4e549dbaa5dfc9daa499af923c26280add3dcbd749b36497c869734e19e222"
+build_start_time: [1670568381, 897922992]
+build_end_time: [1670568382, 949074983]
+inputs:
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/PVSwitch/PVSwitch/Source/PVSwitch.swift": [1670007712, 154154777]

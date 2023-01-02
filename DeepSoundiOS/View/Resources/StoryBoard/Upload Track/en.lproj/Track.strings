@@ -1,0 +1,36 @@
+
+/* Class = "UILabel"; text = "Add All information about this audio file"; ObjectID = "1G9-4V-Jhd"; */
+"1G9-4V-Jhd.text" = "Add All information about this audio file";
+
+/* Class = "UILabel"; text = "Add tag to describe more about your track by  Add a ',' sign at the end of each TAG without space between them"; ObjectID = "3po-si-fUw"; */
+"3po-si-fUw.text" = "Add tag to describe more about your track by  Add a ',' sign at the end of each TAG without space between them";
+
+/* Class = "UILabel"; text = "Private"; ObjectID = "6vT-jR-e99"; */
+"6vT-jR-e99.text" = "Private";
+
+/* Class = "UIButton"; normalTitle = "CREATE"; ObjectID = "Cyw-SU-cYt"; */
+"Cyw-SU-cYt.normalTitle" = "CREATE";
+
+/* Class = "UIButton"; normalTitle = "Genres"; ObjectID = "FF0-A1-GDU"; */
+"FF0-A1-GDU.normalTitle" = "Genres";
+
+/* Class = "UITextField"; placeholder = "Tag(s)"; ObjectID = "GYy-Mp-fNU"; */
+"GYy-Mp-fNU.placeholder" = "Tag(s)";
+
+/* Class = "UILabel"; text = "Availability"; ObjectID = "UuT-KX-Njv"; */
+"UuT-KX-Njv.text" = "Availability";
+
+/* Class = "UIButton"; normalTitle = "Select Pictures"; ObjectID = "a37-OT-OOx"; */
+"a37-OT-OOx.normalTitle" = "Select Pictures";
+
+/* Class = "UILabel"; text = "Public"; ObjectID = "c3P-JJ-UXs"; */
+"c3P-JJ-UXs.text" = "Public";
+
+/* Class = "UIButton"; normalTitle = "Price"; ObjectID = "f6j-Ep-iC6"; */
+"f6j-Ep-iC6.normalTitle" = "Price";
+
+/* Class = "UITextField"; placeholder = "Song Title"; ObjectID = "h2v-hX-mzP"; */
+"h2v-hX-mzP.placeholder" = "Song Title";
+
+/* Class = "UIButton"; normalTitle = "Age Restriction"; ObjectID = "ilo-L3-4w2"; */
+"ilo-L3-4w2.normalTitle" = "Age Restriction";

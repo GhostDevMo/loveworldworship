@@ -1,0 +1,7 @@
+version: "Apple Swift version 5.7.1 (swiftlang-5.7.1.135.3 clang-1400.0.29.51)"
+options: "490e161d0f51a99f54f1f94e96fb899d30b71b908bbab2a76c94fe7ab07e8fc3"
+build_start_time: [1670568385, 272825956]
+build_end_time: [1670568385, 298951148]
+inputs:
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/ExpyTableView/ExpyTableView/Classes/ExpyAbstractions.swift": !private [1670007711, 429322242]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/ExpyTableView/ExpyTableView/Classes/ExpyTableView.swift": !private [1670007711, 429136753]

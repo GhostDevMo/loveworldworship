@@ -1,0 +1,48 @@
+
+/* Class = "UILabel"; text = "Sad No Result"; ObjectID = "2HO-fm-MPb"; */
+"2HO-fm-MPb.text" = "Sad No Result";
+
+/* Class = "UILabel"; text = "We cannot find keyword you are searching for maybe a little spelling mistake?"; ObjectID = "G06-LX-JKv"; */
+"G06-LX-JKv.text" = "We cannot find keyword you are searching for maybe a little spelling mistake?";
+
+/* Class = "UILabel"; text = "Filter"; ObjectID = "Nk7-Ec-Jrx"; */
+"Nk7-Ec-Jrx.text" = "Filter";
+
+/* Class = "UILabel"; text = "We cannot find keyword you are searching for maybe a little spelling mistake?"; ObjectID = "O7E-hZ-oke"; */
+"O7E-hZ-oke.text" = "We cannot find keyword you are searching for maybe a little spelling mistake?";
+
+/* Class = "UIButton"; normalTitle = "APPLY FILTER"; ObjectID = "OdH-dN-cXB"; */
+"OdH-dN-cXB.normalTitle" = "APPLY FILTER";
+
+/* Class = "UIViewController"; title = "Filter"; ObjectID = "R7z-3q-sll"; */
+"R7z-3q-sll.title" = "Filter";
+
+/* Class = "UIButton"; normalTitle = "Search Random"; ObjectID = "Tev-Fq-98W"; */
+"Tev-Fq-98W.normalTitle" = "Search Random";
+
+/* Class = "UIButton"; normalTitle = "Select All"; ObjectID = "Ufa-Gg-FIQ"; */
+"Ufa-Gg-FIQ.normalTitle" = "Select All";
+
+/* Class = "UILabel"; text = "Sad No Result"; ObjectID = "WqZ-WD-QO1"; */
+"WqZ-WD-QO1.text" = "Sad No Result";
+
+/* Class = "UILabel"; text = "Sad No Result"; ObjectID = "ZUL-Kb-1ep"; */
+"ZUL-Kb-1ep.text" = "Sad No Result";
+
+/* Class = "UILabel"; text = "We cannot find keyword you are searching for maybe a little spelling mistake?"; ObjectID = "bZ0-Rv-ERa"; */
+"bZ0-Rv-ERa.text" = "We cannot find keyword you are searching for maybe a little spelling mistake?";
+
+/* Class = "UIButton"; normalTitle = "Search Random"; ObjectID = "egf-3p-pag"; */
+"egf-3p-pag.normalTitle" = "Search Random";
+
+/* Class = "UIButton"; normalTitle = "Search Random"; ObjectID = "h1N-Jj-NTZ"; */
+"h1N-Jj-NTZ.normalTitle" = "Search Random";
+
+/* Class = "UILabel"; text = "Sad No Result"; ObjectID = "p4I-Mq-JYv"; */
+"p4I-Mq-JYv.text" = "Sad No Result";
+
+/* Class = "UILabel"; text = "We cannot find keyword you are searching for maybe a little spelling mistake?"; ObjectID = "vtD-LL-cWj"; */
+"vtD-LL-cWj.text" = "We cannot find keyword you are searching for maybe a little spelling mistake?";
+
+/* Class = "UIButton"; normalTitle = "Search Random"; ObjectID = "wyX-zR-zJB"; */
+"wyX-zR-zJB.normalTitle" = "Search Random";

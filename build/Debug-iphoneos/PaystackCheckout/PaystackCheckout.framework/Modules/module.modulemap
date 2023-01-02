@@ -1,0 +1,11 @@
+framework module PaystackCheckout {
+  umbrella header "PaystackCheckout-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module PaystackCheckout.Swift {
+  header "PaystackCheckout-Swift.h"
+  requires objc
+}

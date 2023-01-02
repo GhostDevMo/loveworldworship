@@ -1,0 +1,40 @@
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/API/Models/SkeletonTextNumberOfLines.swift":
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/SkeletonTextNumberOfLines.o"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/SkeletonTextNumberOfLines.swiftdeps"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/SkeletonTextNumberOfLines.dia"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/SkeletonTextNumberOfLines.d"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/UIKitExtensions/SkeletonTreeNode+Extensions.swift":
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/SkeletonTreeNode+Extensions.o"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/SkeletonTreeNode+Extensions.dia"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/SkeletonTreeNode+Extensions.d"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/SkeletonTreeNode+Extensions.swiftdeps"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/API/SkeletonView.swift":
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/SkeletonView.d"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/SkeletonView.o"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/SkeletonView.dia"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/SkeletonView.swiftdeps"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/API/Models/SkeletonTextLineHeight.swift":
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/SkeletonTextLineHeight.swiftdeps"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/SkeletonTextLineHeight.d"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/SkeletonTextLineHeight.dia"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/SkeletonTextLineHeight.o"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/SkeletonExtensions/SkeletonTextNode.swift":
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/SkeletonTextNode.d"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/SkeletonTextNode.o"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/SkeletonTextNode.swiftdeps"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/SkeletonTextNode.dia"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/API/Models/SkeletonTransitionStyle.swift":
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/SkeletonTransitionStyle.dia"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/SkeletonTransitionStyle.d"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/SkeletonTransitionStyle.o"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/SkeletonTransitionStyle.swiftdeps"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/SkeletonTree/SkeletonTreeNode.swift":
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/SkeletonTreeNode.o"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/SkeletonTreeNode.swiftdeps"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/SkeletonTreeNode.d"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/SkeletonTreeNode.dia"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/API/Models/SkeletonType.swift":
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/SkeletonType.swiftdeps"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/SkeletonType.dia"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/SkeletonType.d"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/SkeletonType.o"

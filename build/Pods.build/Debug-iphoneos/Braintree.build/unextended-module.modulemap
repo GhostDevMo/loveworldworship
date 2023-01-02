@@ -1,0 +1,10 @@
+framework module Braintree {
+  umbrella header "Braintree-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module Braintree.__Swift {
+  exclude header "Braintree-Swift.h"
+}

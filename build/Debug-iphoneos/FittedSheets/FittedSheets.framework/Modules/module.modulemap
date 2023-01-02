@@ -1,0 +1,11 @@
+framework module FittedSheets {
+  umbrella header "FittedSheets-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module FittedSheets.Swift {
+  header "FittedSheets-Swift.h"
+  requires objc
+}

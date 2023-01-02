@@ -1,0 +1,25 @@
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/Alamofire/Source/EventMonitor.swift":
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/EventMonitor.swiftdeps"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/EventMonitor.dia"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/EventMonitor.d"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/EventMonitor.o"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/Alamofire/Source/Combine.swift":
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/Combine.o"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/Combine.swiftdeps"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/Combine.dia"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/Combine.d"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/Alamofire/Source/HTTPHeaders.swift":
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/HTTPHeaders.d"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/HTTPHeaders.swiftdeps"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/HTTPHeaders.o"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/HTTPHeaders.dia"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/Alamofire/Source/Concurrency.swift":
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/Concurrency.d"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/Concurrency.dia"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/Concurrency.swiftdeps"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/Concurrency.o"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/Alamofire/Source/DispatchQueue+Alamofire.swift":
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/DispatchQueue+Alamofire.o"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/DispatchQueue+Alamofire.swiftdeps"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/DispatchQueue+Alamofire.dia"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/DispatchQueue+Alamofire.d"

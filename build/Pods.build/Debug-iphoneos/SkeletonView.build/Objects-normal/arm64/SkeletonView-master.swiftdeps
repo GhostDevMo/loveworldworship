@@ -1,0 +1,97 @@
+version: "Apple Swift version 5.7.1 (swiftlang-5.7.1.135.3 clang-1400.0.29.51)"
+options: "3e638839b47afc9eb79b4d665e50430a8277b02ea2e59eb261063678062f76ce"
+build_start_time: [1670568377, 802067041]
+build_end_time: [1670568381, 372462034]
+inputs:
+  ? "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/API/AnimationBuilder/SkeletonAnimationBuilder.swift"
+  : [1670007712, 247312068]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/API/Appearance/SkeletonAppearance.swift": [1670007712, 244117259]
+  ? "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/API/Collections/CollectionViews/SkeletonCollectionViewProtocols.swift"
+  : [1670007712, 245975017]
+  ? "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/API/Collections/TableViews/SkeletonTableViewProtocols.swift"
+  : [1670007712, 245745182]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/API/Deprecated.swift": [1670007712, 245392799]
+  ? "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/API/FoundationExtensions/Notification+SkeletonFlow.swift"
+  : [1670007712, 244401931]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/API/Models/GradientDirection.swift": [1670007712, 244871377]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/API/Models/SkeletonGradient.swift": [1670007712, 244635581]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/API/Models/SkeletonTextLineHeight.swift": [1670007712, 244990348]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/API/Models/SkeletonTextNumberOfLines.swift": [1670007712, 244753122]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/API/Models/SkeletonTransitionStyle.swift": [1670007712, 245265483]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/API/Models/SkeletonType.swift": [1670007712, 245139122]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/API/SkeletonExtended.swift": [1670007712, 243694543]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/API/SkeletonView.swift": [1670007712, 243826866]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/API/UIKitExtensions/CALayer+Animations.swift": [1670007712, 246572971]
+  ? "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/API/UIKitExtensions/UICollectionView+Extensions.swift"
+  : [1670007712, 246946334]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/API/UIKitExtensions/UILabel+IBInspectable.swift": [1670007712, 246212482]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/API/UIKitExtensions/UILabel+SKExtensions.swift": [1670007712, 246451854]
+  ? "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/API/UIKitExtensions/UITextView+IBInspectable.swift"
+  : [1670007712, 246329784]
+  ? "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/API/UIKitExtensions/UITextView+SKExtensions.swift"
+  : [1670007712, 246697902]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/API/UIKitExtensions/UIView+IBInspectable.swift": [1670007712, 247078895]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/API/UIKitExtensions/UIView+SKExtensions.swift": [1670007712, 246812343]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/Collections/CollectionSkeleton.swift": [1670007712, 240716457]
+  ? "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/Collections/SkeletonCollectionDataSource.swift"
+  : [1670007712, 240516185]
+  ? "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/Collections/SkeletonCollectionDelegate.swift"
+  : [1670007712, 240619182]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/Collections/SkeletonReusableCell.swift": [1670007712, 240394592]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/Debug/SkeletonDebug.swift": [1670007712, 243449687]
+  ? "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/FoundationExtensions/DispatchQueue+Extensions.swift"
+  : [1670007712, 238189935]
+  ? "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/FoundationExtensions/Int+Extensions.swift"
+  : [1670007712, 238049507]
+  ? "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/FoundationExtensions/Notification+Extensions.swift"
+  : [1670007712, 238327503]
+  ? "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/FoundationExtensions/ProcessInfo+Extensions.swift"
+  : [1670007712, 238461732]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/Helpers/AssociationPolicy.swift": [1670007712, 243099451]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/Helpers/Recursive.swift": [1670007712, 243215084]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/Helpers/Swizzling.swift": [1670007712, 242986202]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/Models/RecoverableViewState.swift": [1670007712, 238999366]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/Models/SkeletonLayer.swift": [1670007712, 238846302]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/SkeletonConfigs/SkeletonConfig.swift": [1670007712, 237444162]
+  ? "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/SkeletonConfigs/SkeletonMultilinesLayerConfig.swift"
+  : [1670007712, 237605810]
+  ? "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/SkeletonExtensions/GradientDirection+Animations.swift"
+  : [1670007712, 239785909]
+  ? "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/SkeletonExtensions/PrepareViewForSkeleton.swift"
+  : [1670007712, 239519596]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/SkeletonExtensions/Recoverable.swift": [1670007712, 239906311]
+  ? "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/SkeletonExtensions/SkeletonTextNode.swift"
+  : [1670007712, 240031719]
+  ? "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/SkeletonExtensions/SubviewsSkeletonables.swift"
+  : [1670007712, 239651203]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/SkeletonFlowHandler.swift": [1670007712, 240159511]
+  ? "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/SkeletonLayerBuilders/SkeletonLayerBuilder.swift"
+  : [1670007712, 242706775]
+  ? "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/SkeletonLayerBuilders/SkeletonMultilineLayerBuilder.swift"
+  : [1670007712, 242604494]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/SkeletonTree/SkeletonTreeNode.swift": [1670007712, 239256381]
+  ? "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/UIKitExtensions/CALayer+Extensions.swift"
+  : [1670007712, 241709232]
+  ? "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/UIKitExtensions/SkeletonTreeNode+Extensions.swift"
+  : [1670007712, 241316795]
+  ? "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/UIKitExtensions/UICollectionView+CollectionSkeleton.swift"
+  : [1670007712, 241415500]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/UIKitExtensions/UIColor+Skeleton.swift": [1670007712, 241512298]
+  ? "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/UIKitExtensions/UILabel+Extensions.swift"
+  : [1670007712, 242001056]
+  ? "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/UIKitExtensions/UITableView+CollectionSkeleton.swift"
+  : [1670007712, 241611719]
+  ? "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/UIKitExtensions/UITableView+Extensions.swift"
+  : [1670007712, 241806030]
+  ? "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/UIKitExtensions/UIView+AppLifecycleNotifications.swift"
+  : [1670007712, 241015911]
+  ? "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/UIKitExtensions/UIView+AssociatedObjects.swift"
+  : [1670007712, 241905212]
+  ? "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/UIKitExtensions/UIView+CollectionSkeleton.swift"
+  : [1670007712, 242201805]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/UIKitExtensions/UIView+Extensions.swift": [1670007712, 241117954]
+  ? "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/UIKitExtensions/UIView+SkeletonView.swift"
+  : [1670007712, 241219043]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/UIKitExtensions/UIView+Swizzling.swift": [1670007712, 242305040]
+  ? "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/UIKitExtensions/UIView+Transitions.swift"
+  : [1670007712, 242101669]

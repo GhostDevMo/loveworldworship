@@ -1,0 +1,10 @@
+framework module ExpyTableView {
+  umbrella header "ExpyTableView-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module ExpyTableView.__Swift {
+  exclude header "ExpyTableView-Swift.h"
+}

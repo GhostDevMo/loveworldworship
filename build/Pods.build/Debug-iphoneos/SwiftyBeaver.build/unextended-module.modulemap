@@ -1,0 +1,10 @@
+framework module SwiftyBeaver {
+  umbrella header "SwiftyBeaver-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module SwiftyBeaver.__Swift {
+  exclude header "SwiftyBeaver-Swift.h"
+}

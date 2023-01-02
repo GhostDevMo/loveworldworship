@@ -1,0 +1,11 @@
+version: "Apple Swift version 5.7.1 (swiftlang-5.7.1.135.3 clang-1400.0.29.51)"
+options: "afd89c02002db08f83ee880904d4007c6bfc1bbf7fdbba86666df3c51a6e3110"
+build_start_time: [1670568377, 636904001]
+build_end_time: [1670568377, 758836030]
+inputs:
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/YNExpandableCell/YNExpandableCell/YNExpandableCell.swift": !private [1670007712, 274461746]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/YNExpandableCell/YNExpandableCell/YNExpandableDeprecated.swift": !private [1670007712, 272937297]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/YNExpandableCell/YNExpandableCell/YNTableView.swift": !private [1670007712, 272662639]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/YNExpandableCell/YNExpandableCell/YNTableViewCell.swift": !private [1670007712, 272815704]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/YNExpandableCell/YNExpandableCell/YNTableViewDelegate.swift": !private [1670007712, 273160934]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/YNExpandableCell/YNExpandableCell/YNTableViewExtenstion.swift": !private [1670007712, 273051261]

@@ -1,0 +1,6 @@
+version: "Apple Swift version 5.7.1 (swiftlang-5.7.1.135.3 clang-1400.0.29.51)"
+options: "f19b58c833e6e314ef74f7fc0931b3dfc70a297dfd280f75f8125d21cbc7114a"
+build_start_time: [1670568377, 744882106]
+build_end_time: [1670568380, 502168178]
+inputs:
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SwiftEventBus/SwiftEventBus/SwiftEventBus.swift": [1670007712, 252985000]

@@ -1,0 +1,8 @@
+version: "Apple Swift version 5.7.1 (swiftlang-5.7.1.135.3 clang-1400.0.29.51)"
+options: "e35242fd110e78c20d35d7bd98d66fed31b6ea8d8c252c0f0a74d4137428ddb4"
+build_start_time: [1670568385, 380097866]
+build_end_time: [1670568387, 456995964]
+inputs:
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/CircleProgressView/CircleProgressView/AppDelegate.swift": [1670007711, 421750068]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/CircleProgressView/CircleProgressView/CircleProgressView.swift": [1670007711, 421940803]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/CircleProgressView/CircleProgressView/ViewController.swift": [1670007711, 421597719]

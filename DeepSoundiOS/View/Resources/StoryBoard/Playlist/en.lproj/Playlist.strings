@@ -1,0 +1,63 @@
+
+/* Class = "UILabel"; text = "Playlist Name"; ObjectID = "1fD-P5-aUi"; */
+"1fD-P5-aUi.text" = "Playlist Name";
+
+/* Class = "UILabel"; text = "By"; ObjectID = "7nI-HL-96u"; */
+"7nI-HL-96u.text" = "By";
+
+/* Class = "UIButton"; normalTitle = "CREATE"; ObjectID = "AbV-Z1-td1"; */
+"AbV-Z1-td1.normalTitle" = "CREATE";
+
+/* Class = "UIButton"; normalTitle = "CREATE"; ObjectID = "B3s-be-RTG"; */
+"B3s-be-RTG.normalTitle" = "CREATE";
+
+/* Class = "UILabel"; text = "Cerate and share playlist. Each playlist is custom created and organized to help you find the best music for your preference."; ObjectID = "Fal-W5-Hm0"; */
+"Fal-W5-Hm0.text" = "Cerate and share playlist. Each playlist is custom created and organized to help you find the best music for your preference.";
+
+/* Class = "UILabel"; text = "There is no song in this playlist "; ObjectID = "Nwr-xk-OhF"; */
+"Nwr-xk-OhF.text" = "There is no song in this playlist ";
+
+/* Class = "UITextField"; placeholder = "Playlist Name here "; ObjectID = "PNM-5P-gSD"; */
+"PNM-5P-gSD.placeholder" = "Playlist Name here ";
+
+/* Class = "UILabel"; text = "Cerate and share playlist. Each playlist is custom created and organized to help you find the best music for your preference."; ObjectID = "TRd-Yy-gXv"; */
+"TRd-Yy-gXv.text" = "Cerate and share playlist. Each playlist is custom created and organized to help you find the best music for your preference.";
+
+/* Class = "UILabel"; text = "Public"; ObjectID = "UAl-qU-LGo"; */
+"UAl-qU-LGo.text" = "Public";
+
+/* Class = "UILabel"; text = "Private"; ObjectID = "VDt-AL-Ubd"; */
+"VDt-AL-Ubd.text" = "Private";
+
+/* Class = "UILabel"; text = "Private"; ObjectID = "XHh-5J-eVh"; */
+"XHh-5J-eVh.text" = "Private";
+
+/* Class = "UILabel"; text = "Privacy"; ObjectID = "XTO-ec-UM5"; */
+"XTO-ec-UM5.text" = "Privacy";
+
+/* Class = "UIButton"; normalTitle = "Select Pictures"; ObjectID = "Yzn-O2-Kmm"; */
+"Yzn-O2-Kmm.normalTitle" = "Select Pictures";
+
+/* Class = "UILabel"; text = "Public"; ObjectID = "fIY-5q-3KD"; */
+"fIY-5q-3KD.text" = "Public";
+
+/* Class = "UILabel"; text = "Songs"; ObjectID = "k5p-nk-PU1"; */
+"k5p-nk-PU1.text" = "Songs";
+
+/* Class = "UITextField"; placeholder = "Playlist Name here "; ObjectID = "kWg-8T-Gcz"; */
+"kWg-8T-Gcz.placeholder" = "Playlist Name here ";
+
+/* Class = "UILabel"; text = "Privacy"; ObjectID = "kXm-TM-uid"; */
+"kXm-TM-uid.text" = "Privacy";
+
+/* Class = "UIButton"; normalTitle = "Select Pictures"; ObjectID = "nCe-0k-8Kz"; */
+"nCe-0k-8Kz.normalTitle" = "Select Pictures";
+
+/* Class = "UILabel"; text = "0"; ObjectID = "oqf-AC-ke7"; */
+"oqf-AC-ke7.text" = "0";
+
+/* Class = "UILabel"; text = "Created"; ObjectID = "yN1-Zr-5RZ"; */
+"yN1-Zr-5RZ.text" = "Created";
+
+/* Class = "UILabel"; text = "0"; ObjectID = "yi9-b9-qce"; */
+"yi9-b9-qce.text" = "0";

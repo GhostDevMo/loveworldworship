@@ -1,0 +1,177 @@
+
+/* Class = "UILabel"; text = "Followings"; ObjectID = "06G-om-NHP"; */
+"06G-om-NHP.text" = "Followings";
+
+/* Class = "UILabel"; text = "There are no activity by this user "; ObjectID = "0j0-lS-WKF"; */
+"0j0-lS-WKF.text" = "There are no activity by this user ";
+
+/* Class = "UILabel"; text = "New Releases "; ObjectID = "12U-jZ-LeB"; */
+"12U-jZ-LeB.text" = "New Releases ";
+
+/* Class = "UILabel"; text = "Explore by genre and mood"; ObjectID = "1In-0g-hsf"; */
+"1In-0g-hsf.text" = "Explore by genre and mood";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "1qV-vr-Hyc"; */
+"1qV-vr-Hyc.text" = "Label";
+
+/* Class = "UILabel"; text = "Top Songs"; ObjectID = "22t-Av-XYK"; */
+"22t-Av-XYK.text" = "Top Songs";
+
+/* Class = "UILabel"; text = "There are no Top songs uploaded"; ObjectID = "29a-I3-s8A"; */
+"29a-I3-s8A.text" = "There are no Top songs uploaded";
+
+/* Class = "UILabel"; text = "0"; ObjectID = "2sl-gM-RFJ"; */
+"2sl-gM-RFJ.text" = "0";
+
+/* Class = "UIViewController"; title = "Playlist"; ObjectID = "4B8-eS-g7d"; */
+"4B8-eS-g7d.title" = "Playlist";
+
+/* Class = "UILabel"; text = "Store"; ObjectID = "4Mr-II-2aK"; */
+"4Mr-II-2aK.text" = "Store";
+
+/* Class = "UILabel"; text = "Description"; ObjectID = "5Gq-SM-ITU"; */
+"5Gq-SM-ITU.text" = "Description";
+
+/* Class = "UILabel"; text = "Browse "; ObjectID = "5St-Ba-VQG"; */
+"5St-Ba-VQG.text" = "Browse ";
+
+/* Class = "UILabel"; text = "There are no songs in this album"; ObjectID = "5zB-af-WBr"; */
+"5zB-af-WBr.text" = "There are no songs in this album";
+
+/* Class = "UILabel"; text = "There are no latest songs uploaded"; ObjectID = "6DS-TS-LfN"; */
+"6DS-TS-LfN.text" = "There are no latest songs uploaded";
+
+/* Class = "UILabel"; text = "Description"; ObjectID = "7BL-ZG-VRm"; */
+"7BL-ZG-VRm.text" = "Description";
+
+/* Class = "UIBarButtonItem"; title = " "; ObjectID = "7b4-Q4-7yZ"; */
+"7b4-Q4-7yZ.title" = " ";
+
+/* Class = "UILabel"; text = "@Username"; ObjectID = "CQo-ZL-ek7"; */
+"CQo-ZL-ek7.text" = "@Username";
+
+/* Class = "UILabel"; text = "Activities"; ObjectID = "Ecd-af-All"; */
+"Ecd-af-All.text" = "Activities";
+
+/* Class = "UILabel"; text = "About"; ObjectID = "FG1-Ul-Vlk"; */
+"FG1-Ul-Vlk.text" = "About";
+
+/* Class = "UILabel"; text = "There are no Top songs uploaded"; ObjectID = "FWL-A8-m8Q"; */
+"FWL-A8-m8Q.text" = "There are no Top songs uploaded";
+
+/* Class = "UINavigationItem"; title = "Deep Sound"; ObjectID = "ITg-0k-YEY"; */
+"ITg-0k-YEY.title" = "Deep Sound";
+
+/* Class = "UILabel"; text = "Playlist"; ObjectID = "LUv-sH-nxa"; */
+"LUv-sH-nxa.text" = "Playlist";
+
+/* Class = "UILabel"; text = "Followings"; ObjectID = "Nt8-YL-u9B"; */
+"Nt8-YL-u9B.text" = "Followings";
+
+/* Class = "UILabel"; text = "Followers"; ObjectID = "OCm-N3-zLV"; */
+"OCm-N3-zLV.text" = "Followers";
+
+/* Class = "UILabel"; text = "There are no latest songs uploaded"; ObjectID = "Osg-05-W0w"; */
+"Osg-05-W0w.text" = "There are no latest songs uploaded";
+
+/* Class = "UIBarButtonItem"; title = " "; ObjectID = "Pyk-R0-8rn"; */
+"Pyk-R0-8rn.title" = " ";
+
+/* Class = "UIBarButtonItem"; title = " "; ObjectID = "Qzp-Tp-zMw"; */
+"Qzp-Tp-zMw.title" = " ";
+
+/* Class = "UILabel"; text = "Latest Songs"; ObjectID = "ROC-5j-Zo3"; */
+"ROC-5j-Zo3.text" = "Latest Songs";
+
+/* Class = "UILabel"; text = "Latest Songs"; ObjectID = "Sx4-YS-62l"; */
+"Sx4-YS-62l.text" = "Latest Songs";
+
+/* Class = "UILabel"; text = "There are no activity by this user "; ObjectID = "T4z-by-qQI"; */
+"T4z-by-qQI.text" = "There are no activity by this user ";
+
+/* Class = "UILabel"; text = "You have no Playlists yet"; ObjectID = "TNL-Wj-hXt"; */
+"TNL-Wj-hXt.text" = "You have no Playlists yet";
+
+/* Class = "UILabel"; text = "|"; ObjectID = "UZf-6M-UDG"; */
+"UZf-6M-UDG.text" = "|";
+
+/* Class = "UILabel"; text = "Top Songs "; ObjectID = "VNu-aB-ot3"; */
+"VNu-aB-ot3.text" = "Top Songs ";
+
+/* Class = "UINavigationItem"; title = "Playlist"; ObjectID = "W03-0E-NCB"; */
+"W03-0E-NCB.title" = "Playlist";
+
+/* Class = "UILabel"; text = "Artist "; ObjectID = "WQW-I0-kXK"; */
+"WQW-I0-kXK.text" = "Artist ";
+
+/* Class = "UILabel"; text = "There are no activity by this user "; ObjectID = "Wtu-Gf-iM3"; */
+"Wtu-Gf-iM3.text" = "There are no activity by this user ";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "XWj-W2-uOw"; */
+"XWj-W2-uOw.text" = "Label";
+
+/* Class = "UILabel"; text = "Name "; ObjectID = "YCu-6R-vTh"; */
+"YCu-6R-vTh.text" = "Name ";
+
+/* Class = "UILabel"; text = "@Username"; ObjectID = "YWS-va-Mqx"; */
+"YWS-va-Mqx.text" = "@Username";
+
+/* Class = "UINavigationItem"; title = "Library"; ObjectID = "YdT-Q7-ooH"; */
+"YdT-Q7-ooH.title" = "Library";
+
+/* Class = "UILabel"; text = "0"; ObjectID = "ZLz-Uq-D9e"; */
+"ZLz-Uq-D9e.text" = "0";
+
+/* Class = "UILabel"; text = "0"; ObjectID = "ZX6-0s-xaF"; */
+"ZX6-0s-xaF.text" = "0";
+
+/* Class = "UILabel"; text = "There are no Store songs uploaded"; ObjectID = "bOu-Wr-pJm"; */
+"bOu-Wr-pJm.text" = "There are no Store songs uploaded";
+
+/* Class = "UILabel"; text = "There are no activity by this user "; ObjectID = "bh9-ce-1vO"; */
+"bh9-ce-1vO.text" = "There are no activity by this user ";
+
+/* Class = "UILabel"; text = "My Playlists"; ObjectID = "ceE-Aa-RNj"; */
+"ceE-Aa-RNj.text" = "My Playlists";
+
+/* Class = "UILabel"; text = "Popular "; ObjectID = "dLQ-0a-MeB"; */
+"dLQ-0a-MeB.text" = "Popular ";
+
+/* Class = "UILabel"; text = "Top Songs"; ObjectID = "edW-Gd-DDC"; */
+"edW-Gd-DDC.text" = "Top Songs";
+
+/* Class = "UILabel"; text = "New sounds released recently"; ObjectID = "ekY-PW-qlh"; */
+"ekY-PW-qlh.text" = "New sounds released recently";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "fuz-id-8kQ"; */
+"fuz-id-8kQ.text" = "Label";
+
+/* Class = "UILabel"; text = "Store"; ObjectID = "iS3-r1-0e5"; */
+"iS3-r1-0e5.text" = "Store";
+
+/* Class = "UILabel"; text = "About"; ObjectID = "lfJ-N6-lFS"; */
+"lfJ-N6-lFS.text" = "About";
+
+/* Class = "UILabel"; text = "Name "; ObjectID = "nPU-Pu-bcR"; */
+"nPU-Pu-bcR.text" = "Name ";
+
+/* Class = "UILabel"; text = "Top Albums "; ObjectID = "r3S-1A-Hj4"; */
+"r3S-1A-Hj4.text" = "Top Albums ";
+
+/* Class = "UILabel"; text = "|"; ObjectID = "s4h-z8-TBw"; */
+"s4h-z8-TBw.text" = "|";
+
+/* Class = "UILabel"; text = "Activities"; ObjectID = "sqY-Pz-FGl"; */
+"sqY-Pz-FGl.text" = "Activities";
+
+/* Class = "UILabel"; text = "There are no Store songs uploaded"; ObjectID = "tZu-gZ-A7k"; */
+"tZu-gZ-A7k.text" = "There are no Store songs uploaded";
+
+/* Class = "UILabel"; text = "Followers"; ObjectID = "vD5-bQ-NEt"; */
+"vD5-bQ-NEt.text" = "Followers";
+
+/* Class = "UILabel"; text = "Recently Played >"; ObjectID = "wgl-he-XM1"; */
+"wgl-he-XM1.text" = "Recently Played >";
+
+/* Class = "UILabel"; text = "0"; ObjectID = "yq0-dO-QD5"; */
+"yq0-dO-QD5.text" = "0";

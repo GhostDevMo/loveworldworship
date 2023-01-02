@@ -1,0 +1,20 @@
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/R.swift/Sources/RswiftResources/StringResource.swift":
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/StringResource.d"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/StringResource.o"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/StringResource.dia"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/StringResource.swiftdeps"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/R.swift/Sources/RswiftResources/Integrations/StringResource+Integrations.swift":
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/StringResource+Integrations.d"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/StringResource+Integrations.dia"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/StringResource+Integrations.swiftdeps"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/StringResource+Integrations.o"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/R.swift/Sources/RswiftResources/Shared/StringParam.swift":
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/StringParam.d"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/StringParam.o"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/StringParam.dia"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/StringParam.swiftdeps"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/R.swift/Sources/RswiftResources/Shared/StringParam+Extensions.swift":
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/StringParam+Extensions.dia"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/StringParam+Extensions.d"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/StringParam+Extensions.swiftdeps"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/StringParam+Extensions.o"

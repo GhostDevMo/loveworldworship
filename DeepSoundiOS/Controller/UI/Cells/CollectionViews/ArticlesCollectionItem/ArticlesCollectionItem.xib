@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Poppins-Regular.otf">
+            <string>Poppins-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="" id="gTV-IL-0wX" customClass="ArticlesCollectionItem" customModule="DeepSoundiOS" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="313" height="234"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="313" height="234"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Xsy-97-bIP">
+                        <rect key="frame" x="8" y="8" width="297" height="150"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="150" id="KVI-3O-13A"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadiusV">
+                                <real key="value" value="10"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TimeLabel" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B8N-l9-c9U">
+                        <rect key="frame" x="218.5" y="164" width="86.5" height="24"/>
+                        <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="17"/>
+                        <color key="textColor" red="0.19215402009999999" green="0.19215536120000001" blue="0.19215893749999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p6I-1J-ivg">
+                        <rect key="frame" x="8" y="190" width="289" height="24"/>
+                        <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="17"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstItem="p6I-1J-ivg" firstAttribute="leading" secondItem="Xsy-97-bIP" secondAttribute="leading" id="AAk-DV-WQV"/>
+                <constraint firstItem="Xsy-97-bIP" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="8" id="AJv-dA-45q"/>
+                <constraint firstItem="B8N-l9-c9U" firstAttribute="trailing" secondItem="Xsy-97-bIP" secondAttribute="trailing" id="Jmk-WU-K5c"/>
+                <constraint firstItem="Xsy-97-bIP" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="QtJ-0R-qgT"/>
+                <constraint firstAttribute="trailing" secondItem="p6I-1J-ivg" secondAttribute="trailing" constant="16" id="UZp-ji-WJv"/>
+                <constraint firstAttribute="bottom" secondItem="p6I-1J-ivg" secondAttribute="bottom" constant="20" id="Xgh-fK-eaC"/>
+                <constraint firstAttribute="trailing" secondItem="Xsy-97-bIP" secondAttribute="trailing" constant="8" id="l4B-VG-oQ2"/>
+                <constraint firstItem="B8N-l9-c9U" firstAttribute="top" secondItem="Xsy-97-bIP" secondAttribute="bottom" constant="6" id="nSJ-5b-rhs"/>
+                <constraint firstItem="Xsy-97-bIP" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="8" id="sRY-r4-oRh"/>
+                <constraint firstItem="B8N-l9-c9U" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="uBs-bv-hQp"/>
+            </constraints>
+            <size key="customSize" width="313" height="234"/>
+            <connections>
+                <outlet property="articleImage" destination="Xsy-97-bIP" id="GRn-JX-73H"/>
+                <outlet property="timelabel" destination="B8N-l9-c9U" id="Mlf-Ba-YNB"/>
+                <outlet property="titleLabel" destination="p6I-1J-ivg" id="nFw-hv-gcm"/>
+            </connections>
+            <point key="canvasLocation" x="328.26086956521743" y="163.39285714285714"/>
+        </collectionViewCell>
+    </objects>
+</document>

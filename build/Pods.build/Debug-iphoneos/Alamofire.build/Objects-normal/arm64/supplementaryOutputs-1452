@@ -1,0 +1,20 @@
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/Alamofire/Source/URLEncodedFormEncoder.swift":
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/URLEncodedFormEncoder.d"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/URLEncodedFormEncoder.dia"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/URLEncodedFormEncoder.o"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/URLEncodedFormEncoder.swiftdeps"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/Alamofire/Source/URLRequest+Alamofire.swift":
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/URLRequest+Alamofire.d"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/URLRequest+Alamofire.o"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/URLRequest+Alamofire.swiftdeps"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/URLRequest+Alamofire.dia"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/Alamofire/Source/Validation.swift":
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/Validation.d"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/Validation.o"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/Validation.swiftdeps"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/Validation.dia"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/Alamofire/Source/URLSessionConfiguration+Alamofire.swift":
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/URLSessionConfiguration+Alamofire.o"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/URLSessionConfiguration+Alamofire.swiftdeps"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/URLSessionConfiguration+Alamofire.d"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/URLSessionConfiguration+Alamofire.dia"

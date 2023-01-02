@@ -1,0 +1,10 @@
+framework module PVSwitch {
+  umbrella header "PVSwitch-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module PVSwitch.__Swift {
+  exclude header "PVSwitch-Swift.h"
+}

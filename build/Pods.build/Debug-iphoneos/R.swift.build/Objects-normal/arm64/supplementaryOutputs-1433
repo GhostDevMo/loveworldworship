@@ -1,0 +1,20 @@
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/R.swift/Sources/RswiftResources/Integrations/ReuseIdentifier+Integrations.swift":
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/ReuseIdentifier+Integrations.o"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/ReuseIdentifier+Integrations.swiftdeps"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/ReuseIdentifier+Integrations.d"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/ReuseIdentifier+Integrations.dia"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/R.swift/Sources/RswiftResources/NibResource.swift":
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/NibResource.o"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/NibResource.d"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/NibResource.dia"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/NibResource.swiftdeps"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/R.swift/Sources/RswiftResources/Shared/Reusable.swift":
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/Reusable.dia"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/Reusable.d"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/Reusable.o"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/Reusable.swiftdeps"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/R.swift/Sources/RswiftResources/PropertyListResource.swift":
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/PropertyListResource.swiftdeps"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/PropertyListResource.d"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/PropertyListResource.o"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/PropertyListResource.dia"

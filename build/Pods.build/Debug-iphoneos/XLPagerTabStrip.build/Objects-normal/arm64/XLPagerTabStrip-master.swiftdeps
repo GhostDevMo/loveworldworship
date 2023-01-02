@@ -1,0 +1,18 @@
+version: "Apple Swift version 5.7.1 (swiftlang-5.7.1.135.3 clang-1400.0.29.51)"
+options: "ff347538964b074ff3d3101547abadbaac2ca8e62c7fe102025d4eec65defdd5"
+build_start_time: [1670568377, 637688159]
+build_end_time: [1670568379, 764308929]
+inputs:
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/XLPagerTabStrip/Sources/BarPagerTabStripViewController.swift": [1670007712, 265115499]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/XLPagerTabStrip/Sources/BarView.swift": [1670007712, 264575719]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/XLPagerTabStrip/Sources/BaseButtonBarPagerTabStripViewController.swift": [1670007712, 265442371]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/XLPagerTabStrip/Sources/ButtonBarPagerTabStripViewController.swift": [1670007712, 265621662]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/XLPagerTabStrip/Sources/ButtonBarView.swift": [1670007712, 264462947]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/XLPagerTabStrip/Sources/ButtonBarViewCell.swift": [1670007712, 264791250]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/XLPagerTabStrip/Sources/IndicatorInfo.swift": [1670007712, 264120578]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/XLPagerTabStrip/Sources/PagerTabStripBehaviour.swift": [1670007712, 264681339]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/XLPagerTabStrip/Sources/PagerTabStripError.swift": [1670007712, 265006780]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/XLPagerTabStrip/Sources/PagerTabStripViewController.swift": [1670007712, 265274524]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/XLPagerTabStrip/Sources/SegmentedPagerTabStripViewController.swift": [1670007712, 264353752]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/XLPagerTabStrip/Sources/SwipeDirection.swift": [1670007712, 263877868]
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/XLPagerTabStrip/Sources/TwitterPagerTabStripViewController.swift": [1670007712, 264004230]

@@ -1,0 +1,111 @@
+
+/* Class = "UILabel"; text = "Choose Genres"; ObjectID = "0MO-Ab-PGy"; */
+"0MO-Ab-PGy.text" = "Choose Genres";
+
+/* Class = "UILabel"; text = "Are you sure you want to delete this playlist ?"; ObjectID = "0lJ-xX-pfv"; */
+"0lJ-xX-pfv.text" = "Are you sure you want to delete this playlist ?";
+
+/* Class = "UIButton"; normalTitle = "Copy"; ObjectID = "3eQ-ls-zjm"; */
+"3eQ-ls-zjm.normalTitle" = "Copy";
+
+/* Class = "UIButton"; normalTitle = "CREATE"; ObjectID = "5CU-JC-tC8"; */
+"5CU-JC-tC8.normalTitle" = "CREATE";
+
+/* Class = "UIButton"; normalTitle = "CLOSE"; ObjectID = "6Oq-yu-kwh"; */
+"6Oq-yu-kwh.normalTitle" = "CLOSE";
+
+/* Class = "UIButton"; normalTitle = "NO"; ObjectID = "7F5-OO-g83"; */
+"7F5-OO-g83.normalTitle" = "NO";
+
+/* Class = "UIButton"; normalTitle = "CLOSE"; ObjectID = "7mz-Jz-bCw"; */
+"7mz-Jz-bCw.normalTitle" = "CLOSE";
+
+/* Class = "UILabel"; text = "Warning"; ObjectID = "8qw-gw-JrI"; */
+"8qw-gw-JrI.text" = "Warning";
+
+/* Class = "UIButton"; normalTitle = "YES"; ObjectID = "9EZ-Ew-fbY"; */
+"9EZ-Ew-fbY.normalTitle" = "YES";
+
+/* Class = "UIButton"; normalTitle = "Edit Playlist"; ObjectID = "AZb-yZ-Dq9"; */
+"AZb-yZ-Dq9.normalTitle" = "Edit Playlist";
+
+/* Class = "UIButton"; normalTitle = "Share"; ObjectID = "C6T-PX-HHK"; */
+"C6T-PX-HHK.normalTitle" = "Share";
+
+/* Class = "UILabel"; text = "Delete Playlist"; ObjectID = "CSa-X1-Rme"; */
+"CSa-X1-Rme.text" = "Delete Playlist";
+
+/* Class = "UIButton"; normalTitle = "YES"; ObjectID = "CoC-ni-v9b"; */
+"CoC-ni-v9b.normalTitle" = "YES";
+
+/* Class = "UILabel"; text = "Select a playlist"; ObjectID = "D5g-kF-cYF"; */
+"D5g-kF-cYF.text" = "Select a playlist";
+
+/* Class = "UILabel"; text = "Are you sure you want to log out?"; ObjectID = "Er3-Fh-ugb"; */
+"Er3-Fh-ugb.text" = "Are you sure you want to log out?";
+
+/* Class = "UIButton"; normalTitle = "OK"; ObjectID = "QAd-1J-S2M"; */
+"QAd-1J-S2M.normalTitle" = "OK";
+
+/* Class = "UILabel"; text = "Do you want to unblock this user"; ObjectID = "REP-1Q-AO5"; */
+"REP-1Q-AO5.text" = "Do you want to unblock this user";
+
+/* Class = "UILabel"; text = "Warning"; ObjectID = "SIa-iv-X1G"; */
+"SIa-iv-X1G.text" = "Warning";
+
+/* Class = "UIButton"; normalTitle = "DONE"; ObjectID = "Scr-gc-YxT"; */
+"Scr-gc-YxT.normalTitle" = "DONE";
+
+/* Class = "UIButton"; normalTitle = "CLOSE"; ObjectID = "Tg8-Vn-n3g"; */
+"Tg8-Vn-n3g.normalTitle" = "CLOSE";
+
+/* Class = "UIButton"; normalTitle = "YES"; ObjectID = "UZQ-Ju-QoG"; */
+"UZQ-Ju-QoG.normalTitle" = "YES";
+
+/* Class = "UIButton"; normalTitle = "Report This Song"; ObjectID = "WIa-1d-nDv"; */
+"WIa-1d-nDv.normalTitle" = "Report This Song";
+
+/* Class = "UIButton"; normalTitle = "CLOSE"; ObjectID = "Y7n-BS-Q5I"; */
+"Y7n-BS-Q5I.normalTitle" = "CLOSE";
+
+/* Class = "UIButton"; normalTitle = "NO"; ObjectID = "YiY-y4-Qdi"; */
+"YiY-y4-Qdi.normalTitle" = "NO";
+
+/* Class = "UIButton"; normalTitle = "Delete Playlist"; ObjectID = "gm8-mA-y0m"; */
+"gm8-mA-y0m.normalTitle" = "Delete Playlist";
+
+/* Class = "UIButton"; normalTitle = "DONE"; ObjectID = "gq5-NH-zdO"; */
+"gq5-NH-zdO.normalTitle" = "DONE";
+
+/* Class = "UIButton"; normalTitle = "CLOSE"; ObjectID = "hCf-KM-JhR"; */
+"hCf-KM-JhR.normalTitle" = "CLOSE";
+
+/* Class = "UIButton"; normalTitle = "Copy link to Profile"; ObjectID = "qJ5-rb-sM7"; */
+"qJ5-rb-sM7.normalTitle" = "Copy link to Profile";
+
+/* Class = "UILabel"; text = "Choose Price"; ObjectID = "s22-2P-AWh"; */
+"s22-2P-AWh.text" = "Choose Price";
+
+/* Class = "UIButton"; normalTitle = "DONE"; ObjectID = "skb-Wc-eQa"; */
+"skb-Wc-eQa.normalTitle" = "DONE";
+
+/* Class = "UIButton"; normalTitle = "CLOSE"; ObjectID = "snE-JT-TnQ"; */
+"snE-JT-TnQ.normalTitle" = "CLOSE";
+
+/* Class = "UIButton"; normalTitle = "Block"; ObjectID = "tSF-R1-Lfu"; */
+"tSF-R1-Lfu.normalTitle" = "Block";
+
+/* Class = "UILabel"; text = "Playlist"; ObjectID = "tTy-px-f2K"; */
+"tTy-px-f2K.text" = "Playlist";
+
+/* Class = "UIButton"; normalTitle = "NO"; ObjectID = "v95-OH-7iI"; */
+"v95-OH-7iI.normalTitle" = "NO";
+
+/* Class = "UILabel"; text = "Security"; ObjectID = "vTe-uL-O5O"; */
+"vTe-uL-O5O.text" = "Security";
+
+/* Class = "UIButton"; normalTitle = "Copy"; ObjectID = "wjg-fi-70K"; */
+"wjg-fi-70K.normalTitle" = "Copy";
+
+/* Class = "UILabel"; text = "Songs"; ObjectID = "z3c-2O-aBv"; */
+"z3c-2O-aBv.text" = "Songs";

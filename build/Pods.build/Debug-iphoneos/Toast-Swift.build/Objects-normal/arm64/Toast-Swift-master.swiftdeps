@@ -1,0 +1,6 @@
+version: "Apple Swift version 5.7.1 (swiftlang-5.7.1.135.3 clang-1400.0.29.51)"
+options: "7e5fb512c87f3776a3cc00b45a5553fa7716e5f7deb0d12e5e52a7471c567fb0"
+build_start_time: [1670568377, 634505033]
+build_end_time: [1670568380, 306633949]
+inputs:
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/Toast-Swift/Toast/Toast.swift": [1670007712, 258752822]

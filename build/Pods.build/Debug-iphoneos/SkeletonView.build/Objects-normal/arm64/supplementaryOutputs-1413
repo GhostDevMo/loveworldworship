@@ -1,0 +1,40 @@
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/API/Deprecated.swift":
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/Deprecated.o"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/Deprecated.dia"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/Deprecated.swiftdeps"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/Deprecated.d"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/Collections/CollectionSkeleton.swift":
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/CollectionSkeleton.o"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/CollectionSkeleton.d"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/CollectionSkeleton.dia"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/CollectionSkeleton.swiftdeps"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/API/UIKitExtensions/CALayer+Animations.swift":
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/CALayer+Animations.d"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/CALayer+Animations.o"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/CALayer+Animations.dia"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/CALayer+Animations.swiftdeps"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/Helpers/AssociationPolicy.swift":
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/AssociationPolicy.swiftdeps"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/AssociationPolicy.o"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/AssociationPolicy.dia"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/AssociationPolicy.d"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/SkeletonExtensions/GradientDirection+Animations.swift":
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/GradientDirection+Animations.dia"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/GradientDirection+Animations.o"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/GradientDirection+Animations.d"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/GradientDirection+Animations.swiftdeps"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/API/Models/GradientDirection.swift":
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/GradientDirection.swiftdeps"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/GradientDirection.d"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/GradientDirection.o"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/GradientDirection.dia"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/FoundationExtensions/DispatchQueue+Extensions.swift":
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/DispatchQueue+Extensions.d"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/DispatchQueue+Extensions.o"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/DispatchQueue+Extensions.swiftdeps"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/DispatchQueue+Extensions.dia"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkeletonView/SkeletonViewCore/Sources/Internal/UIKitExtensions/CALayer+Extensions.swift":
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/CALayer+Extensions.o"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/CALayer+Extensions.swiftdeps"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/CALayer+Extensions.d"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/SkeletonView.build/Objects-normal/arm64/CALayer+Extensions.dia"

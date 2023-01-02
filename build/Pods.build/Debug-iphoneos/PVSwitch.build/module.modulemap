@@ -1,0 +1,11 @@
+framework module PVSwitch {
+  umbrella header "PVSwitch-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module PVSwitch.Swift {
+  header "PVSwitch-Swift.h"
+  requires objc
+}

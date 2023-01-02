@@ -1,0 +1,20 @@
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/R.swift/Sources/RswiftResources/Integrations/FileResource+Integrations.swift":
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/FileResource+Integrations.swiftdeps"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/FileResource+Integrations.d"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/FileResource+Integrations.o"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/FileResource+Integrations.dia"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/R.swift/Sources/RswiftResources/Integrations/DataResource+Integrations.swift":
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/DataResource+Integrations.d"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/DataResource+Integrations.swiftdeps"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/DataResource+Integrations.o"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/DataResource+Integrations.dia"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/R.swift/Sources/RswiftResources/FileResource.swift":
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/FileResource.d"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/FileResource.swiftdeps"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/FileResource.o"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/FileResource.dia"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/R.swift/Sources/RswiftResources/Shared/DeploymentTarget.swift":
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/DeploymentTarget.dia"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/DeploymentTarget.d"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/DeploymentTarget.swiftdeps"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/R.swift.build/Objects-normal/arm64/DeploymentTarget.o"

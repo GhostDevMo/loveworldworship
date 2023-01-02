@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>application-identifier</key>
+	<string>FXJHCKHG67.com.krea8iv.Soundkit001</string>
+	<key>aps-environment</key>
+	<string>development</string>
+	<key>com.apple.developer.applesignin</key>
+	<array>
+		<string>Default</string>
+	</array>
+	<key>com.apple.developer.in-app-payments</key>
+	<array/>
+	<key>com.apple.developer.team-identifier</key>
+	<string>FXJHCKHG67</string>
+	<key>get-task-allow</key>
+	<true/>
+</dict>
+</plist>

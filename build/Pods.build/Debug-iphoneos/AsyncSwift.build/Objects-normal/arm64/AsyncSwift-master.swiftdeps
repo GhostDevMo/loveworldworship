@@ -1,0 +1,6 @@
+version: "Apple Swift version 5.7.1 (swiftlang-5.7.1.135.3 clang-1400.0.29.51)"
+options: "fb1e1a9b802f5b4ea369b44c1d1412c4af45a684dff8218e377b00935c680a50"
+build_start_time: [1670568386, 889512062]
+build_end_time: [1670568390, 470011949]
+inputs:
+  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/AsyncSwift/Sources/Async/Async.swift": [1670007711, 289529323]

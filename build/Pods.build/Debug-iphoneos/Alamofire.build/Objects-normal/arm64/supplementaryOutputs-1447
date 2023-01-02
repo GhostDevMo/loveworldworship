@@ -1,0 +1,25 @@
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/Alamofire/Source/NetworkReachabilityManager.swift":
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/NetworkReachabilityManager.o"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/NetworkReachabilityManager.d"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/NetworkReachabilityManager.swiftdeps"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/NetworkReachabilityManager.dia"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/Alamofire/Source/HTTPMethod.swift":
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/HTTPMethod.swiftdeps"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/HTTPMethod.dia"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/HTTPMethod.d"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/HTTPMethod.o"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/Alamofire/Source/MultipartFormData.swift":
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/MultipartFormData.o"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/MultipartFormData.d"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/MultipartFormData.swiftdeps"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/MultipartFormData.dia"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/Alamofire/Source/MultipartUpload.swift":
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/MultipartUpload.dia"
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/MultipartUpload.d"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/MultipartUpload.swiftdeps"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/MultipartUpload.o"
+"/Users/ojo/Downloads/DeepsoundiOSApp/Pods/Alamofire/Source/Notifications.swift":
+  dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/Notifications.d"
+  swift-dependencies: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/Notifications.swiftdeps"
+  diagnostics: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/Notifications.dia"
+  object: "/Users/ojo/Downloads/DeepsoundiOSApp/build/Pods.build/Debug-iphoneos/Alamofire.build/Objects-normal/arm64/Notifications.o"

@@ -1,0 +1,10 @@
+framework module AuthorizeNetAccept {
+  umbrella header "AuthorizeNetAccept-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module AuthorizeNetAccept.__Swift {
+  exclude header "AuthorizeNetAccept-Swift.h"
+}
