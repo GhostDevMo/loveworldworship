@@ -1,6 +1,0 @@
-version: "Apple Swift version 5.7.1 (swiftlang-5.7.1.135.3 clang-1400.0.29.51)"
-options: "31c927472598d4f0e72672358b0f9a30176064b415ce64b6b1993625be2fe5e0"
-build_start_time: [1670568386, 832527160]
-build_end_time: [1670568386, 858577966]
-inputs:
-  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/Braintree/Sources/PayPalDataCollector/Public/PayPalDataCollector/PPDataCollector.swift": !private [1670007711, 304708957]

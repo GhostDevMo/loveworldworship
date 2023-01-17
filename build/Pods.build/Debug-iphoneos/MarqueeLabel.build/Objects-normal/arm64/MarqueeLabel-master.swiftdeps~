@@ -1,6 +1,0 @@
-version: "Apple Swift version 5.7.1 (swiftlang-5.7.1.135.3 clang-1400.0.29.51)"
-options: "3b57244433c071740eafe1eec08c34e30b4ab79d96341b8a68b9e1e4c6fdc63d"
-build_start_time: [1670568381, 943088054]
-build_end_time: [1670568381, 966846942]
-inputs:
-  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/MarqueeLabel/Sources/MarqueeLabel.swift": !private [1670007712, 127823829]

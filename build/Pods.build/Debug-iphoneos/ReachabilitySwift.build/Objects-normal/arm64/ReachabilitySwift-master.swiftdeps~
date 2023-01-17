@@ -1,6 +1,0 @@
-version: "Apple Swift version 5.7.1 (swiftlang-5.7.1.135.3 clang-1400.0.29.51)"
-options: "843c36eab74b7a342855a5e669f9a3d0c34e1d790d501d1f4946e68953eda46a"
-build_start_time: [1670568380, 986289024]
-build_end_time: [1670568381, 14662981]
-inputs:
-  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/ReachabilitySwift/Sources/Reachability.swift": !private [1670007712, 221528530]

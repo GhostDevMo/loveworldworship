@@ -1,8 +1,0 @@
-version: "Apple Swift version 5.7.1 (swiftlang-5.7.1.135.3 clang-1400.0.29.51)"
-options: "b26b6dd8a5b5877f4fab05b493a32d8726d80e425bd83b8698d4b2f5d9923eae"
-build_start_time: [1670568377, 769126892]
-build_end_time: [1670568377, 801588058]
-inputs:
-  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkyFloatingLabelTextField/Sources/SkyFloatingLabelTextField.swift": !private [1670007712, 250534534]
-  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkyFloatingLabelTextField/Sources/SkyFloatingLabelTextFieldWithIcon.swift": !private [1670007712, 250763177]
-  "/Users/ojo/Downloads/DeepsoundiOSApp/Pods/SkyFloatingLabelTextField/Sources/UITextField+fixCaretPosition.swift": !private [1670007712, 250654220]
