@@ -1,5 +1,5 @@
-# DeepSoundIOS
-DeepSound IOS Application
+# LoveworldWorshipIOS
+Loveworld Worship IOS Application
 
 1. Click on Recently Played - Crash FIXED
 2. Click on Genres - crash FIXED
