@@ -23,32 +23,43 @@ class ProfileManger{
             API.Params.Fetch: "stations,followers,following,albums,playlists,blocks.favourites,recently_played,liked,activities,latest_songs,top_songs,store",
             API.Params.ServerKey: API.SERVER_KEY.Server_Key
             
-            ] as [String : Any]
+        ] as [String : Any]
         
         let jsonData = try! JSONSerialization.data(withJSONObject: params, options: [])
         let decoded = String(data: jsonData, encoding: .utf8)!
         log.verbose("Targeted URL = \(API.GetProfile_Constants_Methods.GET_PROFILE_API)")
-            log.verbose("Decoded String = \(decoded)")
+        log.verbose("Decoded String = \(decoded)")
         AF.request(API.GetProfile_Constants_Methods.GET_PROFILE_API, method: .post, parameters: params, encoding:URLEncoding.default, headers: nil).responseJSON { (response) in
             
-            if (response.value != nil){
-                guard let res = response.value as? [String:Any] else {return}
-                guard let apiStatus = res["status"]  as? Int else {return}
-                if apiStatus ==  API.ERROR_CODES.E_TwoH{
-                    log.verbose("apiStatus Int = \(apiStatus)")
-                    let data = try! JSONSerialization.data(withJSONObject: response.value!, options: [])
-                    let result = try! JSONDecoder().decode(ProfileModel.ProfileSuccessModel.self, from: data)
-                    completionBlock(result,nil,nil)
-                }else{
-                    log.verbose("apiStatus String = \(apiStatus)")
-                    let data = try! JSONSerialization.data(withJSONObject: response.value as Any, options: [])
-                    let result = try! JSONDecoder().decode(ProfileModel.sessionErrorModel.self, from: data)
-                    log.error("AuthError = \(result.error ?? "")")
-                    completionBlock(nil,result,nil)
+            if let responseValue = response.value {
+                do {
+                    guard let res = responseValue as? [String:Any] else {
+                        return
+                    }
+                    
+                    guard let apiStatus = res["status"] as? Int else {
+                        return
+                    }
+                    
+                    if apiStatus == API.ERROR_CODES.E_TwoH {
+                        log.verbose("apiStatus Int = \(apiStatus)")
+                        let data = try JSONSerialization.data(withJSONObject: responseValue, options: [])
+                        let result = try JSONDecoder().decode(ProfileModel.ProfileSuccessModel.self, from: data)
+                        completionBlock(result, nil, nil)
+                    } else {
+                        log.verbose("apiStatus String = \(apiStatus)")
+                        let data = try JSONSerialization.data(withJSONObject: responseValue as Any, options: [])
+                        let result = try JSONDecoder().decode(ProfileModel.sessionErrorModel.self, from: data)
+                        log.error("AuthError = \(result.error ?? "")")
+                        completionBlock(nil, result, nil)
+                    }
+                } catch {
+                    log.error("Error: \(error.localizedDescription)")
+                    completionBlock(nil, nil, error)
                 }
-            }else{
+            } else {
                 log.error("error = \(response.error?.localizedDescription ?? "")")
-                completionBlock(nil,nil,response.error)
+                completionBlock(nil, nil, response.error)
             }
         }
     }

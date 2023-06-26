@@ -388,10 +388,10 @@ class UserInfoVC: BaseVC {
                                     self.followBtn.setImage(R.image.ic_add(), for: .normal)
                                     self.followBtn.backgroundColor = UIColor.hexStringToUIColor(hex: "444444")
                                 }
-                                self.latestSongArray = success?.data?.latestsongs?[0] ?? []
-                                self.topSongArray = success?.data?.topSongs?[0] ?? []
+                                self.latestSongArray = success?.data?.latestsongs ?? []
+                                self.topSongArray = success?.data?.topSongs ?? []
                                 self.storeSongsArray = success?.data?.store?[0] ?? []
-                                self.activitiesArray = success?.data?.activities?[0] ?? []
+                                self.activitiesArray = success?.data?.activities ?? []
                                 
                                 if self.latestSongArray.isEmpty{
                                     self.latestSongLabel.isHidden = false
@@ -706,8 +706,8 @@ extension UserInfoVC:UICollectionViewDelegate,UICollectionViewDataSource,UIColle
             let recentlyPlayedCountString = object.countViews?.stringValue ?? ""
             let sharedCountString = object.countShares?.stringValue ?? ""
             let commentCountString = object.countComment?.stringValue ?? ""
-            
-            let musicObject = MusicPlayerModel(name: name, time: time, title: title, musicType: musicType, ThumbnailImageString: thumbnailImageString, likeCount: likeCount, favoriteCount: favoriteCount, recentlyPlayedCount: recentlyPlayedCount, sharedCount: sharedCount, commentCount: commentCount, likeCountString: likecountString, favoriteCountString: favoriteCountString, recentlyPlayedCountString: recentlyPlayedCountString, sharedCountString: sharedCountString, commentCountString: commentCountString, audioString: audioString, audioID: audioId, isLiked: isLiked, isFavorite: isFavorited, trackId: trackId,isDemoTrack:isDemo!,isPurchased:false,isOwner: isOwner)
+            let duration = object.duration ?? "0:0"
+            let musicObject = MusicPlayerModel(name: name, time: time, title: title, musicType: musicType, ThumbnailImageString: thumbnailImageString, likeCount: likeCount, favoriteCount: favoriteCount, recentlyPlayedCount: recentlyPlayedCount, sharedCount: sharedCount, commentCount: commentCount, likeCountString: likecountString, favoriteCountString: favoriteCountString, recentlyPlayedCountString: recentlyPlayedCountString, sharedCountString: sharedCountString, commentCountString: commentCountString, audioString: audioString, audioID: audioId, isLiked: isLiked, isFavorite: isFavorited, trackId: trackId,isDemoTrack:isDemo!,isPurchased:false,isOwner: isOwner, duration: duration)
             popupContentController!.popupItem.title = object.publisher?.name ?? ""
             popupContentController!.popupItem.subtitle = object.title?.htmlAttributedString ?? ""
             let cell  = tableView.cellForRow(at: indexPath) as? DashboardNewRelease_CollectionCell
@@ -805,8 +805,8 @@ extension UserInfoVC:UICollectionViewDelegate,UICollectionViewDataSource,UIColle
             let recentlyPlayedCountString = object.countViews?.stringValue ?? ""
             let sharedCountString = object.countShares?.stringValue ?? ""
             let commentCountString = object.countComment?.stringValue ?? ""
-            
-            let musicObject = MusicPlayerModel(name: name, time: time, title: title, musicType: musicType, ThumbnailImageString: thumbnailImageString, likeCount: likeCount, favoriteCount: favoriteCount, recentlyPlayedCount: recentlyPlayedCount, sharedCount: sharedCount, commentCount: commentCount, likeCountString: likecountString, favoriteCountString: favoriteCountString, recentlyPlayedCountString: recentlyPlayedCountString, sharedCountString: sharedCountString, commentCountString: commentCountString, audioString: audioString, audioID: audioId, isLiked: isLiked, isFavorite: isFavorited, trackId: trackId,isDemoTrack:isDemo!,isPurchased:false,isOwner: isOwner)
+            let duration = object.duration ?? "0:0"
+            let musicObject = MusicPlayerModel(name: name, time: time, title: title, musicType: musicType, ThumbnailImageString: thumbnailImageString, likeCount: likeCount, favoriteCount: favoriteCount, recentlyPlayedCount: recentlyPlayedCount, sharedCount: sharedCount, commentCount: commentCount, likeCountString: likecountString, favoriteCountString: favoriteCountString, recentlyPlayedCountString: recentlyPlayedCountString, sharedCountString: sharedCountString, commentCountString: commentCountString, audioString: audioString, audioID: audioId, isLiked: isLiked, isFavorite: isFavorited, trackId: trackId,isDemoTrack:isDemo!,isPurchased:false,isOwner: isOwner, duration: duration)
             
             popupContentController!.popupItem.title = object.publisher?.name ?? ""
             popupContentController!.popupItem.subtitle = object.title?.htmlAttributedString ?? ""
@@ -905,8 +905,8 @@ extension UserInfoVC:UICollectionViewDelegate,UICollectionViewDataSource,UIColle
             let recentlyPlayedCountString = object.countViews?.stringValue ?? ""
             let sharedCountString = object.countShares?.stringValue ?? ""
             let commentCountString = object.countComment?.stringValue ?? ""
-            
-            let musicObject = MusicPlayerModel(name: name, time: time, title: title, musicType: musicType, ThumbnailImageString: thumbnailImageString, likeCount: likeCount, favoriteCount: favoriteCount, recentlyPlayedCount: recentlyPlayedCount, sharedCount: sharedCount, commentCount: commentCount, likeCountString: likecountString, favoriteCountString: favoriteCountString, recentlyPlayedCountString: recentlyPlayedCountString, sharedCountString: sharedCountString, commentCountString: commentCountString, audioString: audioString, audioID: audioId, isLiked: isLiked, isFavorite: isFavorited, trackId: trackId,isDemoTrack:isDemo!,isPurchased:false,isOwner: isOwner)
+            let duration = object.duration ?? "0:0"
+            let musicObject = MusicPlayerModel(name: name, time: time, title: title, musicType: musicType, ThumbnailImageString: thumbnailImageString, likeCount: likeCount, favoriteCount: favoriteCount, recentlyPlayedCount: recentlyPlayedCount, sharedCount: sharedCount, commentCount: commentCount, likeCountString: likecountString, favoriteCountString: favoriteCountString, recentlyPlayedCountString: recentlyPlayedCountString, sharedCountString: sharedCountString, commentCountString: commentCountString, audioString: audioString, audioID: audioId, isLiked: isLiked, isFavorite: isFavorited, trackId: trackId,isDemoTrack:isDemo!,isPurchased:false,isOwner: isOwner, duration: duration)
             popupContentController!.popupItem.title = object.publisher?.name ?? ""
             popupContentController!.popupItem.subtitle = object.title?.htmlAttributedString ?? ""
             let cell  = tableView.cellForRow(at: indexPath) as? DashboardNewRelease_CollectionCell
@@ -1020,8 +1020,8 @@ extension UserInfoVC:UITableViewDelegate,UITableViewDataSource{
         let recentlyPlayedCountString = object.trackData?.countViews?.stringValue ?? ""
         let sharedCountString = object.trackData?.countShares?.stringValue ?? ""
         let commentCountString = object.trackData?.countComment?.stringValue ?? ""
-        
-        let musicObject = MusicPlayerModel(name: name, time: time, title: title, musicType: musicType, ThumbnailImageString: thumbnailImageString, likeCount: likeCount, favoriteCount: favoriteCount, recentlyPlayedCount: recentlyPlayedCount, sharedCount: sharedCount, commentCount: commentCount, likeCountString: likecountString, favoriteCountString: favoriteCountString, recentlyPlayedCountString: recentlyPlayedCountString, sharedCountString: sharedCountString, commentCountString: commentCountString, audioString: audioString, audioID: audioId, isLiked: isLiked, isFavorite: isFavorited, trackId: trackId,isDemoTrack:isDemo!,isPurchased:false,isOwner: isOwner)
+        let duration = object.trackData?.duration ?? "0:0"
+        let musicObject = MusicPlayerModel(name: name, time: time, title: title, musicType: musicType, ThumbnailImageString: thumbnailImageString, likeCount: likeCount, favoriteCount: favoriteCount, recentlyPlayedCount: recentlyPlayedCount, sharedCount: sharedCount, commentCount: commentCount, likeCountString: likecountString, favoriteCountString: favoriteCountString, recentlyPlayedCountString: recentlyPlayedCountString, sharedCountString: sharedCountString, commentCountString: commentCountString, audioString: audioString, audioID: audioId, isLiked: isLiked, isFavorite: isFavorited, trackId: trackId,isDemoTrack:isDemo!,isPurchased:false,isOwner: isOwner, duration: duration)
         popupContentController!.popupItem.title = object.userData?.name ?? ""
         popupContentController!.popupItem.subtitle = object.trackData?.title?.htmlAttributedString ?? ""
         self.addToRecentlyWatched(trackId: object.trackData?.id ?? 0)

@@ -57,20 +57,6 @@ class PlayerShowInfoVC: BaseVC {
         smallthumbnailImage.sd_setImage(with: url , placeholderImage:R.image.imagePlacholder())
         
         
-        if((AppInstance.instance.player?.currentItem?.asset.duration) != nil){
-            
-            if let _ = AppInstance.instance.player?.currentItem?.asset.duration{}else{return}
-            if let _ = AppInstance.instance.player?.currentItem?.currentTime(){}else{return}
-
-            songDuration.text =  self.formatTimeFromSeconds(totalSeconds: Int32(Float(Float64(CMTimeGetSeconds((AppInstance.instance.player?.currentItem?.asset.duration)!)))))
-            
-        }
-        if ((musicObject?.isPurchased!) != nil){
-            purchaseRequired.text = "Yes"
-        }
-        else{
-            purchaseRequired.text = "NO"
-        }
 
     }
     func formatTimeFromSeconds(totalSeconds: Int32) -> String {

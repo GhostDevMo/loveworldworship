@@ -17,6 +17,7 @@ class DashboardSectionFourTableItem: UITableViewCell {
     private let popupContentController = R.storyboard.player.musicPlayerVC()
     var notloggedInVC:NotLoggedInHomeVC?
        var loggedInVC:Dashboard1VC?
+    var loggedLibrayInVC:LibraryVC?
     private var recentlyPlayedArrayMusic = [MusicPlayerModel]()
 
     var songObject = [DiscoverModel.Song]()
@@ -40,10 +41,14 @@ class DashboardSectionFourTableItem: UITableViewCell {
      }
      func bind(_ object:DiscoverModel.NewReleasesRecentlyPlayed?){
          self.object = object
-        for (value) in  self.object?.data ?? []{
-            self.songObject.append(value)
-          }
-        collectionView.reloadData()
+         for (value) in  self.object?.data ?? []{
+             self.songObject.append(value)
+         }
+         DispatchQueue.main.asyncAfter(deadline: .now() +  5.0) {
+             self.isloading = false
+             self.collectionView.reloadData()
+         }
+        
      }
     
 }
@@ -150,8 +155,8 @@ extension DashboardSectionFourTableItem:UICollectionViewDataSource,UICollectionV
          let recentlyPlayedCountString = object.countViews?.stringValue ?? ""
          let sharedCountString = object.countShares?.stringValue ?? ""
          let commentCountString = object.countComment?.stringValue ?? ""
-
-         let musicObject = MusicPlayerModel(name: name, time: time, title: title, musicType: musicType, ThumbnailImageString: thumbnailImageString, likeCount: likeCount, favoriteCount: favoriteCount, recentlyPlayedCount: recentlyPlayedCount, sharedCount: sharedCount, commentCount: commentCount, likeCountString: likecountString, favoriteCountString: favoriteCountString, recentlyPlayedCountString: recentlyPlayedCountString, sharedCountString: sharedCountString, commentCountString: commentCountString, audioString: audioString, audioID: audioId, isLiked: isLiked, isFavorite: isFavorited, trackId: trackId,isDemoTrack:isDemo!,isPurchased:false,isOwner: isOwner)
+        let duration = object.duration ?? "0:0"
+         let musicObject = MusicPlayerModel(name: name, time: time, title: title, musicType: musicType, ThumbnailImageString: thumbnailImageString, likeCount: likeCount, favoriteCount: favoriteCount, recentlyPlayedCount: recentlyPlayedCount, sharedCount: sharedCount, commentCount: commentCount, likeCountString: likecountString, favoriteCountString: favoriteCountString, recentlyPlayedCountString: recentlyPlayedCountString, sharedCountString: sharedCountString, commentCountString: commentCountString, audioString: audioString, audioID: audioId, isLiked: isLiked, isFavorite: isFavorited, trackId: trackId,isDemoTrack:isDemo!,isPurchased:false,isOwner: isOwner, duration: duration)
          popupContentController!.popupItem.title = object.publisher?.name ?? ""
          popupContentController!.popupItem.subtitle = object.title?.htmlAttributedString ?? ""
           let cell  = collectionView.cellForItem(at: indexPath) as? DashboardRecentlyPlayed_CollectionCell
@@ -170,6 +175,14 @@ extension DashboardSectionFourTableItem:UICollectionViewDataSource,UICollectionV
          }else if self.loggedInVC != nil{
              self.loggedInVC?.addToRecentlyWatched(trackId: object.id ?? 0)
              self.loggedInVC?.tabBarController?.presentPopupBar(withContentViewController: self.popupContentController!, animated: true, completion: {
+                 self.popupContentController?.musicObject = musicObject
+                 self.popupContentController!.musicArray = self.recentlyPlayedArrayMusic
+                 self.popupContentController!.currentAudioIndex = indexPath.row
+                self.popupContentController?.setup()
+             })
+         } else if self.loggedLibrayInVC != nil {
+             self.loggedLibrayInVC?.addToRecentlyWatched(trackId: object.id ?? 0)
+             self.loggedLibrayInVC?.tabBarController?.presentPopupBar(withContentViewController: self.popupContentController!, animated: true, completion: {
                  self.popupContentController?.musicObject = musicObject
                  self.popupContentController!.musicArray = self.recentlyPlayedArrayMusic
                  self.popupContentController!.currentAudioIndex = indexPath.row

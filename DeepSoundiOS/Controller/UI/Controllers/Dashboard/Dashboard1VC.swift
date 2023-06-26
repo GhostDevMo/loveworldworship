@@ -38,6 +38,14 @@ class Dashboard1VC: BaseVC {
     private var refreshControl = UIRefreshControl()
     var type:DashboardActionType = .suggested
     
+    var typeFromLibrary:DashboardActionType? {
+        didSet {
+            self.type = typeFromLibrary ?? .suggested
+        }
+    }
+    var fromLibraryVC = false
+    @IBOutlet weak var heightSegmentsss: NSLayoutConstraint!
+    
     var isloading = true
     
     let segmentedControls = HMSegmentedControl(sectionTitles: [
@@ -94,18 +102,21 @@ class Dashboard1VC: BaseVC {
         
        
         navigationController?.setNavigationBarHidden(true, animated: false)
-        segmentedControls.selectionStyle = HMSegmentedControlSelectionStyle.fullWidthStripe
-        segmentedControls.segmentWidthStyle = .dynamic
-        segmentedControls.selectionIndicatorLocation = .bottom
-        segmentedControls.selectionIndicatorColor = UIColor.ButtonColor
-        segmentedControls.titleTextAttributes = [NSAttributedString.Key.font:R.font.urbanistMedium(size: 14)]
-        segmentedControls.selectedTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.ButtonColor]
-        segmentedControls.isUserDraggable = true
-        segmentedControls.verticalDividerWidth = 1.0
-        segmentedControls.selectionIndicatorHeight = 2
-        segmentedControls.frame = CGRect(x: 0, y: 5, width: self.view.frame.width, height: self.segmentedControl.frame.height)
-        segmentedControls.addTarget(self, action: #selector(segmentedControlChangedValue(segmentedControl:)), for: .valueChanged)
-        self.segmentedControl.addSubview(segmentedControls)
+        heightSegmentsss.constant = fromLibraryVC ? 1 : 42
+        if !fromLibraryVC {
+            segmentedControls.selectionStyle = HMSegmentedControlSelectionStyle.fullWidthStripe
+            segmentedControls.segmentWidthStyle = .dynamic
+            segmentedControls.selectionIndicatorLocation = .bottom
+            segmentedControls.selectionIndicatorColor = UIColor.ButtonColor
+            segmentedControls.titleTextAttributes = [NSAttributedString.Key.font:R.font.urbanistMedium(size: 14)]
+            segmentedControls.selectedTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.ButtonColor]
+            segmentedControls.isUserDraggable = true
+            segmentedControls.verticalDividerWidth = 1.0
+            segmentedControls.selectionIndicatorHeight = 2
+            segmentedControls.frame = CGRect(x: 0, y: 5, width: self.view.frame.width, height: self.segmentedControl.frame.height)
+            segmentedControls.addTarget(self, action: #selector(segmentedControlChangedValue(segmentedControl:)), for: .valueChanged)
+            self.segmentedControl.addSubview(segmentedControls)
+        }
     }
 
     
@@ -595,7 +606,8 @@ class Dashboard1VC: BaseVC {
                 audioString = object.demoTrack ?? ""
                 isDemo = true
             }
-            let musicObject = MusicPlayerModel(name: object.publisher?.name ?? "", time: object.duration ?? "", title:  object.songArray?.sName ?? "", musicType: object.songArray?.sCategory ?? "", ThumbnailImageString:  object.songArray?.sThumbnail ?? "", likeCount:  object.countLikes?.intValue ?? 0, favoriteCount: object.countFavorite?.intValue ?? 0, recentlyPlayedCount: object.countViews?.intValue ?? 0, sharedCount: object.countShares?.intValue ?? 0, commentCount: object.countComment?.intValue ?? 0, likeCountString: object.countLikes?.stringValue ?? "", favoriteCountString: object.countFavorite?.stringValue ?? "", recentlyPlayedCountString: object.countViews?.stringValue ?? "", sharedCountString: object.countShares?.stringValue ?? "", commentCountString: object.countComment?.stringValue ?? "", audioString: audioString, audioID: object.audioID ?? "", isLiked: object.isLiked, isFavorite: object.isFavoriated ?? false, trackId: object.id ?? 0,isDemoTrack:isDemo!,isPurchased:false,isOwner: object.isOwner ?? false)
+            let duration = object.duration ?? "0:0"
+            let musicObject = MusicPlayerModel(name: object.publisher?.name ?? "", time: object.duration ?? "", title:  object.songArray?.sName ?? "", musicType: object.songArray?.sCategory ?? "", ThumbnailImageString:  object.songArray?.sThumbnail ?? "", likeCount:  object.countLikes?.intValue ?? 0, favoriteCount: object.countFavorite?.intValue ?? 0, recentlyPlayedCount: object.countViews?.intValue ?? 0, sharedCount: object.countShares?.intValue ?? 0, commentCount: object.countComment?.intValue ?? 0, likeCountString: object.countLikes?.stringValue ?? "", favoriteCountString: object.countFavorite?.stringValue ?? "", recentlyPlayedCountString: object.countViews?.stringValue ?? "", sharedCountString: object.countShares?.stringValue ?? "", commentCountString: object.countComment?.stringValue ?? "", audioString: audioString, audioID: object.audioID ?? "", isLiked: object.isLiked, isFavorite: object.isFavoriated ?? false, trackId: object.id ?? 0,isDemoTrack:isDemo!,isPurchased:false,isOwner: object.isOwner ?? false, duration: duration)
             
             popupContentController!.popupItem.title = object.publisher?.name ?? ""
             popupContentController!.popupItem.subtitle = object.title?.htmlAttributedString ?? ""
@@ -666,7 +678,8 @@ class Dashboard1VC: BaseVC {
                 audioString = object?.demoTrack ?? ""
                 isDemo = true
             }
-            let musicObject = MusicPlayerModel(name: object?.publisher?.name ?? "", time: object?.duration ?? "", title:  object?.songArray?.sName ?? "", musicType: object?.songArray?.sCategory ?? "", ThumbnailImageString:  object?.songArray?.sThumbnail ?? "", likeCount:  object?.countLikes?.intValue ?? 0, favoriteCount: object?.countFavorite?.intValue ?? 0, recentlyPlayedCount: object?.countViews?.intValue ?? 0, sharedCount: object?.countShares?.intValue ?? 0, commentCount: object?.countComment?.intValue ?? 0, likeCountString: object?.countLikes?.stringValue ?? "", favoriteCountString: object?.countFavorite?.stringValue ?? "", recentlyPlayedCountString: object?.countViews?.stringValue ?? "", sharedCountString: object?.countShares?.stringValue ?? "", commentCountString: object?.countComment?.stringValue ?? "", audioString: audioString, audioID: object?.audioID ?? "", isLiked: object?.isLiked, isFavorite: object?.isFavoriated ?? false, trackId: object?.id ?? 0,isDemoTrack:isDemo!,isPurchased:false,isOwner: object?.isOwner ?? false)
+            let duration = object?.duration ?? "0:0"
+            let musicObject = MusicPlayerModel(name: object?.publisher?.name ?? "", time: object?.duration ?? "", title:  object?.songArray?.sName ?? "", musicType: object?.songArray?.sCategory ?? "", ThumbnailImageString:  object?.songArray?.sThumbnail ?? "", likeCount:  object?.countLikes?.intValue ?? 0, favoriteCount: object?.countFavorite?.intValue ?? 0, recentlyPlayedCount: object?.countViews?.intValue ?? 0, sharedCount: object?.countShares?.intValue ?? 0, commentCount: object?.countComment?.intValue ?? 0, likeCountString: object?.countLikes?.stringValue ?? "", favoriteCountString: object?.countFavorite?.stringValue ?? "", recentlyPlayedCountString: object?.countViews?.stringValue ?? "", sharedCountString: object?.countShares?.stringValue ?? "", commentCountString: object?.countComment?.stringValue ?? "", audioString: audioString, audioID: object?.audioID ?? "", isLiked: object?.isLiked, isFavorite: object?.isFavoriated ?? false, trackId: object?.id ?? 0,isDemoTrack:isDemo!,isPurchased:false,isOwner: object?.isOwner ?? false, duration: duration)
             
             popupContentController!.popupItem.title = object?.publisher?.name ?? ""
             popupContentController!.popupItem.subtitle = object?.title?.htmlAttributedString ?? ""
@@ -736,7 +749,8 @@ class Dashboard1VC: BaseVC {
                 audioString = object?.demoTrack ?? ""
                 isDemo = true
             }
-            let musicObject = MusicPlayerModel(name: object?.publisher?.name ?? "", time: object?.duration ?? "", title:  object?.songArray?.sName ?? "", musicType: object?.songArray?.sCategory ?? "", ThumbnailImageString:  object?.songArray?.sThumbnail ?? "", likeCount:  object?.countLikes?.intValue ?? 0, favoriteCount: object?.countFavorite?.intValue ?? 0, recentlyPlayedCount: object?.countViews?.intValue ?? 0, sharedCount: object?.countShares?.intValue ?? 0, commentCount: object?.countComment?.intValue ?? 0, likeCountString: object?.countLikes?.stringValue ?? "", favoriteCountString: object?.countFavorite?.stringValue ?? "", recentlyPlayedCountString: object?.countViews?.stringValue ?? "", sharedCountString: object?.countShares?.stringValue ?? "", commentCountString: object?.countComment?.stringValue ?? "", audioString: audioString, audioID: object?.audioID ?? "", isLiked: object?.isLiked, isFavorite: object?.isFavoriated ?? false, trackId: object?.id ?? 0,isDemoTrack:isDemo!,isPurchased:false,isOwner: object?.isOwner ?? false)
+            let duration = object?.duration ?? "0:0"
+            let musicObject = MusicPlayerModel(name: object?.publisher?.name ?? "", time: object?.duration ?? "", title:  object?.songArray?.sName ?? "", musicType: object?.songArray?.sCategory ?? "", ThumbnailImageString:  object?.songArray?.sThumbnail ?? "", likeCount:  object?.countLikes?.intValue ?? 0, favoriteCount: object?.countFavorite?.intValue ?? 0, recentlyPlayedCount: object?.countViews?.intValue ?? 0, sharedCount: object?.countShares?.intValue ?? 0, commentCount: object?.countComment?.intValue ?? 0, likeCountString: object?.countLikes?.stringValue ?? "", favoriteCountString: object?.countFavorite?.stringValue ?? "", recentlyPlayedCountString: object?.countViews?.stringValue ?? "", sharedCountString: object?.countShares?.stringValue ?? "", commentCountString: object?.countComment?.stringValue ?? "", audioString: audioString, audioID: object?.audioID ?? "", isLiked: object?.isLiked, isFavorite: object?.isFavoriated ?? false, trackId: object?.id ?? 0,isDemoTrack:isDemo!,isPurchased:false,isOwner: object?.isOwner ?? false, duration: duration)
             
             popupContentController!.popupItem.title = object?.publisher?.name ?? ""
             popupContentController!.popupItem.subtitle = object?.title?.htmlAttributedString ?? ""
@@ -806,7 +820,8 @@ class Dashboard1VC: BaseVC {
                 audioString = object?.demoTrack ?? ""
                 isDemo = true
             }
-            let musicObject = MusicPlayerModel(name: object?.publisher?.name ?? "", time: object?.duration ?? "", title:  object?.songArray?.sName ?? "", musicType: object?.songArray?.sCategory ?? "", ThumbnailImageString:  object?.songArray?.sThumbnail ?? "", likeCount:  object?.countLikes?.intValue ?? 0, favoriteCount: object?.countFavorite?.intValue ?? 0, recentlyPlayedCount: object?.countViews?.intValue ?? 0, sharedCount: object?.countShares?.intValue ?? 0, commentCount: object?.countComment?.intValue ?? 0, likeCountString: object?.countLikes?.stringValue ?? "", favoriteCountString: object?.countFavorite?.stringValue ?? "", recentlyPlayedCountString: object?.countViews?.stringValue ?? "", sharedCountString: object?.countShares?.stringValue ?? "", commentCountString: object?.countComment?.stringValue ?? "", audioString: audioString, audioID: object?.audioID ?? "", isLiked: object?.isLiked, isFavorite: object?.isFavoriated ?? false, trackId: object?.id ?? 0,isDemoTrack:isDemo!,isPurchased:false,isOwner: object?.isOwner ?? false)
+            let duration = object?.duration ?? "0:0"
+            let musicObject = MusicPlayerModel(name: object?.publisher?.name ?? "", time: object?.duration ?? "", title:  object?.songArray?.sName ?? "", musicType: object?.songArray?.sCategory ?? "", ThumbnailImageString:  object?.songArray?.sThumbnail ?? "", likeCount:  object?.countLikes?.intValue ?? 0, favoriteCount: object?.countFavorite?.intValue ?? 0, recentlyPlayedCount: object?.countViews?.intValue ?? 0, sharedCount: object?.countShares?.intValue ?? 0, commentCount: object?.countComment?.intValue ?? 0, likeCountString: object?.countLikes?.stringValue ?? "", favoriteCountString: object?.countFavorite?.stringValue ?? "", recentlyPlayedCountString: object?.countViews?.stringValue ?? "", sharedCountString: object?.countShares?.stringValue ?? "", commentCountString: object?.countComment?.stringValue ?? "", audioString: audioString, audioID: object?.audioID ?? "", isLiked: object?.isLiked, isFavorite: object?.isFavoriated ?? false, trackId: object?.id ?? 0,isDemoTrack:isDemo!,isPurchased:false,isOwner: object?.isOwner ?? false, duration: duration)
             
             popupContentController!.popupItem.title = object?.publisher?.name ?? ""
             popupContentController!.popupItem.subtitle = object?.title?.htmlAttributedString ?? ""
@@ -921,7 +936,7 @@ extension Dashboard1VC:UITableViewDelegate,UITableViewDataSource{
                 return artistArray.count
             }
             else if type == .recentlyplayed{
-                return recentlyPlayedArray?.newRelease?.count ?? 0
+                return recentlyPlayedArray?.newRelease?.data?.count ?? 0
             }
             else if type == .popular{
                 return mostPopularArray?.newRelease?.data?.count ?? 0
@@ -947,18 +962,18 @@ extension Dashboard1VC:UITableViewDelegate,UITableViewDataSource{
             switch type {
             
             case .genres:
-                headerView.titleLabel.text = "Genres"
+                headerView.titleLabel.text = "Categories"
                 headerView.btnSeeAll.addTarget(self, action: #selector(didTappSeeAll(_:)), for: .touchUpInside)
                 
                 headerView.btnSeeAll.isHidden = true
                 return headerView
             case .latestsongs:
-                headerView.titleLabel.text = "Latest Songs"
+                headerView.titleLabel.text = "New Releases"
                 headerView.btnSeeAll.addTarget(self, action: #selector(didTappSeeAll(_:)), for: .touchUpInside)
                 headerView.btnSeeAll.tag =  2
                 return headerView
             case .resentlyplayed:
-                headerView.titleLabel.text = "Resently Played"
+                headerView.titleLabel.text = "Recently Played"
                 headerView.btnSeeAll.addTarget(self, action: #selector(didTappSeeAll(_:)), for: .touchUpInside)
                 headerView.btnSeeAll.tag = 3
                 return headerView
@@ -1009,7 +1024,7 @@ extension Dashboard1VC:UITableViewDelegate,UITableViewDataSource{
             let headerView = tableView.dequeueReusableCell(withIdentifier: AssigingOrderHeaderTableCell.identifier) as!  AssigingOrderHeaderTableCell
             headerView.btnArrangOrder.tag = type.rawValue
             headerView.btnArrangOrder.addTarget(self, action: #selector(didTapFilterData(sender:)), for: .touchUpInside)
-            headerView.lblTotalSongs.text = "\(recentlyPlayedArray?.newRelease?.count ?? 0) Recently Played"
+            headerView.lblTotalSongs.text = "\(recentlyPlayedArray?.newRelease?.data?.count ?? 0) Recently Played"
             return headerView
             
         }

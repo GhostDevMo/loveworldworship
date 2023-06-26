@@ -22,7 +22,7 @@ class EditProfileVC: BaseVC {
         super.viewDidLoad()
         self.setupUI()
         self.nameTextField.placeholder = NSLocalizedString("Full Name", comment: "Full Name")
-        self.facebookTextField.placeholder = NSLocalizedString("Facebook", comment: "Facebook")
+        self.facebookTextField.placeholder = NSLocalizedString("Kingschat", comment: "Kingschat")
         self.websiteTextField.placeholder = NSLocalizedString("Website", comment: "Website")
         self.saveButton.backgroundColor = .ButtonColor
         SwiftEventBus.onMainThread(self, name:   EventBusConstants.EventBusConstantsUtils.EVENT_DISMISS_POPOVER) { result in
@@ -47,7 +47,7 @@ class EditProfileVC: BaseVC {
         self.nameTextField.placeholder = (NSLocalizedString("Edit Profile", comment: ""))
         self.saveButton.setTitle((NSLocalizedString("SAVE", comment: "")), for: .normal)
         self.websiteTextField.placeholder = (NSLocalizedString("Website", comment: ""))
-        self.facebookTextField.placeholder = (NSLocalizedString("Facebook", comment: ""))
+        self.websiteTextField.placeholder = (NSLocalizedString("Kingschat", comment: ""))
         self.title = (NSLocalizedString("Edit Profile", comment: ""))
         let name = AppInstance.instance.userProfile?.data?.name ?? ""
         let aboutMe = AppInstance.instance.userProfile?.data?.about ?? ""

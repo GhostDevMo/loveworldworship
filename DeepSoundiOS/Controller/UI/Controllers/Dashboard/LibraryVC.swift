@@ -11,7 +11,9 @@ import DeepSoundSDK
 import SwiftEventBus
 import GoogleMobileAds
 import Async
-class LibraryVC: UIViewController {
+import PureLayout
+
+class LibraryVC: BaseVC {
     
     @IBOutlet weak var chatBtn: UIButton!
     
@@ -53,8 +55,24 @@ class LibraryVC: UIViewController {
     @IBOutlet weak var titleLabel: UINavigationItem!
     @IBOutlet weak var libraryTableView: UITableView!
     
+    @IBOutlet weak var viewAlbumss: UIView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        if let fileView = self.storyboard!.instantiateViewController(withIdentifier: "Dashboard1VC") as? Dashboard1VC {
+            fileView.typeFromLibrary =  .topalbums
+            fileView.fromLibraryVC = true
+            self.addChild(fileView)
+            viewAlbumss.addSubview(fileView.view)
+            fileView.view.configureForAutoLayout()
+            fileView.view.autoPinEdgesToSuperviewEdges()
+            fileView.didMove(toParent: self)
+        }
+        self.showProgressDialog(text: "Loading...")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            self.dismissProgressDialog { }
+        }
         self.chatBtn.tintColor = .ButtonColor
         self.setupUI()
         self.titleLabel.title = (NSLocalizedString("Library", comment: ""))
@@ -201,7 +219,7 @@ extension LibraryVC:UITableViewDelegate,UITableViewDataSource{
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if recentlyPlayedArray?.newRelease?.count != 0{
-            
+
             return 1
         }
         else{
@@ -218,6 +236,7 @@ extension LibraryVC:UITableViewDelegate,UITableViewDataSource{
         if recentlyPlayedArray?.newRelease?.count != 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: DashboardSectionFourTableItem.identifier) as! DashboardSectionFourTableItem
             cell.selectionStyle = .none
+            cell.loggedLibrayInVC = self
             cell.bind(recentlyPlayedArray?.newRelease ?? nil)
             return cell
         }

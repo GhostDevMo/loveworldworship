@@ -55,7 +55,10 @@ NSString *const BTCardClientGraphQLTokenizeFeature = @"tokenize_credit_cards";
 
 - (void)tokenizeCard:(BTCard *)card completion:(void (^)(BTCardNonce *tokenizedCard, NSError *error))completion {
     BTCardRequest *request = [[BTCardRequest alloc] initWithCard:card];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     [self tokenizeCard:request options:nil completion:completion];
+#pragma clang diagnostic pop
 }
 
 
@@ -207,6 +210,8 @@ NSString *const BTCardClientGraphQLTokenizeFeature = @"tokenize_credit_cards";
     if (request.card.parameters) {
         NSMutableDictionary *mutableCardParameters = [request.card.parameters mutableCopy];
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
         if (request.enrollmentID) {
             // Convert the immutable options dictionary so to write to it without overwriting any existing options
             NSMutableDictionary *unionPayEnrollment = [NSMutableDictionary new];
@@ -216,6 +221,7 @@ NSString *const BTCardClientGraphQLTokenizeFeature = @"tokenize_credit_cards";
             }
             mutableCardParameters[@"options"] = [mutableCardParameters[@"options"] mutableCopy];
             mutableCardParameters[@"options"][@"union_pay_enrollment"] = unionPayEnrollment;
+#pragma clang diagnostic pop
         }
 
         parameters[@"credit_card"] = [mutableCardParameters copy];

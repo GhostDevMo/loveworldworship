@@ -13,7 +13,6 @@ import SwiftEventBus
 import IQKeyboardManagerSwift
 import SwiftyBeaver
 import Async
-import OneSignal
 import FBSDKLoginKit
 import GoogleSignIn
 import CoreData
@@ -25,7 +24,7 @@ import Braintree
 let log = SwiftyBeaver.self
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate,OSSubscriptionObserver {
+class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
     var isInternetConnected = Connectivity.isConnectedToNetwork()
@@ -109,10 +108,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate,OSSubscriptionObserver {
         /*
          Uncomment all these to set seperately and comment setServerDataWithKey before uncommenting it
          */
-        
-//        ServerCredentials.setBaseUrl(url: <#T##String#>)  to set Your webURL seperateLy
-//         ServerCredentials.setServerKey(url: <#T##String#>) to set your App server key seperatelu
-//         ServerCredentials.setPurchaseCode(url: <#T##String#>) to set your Purchase code
+        // to set Your webURL seperateLy
+        ServerCredentials.setBaseUrl(url: "https://loveworldworship.com/worship/")
+        // to set your App server key seperatelu
+        ServerCredentials.setServerKey(serverKey: "ef3e877924314cfbb635cd5b1e0121cce6c0bbf1")
+        // to set your Purchase code
+        ServerCredentials.setPurchaseCode(purchaseCode: "b8cee1a6-4125-4a67-95f4-99a20153a79a")
         
         /* Init Swifty Beaver */
         let console = ConsoleDestination()
@@ -129,41 +130,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate,OSSubscriptionObserver {
         DropDown.startListeningToKeyboard()
         GIDSignIn.sharedInstance().clientID = ControlSettings.googleClientKey
         
-        //         OneSignal initialization
-        let onesignalInitSettings = [kOSSettingsKeyAutoPrompt: false,kOSSettingsKeyInAppLaunchURL: false]
-        
-        // Replace 'YOUR_APP_ID' with your OneSignal App ID.
-        OneSignal.initWithLaunchOptions(launchOptions,
-                                        appId: ControlSettings.oneSignalAppId,
-                                        handleNotificationAction: nil,
-                                        settings: onesignalInitSettings)
-        
-        OneSignal.inFocusDisplayType = OSNotificationDisplayType.notification
-        
-        // Recommend moving the below line to prompt for push after informing the user about
-        //   how your app will use them.
-        OneSignal.promptForPushNotifications(userResponse: { accepted in
-            log.verbose("User accepted notifications: \(accepted)")
-        })
-         OneSignal.add(self as OSSubscriptionObserver)
-        
-         let userId = OneSignal.getPermissionSubscriptionState().subscriptionStatus.userId
-               log.verbose("Current playerId \(userId)")
         
     }
     
-    func onOSSubscriptionChanged(_ stateChanges: OSSubscriptionStateChanges!) {
-            if !stateChanges.from.subscribed && stateChanges.to.subscribed {
-               print("Subscribed for OneSignal push notifications!")
-            }
-            print("SubscriptionStateChange: \n\(stateChanges)")
-
-            //The player id is inside stateChanges. But be careful, this value can be nil if the user has not granted you permission to send notifications.
-            if let playerId = stateChanges.to.userId {
-               print("Current playerId \(playerId)")
-                UserDefaults.standard.setDeviceId(value: playerId ?? "", ForKey: Local.DEVICE_ID.DeviceId)
-            }
-         }
     
     func startHost(at index: Int) {
         stopNotifier()

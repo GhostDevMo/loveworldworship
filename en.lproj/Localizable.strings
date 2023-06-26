@@ -11,7 +11,7 @@
 
 "Register" = "Register";
 
-"Select your most favorite genres" = "Select your most favorite genres";
+"Select your most favorite Category" = "Select your most favorite Category";
 
 "ontinue with Facebook" = "Continue with Facebook";
 
@@ -239,7 +239,7 @@
 
 "Full Name" = "Full Name";
 
-"Facebook" = "Facebook";
+"Kingschat" = "Kingschat";
 
 "unknown" = "unknown";
 
@@ -294,7 +294,7 @@
 
 
 
-"Choose Genres" = "Choose Genres";
+"Choose Category" = "Choose Category";
 
 "Are you sure you want to delete this playlist ?" = "Are you sure you want to delete this playlist ?";
 
@@ -367,9 +367,9 @@
 "Copy" = "Copy";
 
 "Songs" = "Songs";
-"Choose Genres" = "Choose Genres";
+"Choose Category" = "Choose Category";
 
-"Choose Genres" = "Choose Genres";
+"Choose Category" = "Choose Category";
 
 "Copy" = "Copy";
 
@@ -647,7 +647,7 @@
 
 "CREATE" = "CREATE";
 
-"Genres" = "Genres";
+"Categories" = "Categories";
 
 "Tag(s)" = "Tag(s)";
 
@@ -861,8 +861,8 @@
 "Spotlight your songs(featured)" = "Spotlight your songs(featured)";
 "Download Songs" = "Download Songs";
 "Turn on 2-step login to level-up your account security. Once turned on, you'll use both your password and a 6-digit security code send to your  phone or email to log in." = "Turn on 2-step login to level-up your account security. Once turned on, you'll use both your password and a 6-digit security code send to your  phone or email to log in.";
-"Select Genre" = "Select Genre";
-"Select your most favorite genres" = "Select your most favorite genres";
+"Select Category" = "Select Category";
+"Select your most favorite Category" = "Select your most favorite Category";
 "You can change these later" = "You can change these later";
 "To log in, you need to verify  your identity." = "To log in, you need to verify  your identity.";
 "We have sent you the confirmation code to your email address." = "We have sent you the confirmation code to your email address.";
@@ -872,7 +872,7 @@
 
 "Create and share Album. Each Album is custom created and organized to help you find the best music for your preference." = "Create and share Album. Each Album is custom created and organized to help you find the best music for your preference.";
 "Album Title" = "Album Title";
-"Genres" = "Genres";
+"Categories" = "Categories";
 "Price" = "Price";
 "CREATE" = "CREATE";
 

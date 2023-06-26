@@ -293,11 +293,12 @@ extension SettingsVC: UITableViewDelegate {
             switch indexPath.row {
             case 0:
                 print("Rate out APP")
-                
+                let rateAppURL = URL(string:  ControlSettings.rateApp)
+                UIApplication.shared.openURL(rateAppURL!)
             case 1:
                 print("ABOUT")
-//                let termOfUseURL = URL(string:  ControlSettings.termsOfUse)
-//                UIApplication.shared.openURL(termOfUseURL!)
+                let aboutUsURL = URL(string:  ControlSettings.aboutUs)
+                UIApplication.shared.openURL(aboutUsURL!)
             case 2:
                 print("terms of use" )
                 let termOfUseURL = URL(string:  ControlSettings.termsOfUse)
@@ -379,7 +380,7 @@ extension SettingsVC: UITableViewDataSource {
         case 1: return 2
         case 2: return 1
         case 3: return 0
-        case 4: return 1
+        case 4: return 0
         case 5: return 4
         case 6: return 2
         default: return 0

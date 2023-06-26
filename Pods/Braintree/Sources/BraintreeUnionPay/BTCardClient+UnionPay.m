@@ -27,10 +27,15 @@
 
 #endif
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Weverything"
 @implementation BTCardClient (UnionPay)
+#pragma clang diagnostic pop
 
 #pragma mark - Public methods
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 - (void)fetchCapabilities:(NSString *)cardNumber
                completion:(void (^)(BTCardCapabilities * _Nullable, NSError * _Nullable))completion {
     [self.apiClient fetchOrReturnRemoteConfiguration:^(BTConfiguration * _Nullable configuration, NSError * _Nullable error) {
@@ -65,6 +70,7 @@
          }];
     }];
 }
+#pragma clang diagnostic pop
 
 - (void)enrollCard:(BTCardRequest *)request
         completion:(nonnull void (^)(NSString * _Nullable, BOOL, NSError * _Nullable))completion {
@@ -91,12 +97,15 @@
         if (card.expirationYear) {
             enrollmentParameters[@"expiration_year"] = card.expirationYear;
         }
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
         if (request.mobileCountryCode) {
             enrollmentParameters[@"mobile_country_code"] = request.mobileCountryCode;
         }
         if (request.mobilePhoneNumber) {
             enrollmentParameters[@"mobile_number"] = request.mobilePhoneNumber;
         }
+#pragma clang diagnostic pop
 
         [self.apiClient POST:@"v1/union_pay_enrollments"
                   parameters:@{ @"union_pay_enrollment": enrollmentParameters }

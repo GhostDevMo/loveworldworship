@@ -29,26 +29,36 @@ class UserInforManager{
         log.verbose("Decoded String = \(decoded)")
         AF.request(API.UserInfo_Methods.USER_INFO_API, method: .post, parameters: params, encoding:URLEncoding.default , headers: nil).responseJSON { (response) in
             
-            if (response.value != nil){
-                guard let res = response.value as? [String:Any] else {return}
-              
-                guard let apiStatus = res["status"]  as? Int else {return}
-                if apiStatus ==  API.ERROR_CODES.E_TwoH{
-                    log.verbose("apiStatus Int = \(apiStatus)")
-                    let data = try! JSONSerialization.data(withJSONObject: response.value!, options: [])
-                    let result = try! JSONDecoder().decode(UserInfoModel.UserInfoSuccessModel.self, from: data)
-                    completionBlock(result,nil,nil)
-                }else{
-                    log.verbose("apiStatus String = \(apiStatus)")
-                    let data = try! JSONSerialization.data(withJSONObject: response.value as Any, options: [])
-                    let result = try! JSONDecoder().decode(UserInfoModel.sessionErrorModel.self, from: data)
-                    log.error("AuthError = \(result.error ?? "")")
-                    completionBlock(nil,result,nil)
-                }
-            }else{
-                log.error("error = \(response.error?.localizedDescription ?? "")")
-                completionBlock(nil,nil,response.error)
-            }
+            if let responseValue = response.value {
+                  do {
+                      guard let res = responseValue as? [String:Any] else {
+                          return
+                      }
+                      
+                      guard let apiStatus = res["status"] as? Int else {
+                          return
+                      }
+                      
+                      if apiStatus == API.ERROR_CODES.E_TwoH {
+                          log.verbose("apiStatus Int = \(apiStatus)")
+                          let data = try JSONSerialization.data(withJSONObject: responseValue, options: [])
+                          let result = try JSONDecoder().decode(UserInfoModel.UserInfoSuccessModel.self, from: data)
+                          completionBlock(result, nil, nil)
+                      } else {
+                          log.verbose("apiStatus String = \(apiStatus)")
+                          let data = try JSONSerialization.data(withJSONObject: responseValue as Any, options: [])
+                          let result = try JSONDecoder().decode(UserInfoModel.sessionErrorModel.self, from: data)
+                          log.error("AuthError = \(result.error ?? "")")
+                          completionBlock(nil, result, nil)
+                      }
+                  } catch {
+                      log.error("Error: \(error.localizedDescription)")
+                      completionBlock(nil, nil, error)
+                  }
+              } else {
+                  log.error("error = \(response.error?.localizedDescription ?? "")")
+                  completionBlock(nil, nil, response.error)
+              }
         }
     }
 }

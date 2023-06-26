@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -38,7 +38,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KkL-jX-xzn">
-                                <rect key="frame" x="0.0" y="47" width="375" height="731"/>
+                                <rect key="frame" x="0.0" y="50" width="375" height="728"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZGx-lN-lYc">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="734"/>
@@ -137,29 +137,10 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AMT-Uk-F2X">
-                                                <rect key="frame" x="149" y="450" width="158.66666666666663" height="24"/>
+                                                <rect key="frame" x="149" y="450" width="84" height="24"/>
                                                 <subviews>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="rnG-BS-j68">
-                                                        <rect key="frame" x="0.0" y="0.0" width="74.666666666666671" height="24"/>
-                                                        <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lOM-Dh-zRC">
-                                                                <rect key="frame" x="0.0" y="0.0" width="37.333333333333336" height="24"/>
-                                                                <color key="tintColor" systemColor="labelColor"/>
-                                                                <state key="normal" image="ic_uncheck_radio"/>
-                                                                <connections>
-                                                                    <action selector="publicPressed:" destination="9i8-m9-JtX" eventType="touchUpInside" id="i5x-Zb-wfw"/>
-                                                                </connections>
-                                                            </button>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Public" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fIY-5q-3KD">
-                                                                <rect key="frame" x="37.333333333333343" y="0.0" width="37.333333333333343" height="24"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                                <color key="textColor" red="0.27839714290000001" green="0.2784510255" blue="0.2783937454" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
-                                                        </subviews>
-                                                    </stackView>
                                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="41k-Sa-r6o">
-                                                        <rect key="frame" x="74.666666666666657" y="0.0" width="84" height="24"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="84" height="24"/>
                                                         <subviews>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XJi-ht-kXl">
                                                                 <rect key="frame" x="0.0" y="0.0" width="42" height="24"/>
@@ -170,7 +151,7 @@
                                                                 </connections>
                                                             </button>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Private" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XHh-5J-eVh">
-                                                                <rect key="frame" x="42.000000000000028" y="0.0" width="42" height="24"/>
+                                                                <rect key="frame" x="42" y="0.0" width="42" height="24"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                                 <color key="textColor" red="0.27839714290000001" green="0.2784510255" blue="0.2783937454" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                 <nil key="highlightedColor"/>
@@ -256,8 +237,6 @@
                         <outlet property="privacyLabel" destination="XTO-ec-UM5" id="1D2-iR-Qro"/>
                         <outlet property="privateBtn" destination="XJi-ht-kXl" id="mlW-7w-16R"/>
                         <outlet property="privateLabel" destination="XHh-5J-eVh" id="aMa-Wa-Zdv"/>
-                        <outlet property="publicBtn" destination="lOM-Dh-zRC" id="3Lm-0X-ZZk"/>
-                        <outlet property="publicLabel" destination="fIY-5q-3KD" id="UxH-Cb-dJN"/>
                         <outlet property="selectPictureBtn" destination="nCe-0k-8Kz" id="3S4-Lj-lqn"/>
                         <outlet property="topLabel" destination="Fal-W5-Hm0" id="ld8-3a-Kck"/>
                         <outlet property="updateBtn" destination="AbV-Z1-td1" id="1OK-ez-kOk"/>
@@ -276,7 +255,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uR4-AR-7ls">
-                                <rect key="frame" x="0.0" y="47" width="375" height="731"/>
+                                <rect key="frame" x="0.0" y="50" width="375" height="728"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zxo-ob-GUY">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="734"/>
@@ -631,29 +610,10 @@
                                         <rect key="frame" x="57" y="241" width="287" height="274"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="3TM-VX-YBE">
-                                                <rect key="frame" x="10" y="48.333333333333314" width="78.666666666666671" height="58"/>
+                                                <rect key="frame" x="10" y="48.333333333333314" width="78.666666666666671" height="24"/>
                                                 <subviews>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="qhD-uf-D5n">
-                                                        <rect key="frame" x="0.0" y="0.0" width="78.666666666666671" height="24"/>
-                                                        <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Dq-FI-tOM">
-                                                                <rect key="frame" x="0.0" y="0.0" width="39.333333333333336" height="24"/>
-                                                                <color key="tintColor" systemColor="labelColor"/>
-                                                                <state key="normal" image="ic_uncheck_radio"/>
-                                                                <connections>
-                                                                    <action selector="publicPressed:" destination="U8Y-mW-iCg" eventType="touchUpInside" id="sKM-97-f3P"/>
-                                                                </connections>
-                                                            </button>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Public" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UAl-qU-LGo">
-                                                                <rect key="frame" x="39.333333333333329" y="0.0" width="39.333333333333329" height="24"/>
-                                                                <fontDescription key="fontDescription" name="Urbanist-Regular" family="Urbanist" pointSize="13"/>
-                                                                <color key="textColor" red="0.27839714290000001" green="0.2784510255" blue="0.2783937454" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
-                                                        </subviews>
-                                                    </stackView>
                                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="yiP-kp-ze3">
-                                                        <rect key="frame" x="0.0" y="34" width="78.666666666666671" height="24"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="78.666666666666671" height="24"/>
                                                         <subviews>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8LO-cw-Jku">
                                                                 <rect key="frame" x="0.0" y="0.0" width="39.333333333333336" height="24"/>
@@ -792,8 +752,6 @@
                         <outlet property="privacyView" destination="xGN-La-dsK" id="Psx-GA-jZ2"/>
                         <outlet property="privateBtn" destination="8LO-cw-Jku" id="Bif-wh-8XQ"/>
                         <outlet property="privateLabel" destination="VDt-AL-Ubd" id="a3A-pv-UxJ"/>
-                        <outlet property="publicBtn" destination="9Dq-FI-tOM" id="chg-iN-RMm"/>
-                        <outlet property="publicLabel" destination="UAl-qU-LGo" id="zAR-4E-3Ip"/>
                         <outlet property="selectPictureBtn" destination="Yzn-O2-Kmm" id="dg3-v7-zfv"/>
                         <outlet property="showPrivacy" destination="cC4-x4-yHy" id="DKh-1a-SiA"/>
                         <outlet property="topLabel" destination="TRd-Yy-gXv" id="f2k-xq-Qfm"/>
@@ -812,7 +770,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yfv-jg-lbd">
-                                <rect key="frame" x="0.0" y="47" width="320" height="731"/>
+                                <rect key="frame" x="0.0" y="50" width="320" height="716"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3hf-OP-ztv">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="800"/>
@@ -851,10 +809,10 @@
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" spacing="7" translatesAutoresizingMaskIntoConstraints="NO" id="4NA-Rh-a4J">
-                                                                <rect key="frame" x="-13.666666666666657" y="46" width="74" height="20"/>
+                                                                <rect key="frame" x="-56.999999999999986" y="46" width="161" height="20"/>
                                                                 <subviews>
-                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JoB-ij-fde">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="20" height="20"/>
+                                                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JoB-ij-fde">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="49" height="20"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="20" id="4dc-8l-l8U"/>
                                                                             <constraint firstAttribute="height" constant="20" id="GJp-4q-mYG"/>
@@ -862,8 +820,8 @@
                                                                         <state key="normal" title="Button"/>
                                                                         <buttonConfiguration key="configuration" style="plain" image="ic-download-square" title=" "/>
                                                                     </button>
-                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dGf-7J-KQ0">
-                                                                        <rect key="frame" x="27" y="0.0" width="20" height="20"/>
+                                                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dGf-7J-KQ0">
+                                                                        <rect key="frame" x="55.999999999999986" y="0.0" width="49" height="20"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="20" id="CJi-Ra-P9B"/>
                                                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="20" id="mOs-8W-Ig8"/>
@@ -871,8 +829,8 @@
                                                                         <state key="normal" title="Button"/>
                                                                         <buttonConfiguration key="configuration" style="plain" image="share" title=" "/>
                                                                     </button>
-                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zgi-bt-Jb0">
-                                                                        <rect key="frame" x="54" y="0.0" width="20" height="20"/>
+                                                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zgi-bt-Jb0">
+                                                                        <rect key="frame" x="112" y="0.0" width="49" height="20"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="20" id="CNt-r3-rvy"/>
                                                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="20" id="jLj-gv-G1B"/>

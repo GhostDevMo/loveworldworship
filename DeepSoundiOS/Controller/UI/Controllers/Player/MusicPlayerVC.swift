@@ -392,8 +392,11 @@ class MusicPlayerVC: BaseVC {
                 
             }
         }else{
-            self.nextTrack()
-            
+            if repeatState {
+                currentTrack()
+            } else {
+                self.nextTrack()
+            }
         }
         
         
@@ -410,19 +413,35 @@ class MusicPlayerVC: BaseVC {
         }
         
         if((AppInstance.instance.player?.currentItem?.asset.duration) != nil){
-            if let _ = AppInstance.instance.player?.currentItem?.asset.duration{}else{return}
-            if let _ = AppInstance.instance.player?.currentItem?.currentTime(){}else{return}
-            let currentTime1 : CMTime = (AppInstance.instance.player?.currentItem?.asset.duration)!
-            let seconds1 : Float64 = CMTimeGetSeconds(currentTime1)
-            let time1 : Float = Float(seconds1)
-            progressSlider.minimumValue = 0
-            progressSlider.maximumValue = time1
-            let currentTime : CMTime = ((AppInstance.instance.player?.currentTime())!)
-            let seconds : Float64 = CMTimeGetSeconds(currentTime)
-            let time : Float = Float(seconds)
-            self.progressSlider.value = time
-            totalDurationLengthLabel.text =  self.formatTimeFromSeconds(totalSeconds: Int32(Float(Float64(CMTimeGetSeconds((AppInstance.instance.player?.currentItem?.asset.duration)!)))))
-            calculatedTimeLenghtLabel.text = self.formatTimeFromSeconds(totalSeconds: Int32(Float(Float64(CMTimeGetSeconds((AppInstance.instance.player?.currentItem?.currentTime())!)))))
+            if AppInstance.instance.player?.currentItem?.status == .readyToPlay {
+                if let _ = AppInstance.instance.player?.currentItem?.asset.duration{}else{return}
+                if let _ = AppInstance.instance.player?.currentItem?.currentTime(){}else{return}
+                let currentTime1 : CMTime = (AppInstance.instance.player?.currentItem?.asset.duration)!
+                let seconds1 : Float64 = CMTimeGetSeconds(currentTime1)
+                let time1 : Float = Float(seconds1)
+                
+                let timeData = musicObject?.duration ?? "0:0"
+                let parts = timeData.split(separator: ":")
+                let minutesData = Int(parts[0])!
+                let secondsData = Int(parts[1])!
+                let totalData = minutesData * 60 + secondsData
+                print(totalData)
+                
+                
+                progressSlider.minimumValue = 0
+                progressSlider.maximumValue = Float(totalData)
+                
+                let currentTime : CMTime = ((AppInstance.instance.player?.currentTime())!)
+                let seconds : Float64 = CMTimeGetSeconds(currentTime)
+                let time : Float = Float(seconds)
+                self.progressSlider.value = time
+                totalDurationLengthLabel.text =  self.formatTimeFromSeconds(totalSeconds: Int32(Float(totalData)))
+                calculatedTimeLenghtLabel.text = self.formatTimeFromSeconds(totalSeconds: Int32(Float(Float64(CMTimeGetSeconds((AppInstance.instance.player?.currentItem?.currentTime())!)))))
+            } else {
+                progressSlider.value = 0
+                progressSlider.minimumValue = 0
+                progressSlider.maximumValue = 0
+            }
         }else{
             progressSlider.value = 0
             progressSlider.minimumValue = 0
@@ -434,6 +453,76 @@ class MusicPlayerVC: BaseVC {
         
         if(currentAudioIndex < musicArray.count-1){
             currentAudioIndex = currentAudioIndex + 1
+            isPaused = false
+            
+            self.playBtn.setImage(R.image.ic_pause(), for: .normal)
+            self.play(url: URL(string:(musicArray[self.currentAudioIndex].audioString!))!)
+            self.nameLabel.text = self.musicArray[currentAudioIndex].name ?? ""
+            self.titleLabel.text = self.musicArray[currentAudioIndex].title?.htmlAttributedString ?? ""
+            
+            self.timeLabel.text = self.musicArray[currentAudioIndex].time ?? ""
+            self.musicTypeLabel.text = (self.musicArray[currentAudioIndex].musicType ?? "") + " Music"
+            let thumbnailURL = URL.init(string:self.musicArray[currentAudioIndex].ThumbnailImageString ?? "")
+            thumbnailImage.sd_setImage(with: thumbnailURL , placeholderImage:R.image.imagePlacholder())
+            popupItem.image = thumbnailImage.image
+            popupItem.title = self.musicArray[currentAudioIndex].name ?? ""
+            popupItem.subtitle = self.musicArray[currentAudioIndex].title?.htmlAttributedString ?? ""
+           // backGroundImage.sd_setImage(with: thumbnailURL , placeholderImage:R.image.imagePlacholder())
+            if (self.musicArray[currentAudioIndex].isLiked ?? false) {
+                likeBtn.setImage(R.image.icHeartOrangeBs(), for: .normal)
+            }else{
+                likeBtn.setImage(R.image.icHeartBs(), for: .normal)
+            }
+            
+            if (self.musicArray[currentAudioIndex].isFavorite!) {
+                favoriteBtn.setImage(R.image.ic_starYellow(), for: .normal)
+                
+            }else{
+                favoriteBtn.setImage(R.image.ic_starPlayer(), for: .normal)
+            }
+            
+           // self.rotateThumbnailImageContinuously()
+            
+        }else{
+            self.playBtn.cornerRadiusV = self.playBtn.frame.height / 2
+            self.nameLabel.text = self.musicArray[currentAudioIndex].name ?? ""
+            self.titleLabel.text = self.musicArray[currentAudioIndex].title?.htmlAttributedString ?? ""
+            
+            self.timeLabel.text = self.musicArray[currentAudioIndex].time ?? ""
+            self.musicTypeLabel.text = (self.musicArray[currentAudioIndex].musicType ?? "") + " Music"
+            let thumbnailURL = URL.init(string:self.musicArray[currentAudioIndex].ThumbnailImageString ?? "")
+            thumbnailImage.sd_setImage(with: thumbnailURL , placeholderImage:R.image.imagePlacholder())
+            popupItem.image = thumbnailImage.image
+            popupItem.title = self.musicArray[currentAudioIndex].name ?? ""
+            popupItem.subtitle = self.musicArray[currentAudioIndex].title?.htmlAttributedString ?? ""
+          //  backGroundImage.sd_setImage(with: thumbnailURL , placeholderImage:R.image.imagePlacholder())
+            if (self.musicArray[currentAudioIndex].isLiked ?? false) {
+                likeBtn.setImage(R.image.icHeartOrangeBs(), for: .normal)
+            }else{
+                likeBtn.setImage(R.image.icHeartBs(), for: .normal)
+            }
+            
+            if (self.musicArray[currentAudioIndex].isFavorite!) {
+                favoriteBtn.setImage(R.image.ic_starYellow(), for: .normal)
+                
+            }else{
+                favoriteBtn.setImage(R.image.ic_starPlayer(), for: .normal)
+            }
+            
+            //self.rotateThumbnailImageContinuously()
+            currentAudioIndex = 0
+            isPaused = false
+            self.playBtn.setImage(R.image.ic_pause(), for: .normal)
+            
+            self.play(url: URL(string:(musicArray[self.currentAudioIndex].audioString as! String))!)
+            self.setupNowPlaying(title: musicArray[self.currentAudioIndex].title ?? "", image: self.thumbnailImage.image ?? UIImage())
+        }
+    }
+    
+    func currentTrack(){
+        
+        if(currentAudioIndex < musicArray.count-1){
+
             isPaused = false
             
             self.playBtn.setImage(R.image.ic_pause(), for: .normal)
@@ -1164,3 +1253,10 @@ extension MusicPlayerVC:AVAudioPlayerDelegate{
 //        })
 //    }
 //}
+
+extension AVPlayer {
+    func duration() -> Double {
+        guard let currentItem = currentItem else { return 0.0 }
+        return CMTimeGetSeconds(currentItem.duration)
+    }
+}

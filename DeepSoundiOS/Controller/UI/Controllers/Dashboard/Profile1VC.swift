@@ -333,7 +333,7 @@ class Profile1VC: ButtonBarPagerTabStripViewController {
     }
     override func viewControllers(for pagerTabStripController: PagerTabStripViewController) -> [UIViewController] {
         
-        let activitiesVC = R.storyboard.dashboard.activitiesVC()
+//        let activitiesVC = R.storyboard.dashboard.activitiesVC()
        
         let albumsVC = R.storyboard.dashboard.albumsVC()
       
@@ -343,18 +343,20 @@ class Profile1VC: ButtonBarPagerTabStripViewController {
         let profilePlaylistVC = R.storyboard.dashboard.profilePlaylistVC()
         
         
-        let songVC = R.storyboard.dashboard.songVC()
+//        let songVC = R.storyboard.dashboard.songVC()
        
         
-        let storeVC = R.storyboard.dashboard.storeVC()
+//        let storeVC = R.storyboard.dashboard.storeVC()
         
         
-        let stationsVC = R.storyboard.dashboard.stationsVC()
+//        let stationsVC = R.storyboard.dashboard.stationsVC()
         
         
         
         
-        return [songVC!,albumsVC!,profilePlaylistVC!,profileLikedVC!,activitiesVC!,storeVC!,stationsVC!]
+//        return [songVC!,albumsVC!,profilePlaylistVC!,profileLikedVC!,activitiesVC!,storeVC!,stationsVC!]
+        
+        return [albumsVC!,profilePlaylistVC!,profileLikedVC!]
         
     }
     private func uploadImage(status:Bool){

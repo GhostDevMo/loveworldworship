@@ -19,7 +19,6 @@ class CreatePlaylistVC: BaseVC,PanModalPresentable {
     @IBOutlet weak var btnClosePopUp: UIButton!
     @IBOutlet weak var lblPrivacyTittle: UILabel!
     @IBOutlet weak var privateLabel: UILabel!
-    @IBOutlet weak var publicLabel: UILabel!
     @IBOutlet weak var privacyLabel: UILabel!
     @IBOutlet weak var topLabel: UILabel!
     @IBOutlet weak var privacyView: UIView!
@@ -28,7 +27,6 @@ class CreatePlaylistVC: BaseVC,PanModalPresentable {
     @IBOutlet weak var createBtn: UIButton!
     @IBOutlet weak var crossBtn: UIButton!
     @IBOutlet weak var privateBtn: UIButton!
-    @IBOutlet weak var publicBtn: UIButton!
     @IBOutlet weak var playlistImage: UIImageView!
     @IBOutlet weak var playlistNameTextField: UITextField!
     
@@ -45,7 +43,6 @@ class CreatePlaylistVC: BaseVC,PanModalPresentable {
         self.setupUI()
         self.playlistNameTextField.placeholder = NSLocalizedString("Playlist Name here ", comment: "Playlist Name here ")
        // self.privacyLabel.text = NSLocalizedString("Privacy", comment: "Privacy")
-        self.publicLabel.text = NSLocalizedString("Public", comment: "Public")
         self.privateLabel.text = NSLocalizedString("Private", comment: "Private")
         self.createBtn.setTitle(NSLocalizedString("Create", comment: "Create"), for: .normal)
         self.topLabel.text = NSLocalizedString("Create Playlist", comment: "Create Playlist")
@@ -68,15 +65,8 @@ class CreatePlaylistVC: BaseVC,PanModalPresentable {
     }
     @IBAction func privatePressed(_ sender: Any) {
         self.privateBtn.setImage(R.image.ic_check_radio(), for: .normal)
-        self.publicBtn.setImage(R.image.ic_uncheck_radio(), for: .normal)
         showPrivacy.setTitle("Private", for: .normal)
         self.privacyText = 0
-    }
-    @IBAction func publicPressed(_ sender: Any) {
-        self.publicBtn.setImage(R.image.ic_check_radio(), for: .normal)
-        self.privateBtn.setImage(R.image.ic_uncheck_radio(), for: .normal)
-        showPrivacy.setTitle("Public", for: .normal)
-        self.privacyText = 1
     }
     @IBAction func showPrivacyView(_ sender: Any) {
         privacyView.isHidden = false
@@ -126,7 +116,6 @@ class CreatePlaylistVC: BaseVC,PanModalPresentable {
     private func setupUI(){
         self.crossBtn.isHidden = true
         selectPictureBtn.setTitleColor(.ButtonColor, for: .normal)
-        self.publicBtn.setImage(R.image.ic_check_radio()?.withTintColor(.mainColor), for: .normal)
         self.privateBtn.setImage(R.image.ic_uncheck_radio()?.withTintColor(.mainColor), for: .normal)
         cancelBtn.backgroundColor = .lightButtonColor
         cancelBtn.setTitleColor(.ButtonColor, for: .normal)

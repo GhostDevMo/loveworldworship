@@ -185,8 +185,8 @@ class UserInfoModel:BaseModel{
         let countryName: String?
         let genderText: String?
         let isFollowing, isBloked: Bool?
-        let activities: [[Activity]]?
-        let latestsongs, topSongs: [[Latestsong]]?
+        let activities: [Activity]?
+        let latestsongs, topSongs: [Latestsong]?
         let store: [[Latestsong]]?
         let password: String?
         

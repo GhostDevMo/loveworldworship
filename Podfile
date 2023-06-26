@@ -7,6 +7,7 @@ target 'DeepSoundiOS' do
   use_frameworks!
   
   # Pods for DeepSoundiOS
+
   
   pod 'XLPagerTabStrip', '~> 8.1.0'
   pod 'IQKeyboardManagerSwift'
@@ -19,7 +20,7 @@ target 'DeepSoundiOS' do
   pod 'FBSDKLoginKit'
   pod 'SDWebImage', '~> 4.0'
   pod 'DropDown', '2.3.4'
-  pod 'R.swift'
+  pod 'R.swift', '6.0.0'
   pod 'SkyFloatingLabelTextField', '~> 3.0'
   pod 'ReachabilitySwift', '~> 4.3.0'
   pod 'TransitionButton'
@@ -44,7 +45,7 @@ pod 'razorpay-pod','1.1.16'
 pod 'EmptyDataSet-Swift', '~> 5.0.0'
 pod 'PaystackCheckout', '~> 0.1'
 pod 'AuthorizeNetAccept'
-
+pod "PureLayout", '3.1.8'
 
 #pod 'Stripe'
 pod 'PanModal'
@@ -62,10 +63,6 @@ pod 'SkeletonView'
   end
 end
 
-target 'OneSignalNotificationServiceExtension' do
-  use_frameworks!
-  pod 'OneSignal', '>= 2.6.2', '< 3.0'
-end
 
 post_install do |installer|
   installer.pods_project.build_configurations.each do |config|
