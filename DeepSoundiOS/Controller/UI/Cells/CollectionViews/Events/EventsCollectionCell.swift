@@ -9,7 +9,8 @@
 import UIKit
 
 class EventsCollectionCell: UICollectionViewCell {
-
+    
+    @IBOutlet weak var mainView: UIView!
     @IBOutlet weak var EventImage: UIImageView!
     @IBOutlet weak var EventTitle: UILabel!
     @IBOutlet weak var EventDescription: UILabel!
@@ -19,36 +20,30 @@ class EventsCollectionCell: UICollectionViewCell {
     @IBOutlet weak var eventTypeLabel: UILabel!
     @IBOutlet weak var eventView: UIView!
     
-    var object = [[String:Any]]()
-
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        self.mainView.addShadow()
     }
-    func bind(_ object:[String:Any]){
-        
-    let name = object["name"] as? String
-        let description = object["desc"] as? String
-        let eventDate = object["start_date"] as? String
-        let image = object["image"] as? String
-        let onlineUrl = object["online_url"] as? String
-        let userdata = object["user_data"] as? [String:Any]
-        let id = userdata?["id"] as? Int
-        self.EventTitle.text = name
-        self.EventDescription.text = description
-        self.EventDate.text = eventDate
-        self.EventWebsite.text = onlineUrl
-
-        if id == AppInstance.instance.userId ?? 0{
+    
+    func bind(_ object: Events) {
+        self.EventTitle.text = object.name
+        self.EventDescription.text = object.desc?.htmlAttributedString
+        self.EventDate.text = object.start_date
+        if object.real_address == "" || object.real_address == nil {
+            self.EventWebsite.text = object.online_url
+        }else {
+            self.EventWebsite.text = object.real_address
+        }
+        if object.id == AppInstance.instance.userId {
             self.eventView.backgroundColor = .mainColor
             self.eventTypeLabel.text = "My Event"
         }else{
-            self.eventView.backgroundColor = .mainColor
+            self.eventView.backgroundColor = .red
             self.eventTypeLabel.text = "Event"
         }
         
-        let url = URL.init(string:image ?? "")
-        self.EventImage.sd_setImage(with: url , placeholderImage:R.image.imagePlacholder())
-
+        let url = URL.init(string: object.image ?? "")
+        self.EventImage.sd_setImage(with: url , placeholderImage: R.image.imagePlacholder())
     }
 }

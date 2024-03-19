@@ -18,11 +18,11 @@ class SearchAlbum_TableCell: UITableViewCell {
     @IBOutlet weak var albumNameLabel: UILabel!
     @IBOutlet weak var thumbnailImage: UIImageView!
     
-    var indexPath:Int? = 0
+    var indexPath:Int = 0
     var albumURL:String? = ""
        var AlbumID:String? = ""
        var vc:SearchAlbumsVC?
-       var object:SearchModel.Album?
+       var object:Album?
        var userID:Int? = 0
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -33,13 +33,13 @@ class SearchAlbum_TableCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
         
     }
-    func bind(_ object:SearchModel.Album,index:Int){
+    func bind(_ object: Album,index:Int){
         self.albumNameLabel.text = object.title?.htmlAttributedString ?? ""
-        self.songsCountLabel.text = "\(object.categoryName ?? "") Music - \(object.countSongs  ?? 0)"
+        self.songsCountLabel.text = "\(object.category_name ?? "") Music - \(object.count_songs  ?? 0)"
             let url = URL.init(string:object.thumbnail ?? "")
         self.thumbnailImage.sd_setImage(with: url , placeholderImage:R.image.imagePlacholder())
          
-        self.AlbumID = object.albumID ?? ""
+        self.AlbumID = object.album_id ?? ""
          self.indexPath = index
          self.albumURL = object.url ?? ""
          self.userID = object.publisher?.id ?? 0
@@ -55,18 +55,19 @@ class SearchAlbum_TableCell: UITableViewCell {
 
                log.verbose("Delete Song")
            }
-           let EditAlbum = UIAlertAction(title:NSLocalizedString("Edit Album", comment: "Edit Album"), style: .default) { (action) in
-               log.verbose("Edit Song")
-               let vc = R.storyboard.album.uploadAlbumVC()
-              
-                   
-            let object = UpdateAlbumModel(AlbumID: self.object?.albumID ?? "", userID: self.object?.publisher?.id ?? 0, title: self.object?.title ?? "", description: self.object?.albumDescription ?? "", imageString: self.object?.thumbnail ?? "", genre: self.object?.categoryName ?? "", price: 0.0)
-                   vc?.albumObject = object
-                   
-               
+        let EditAlbum = UIAlertAction(title:NSLocalizedString("Edit Album", comment: "Edit Album"), style: .default) { (action) in
+            log.verbose("Edit Song")
+            let vc = R.storyboard.album.uploadAlbumVC()
+            let object = UpdateAlbumModel(AlbumID: self.object?.album_id ?? "",
+                                          userID: self.object?.publisher?.id ?? 0,
+                                          title: self.object?.title ?? "",
+                                          description: self.object?.description ?? "",
+                                          imageString: self.object?.thumbnail ?? "",
+                                          genre: self.object?.category_name ?? "",
+                                          price: self.object?.price?.intValue ?? 0)
+            vc?.albumObject = object
             self.vc?.navigationController?.pushViewController(vc!, animated: true)
-               
-           }
+        }
            
            let ShareAlbum = UIAlertAction(title:NSLocalizedString("Share", comment: "Share") , style: .default) { (action) in
                log.verbose("Share")
@@ -187,7 +188,7 @@ class SearchAlbum_TableCell: UITableViewCell {
            // present the view controller
         self.vc?.present(activityViewController, animated: true, completion: nil)
        }
-    @IBAction func morePressed(_ sender: Any) {
+    @IBAction func morePressed(_ sender: UIButton) {
      if AppInstance.instance.getUserSession(){
                 if AppInstance.instance.userId == self.userID ?? 0 {
                     self.showMoreAlert()

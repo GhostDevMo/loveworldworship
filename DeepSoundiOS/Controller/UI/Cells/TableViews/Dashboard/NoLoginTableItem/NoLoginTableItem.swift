@@ -12,6 +12,9 @@ class NoLoginTableItem: UITableViewCell {
 
     @IBOutlet weak var bottomLabel: UILabel!
     @IBOutlet weak var topLabel: UILabel!
+    
+    var delegate: NoLoginTableDelegate?
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         self.topLabel.text = NSLocalizedString("Enjoy your favorite songs", comment: "Enjoy your favorite songs")
@@ -24,4 +27,7 @@ class NoLoginTableItem: UITableViewCell {
         // Configure the view for the selected state
     }
     
+    @IBAction func buttonPressed(_ sender: UIButton) {
+        self.delegate?.buttonPressed(sender)
+    }
 }

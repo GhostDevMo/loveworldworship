@@ -9,6 +9,7 @@
 import UIKit
 import DeepSoundSDK
 import SwiftEventBus
+
 class PlaylistPopUpVC: UIViewController {
     
     @IBOutlet weak var CLOSE: UIButton!
@@ -21,51 +22,78 @@ class PlaylistPopUpVC: UIViewController {
     var delegate:deletePlaylisttPopupDelegate?
     var updatePlaylistDelegate:updatePlaylistDelegate?
     var copyDelegate:showToastStringDelegate?
-    var playlistObject: PlaylistModel.Playlist?
+    var playlistObject: Playlist?
+    var productDelegate: ProductDetailsDelegate?
+    
+    var isProduct = false
+    var isEvent = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.CLOSE.setTitle((NSLocalizedString("CLOSE", comment: "")), for: .normal)
-        self.Copy.setTitle((NSLocalizedString("Copy", comment: "")), for: .normal)
-        self.Share.setTitle((NSLocalizedString("Share", comment: "")), for: .normal)
-        self.DeletePlaylist.setTitle((NSLocalizedString("Delete Playlist", comment: "")), for: .normal)
-        self.EditPlaylist.setTitle((NSLocalizedString("Edit Playlist", comment: "")), for: .normal)
-        self.playlistLabel.text = (NSLocalizedString("Playlist", comment: ""))
-        SwiftEventBus.onMainThread(self, name:   EventBusConstants.EventBusConstantsUtils.EVENT_DISMISS_POPOVER) { result in
+        SwiftEventBus.onMainThread(self, name: EventBusConstants.EventBusConstantsUtils.EVENT_DISMISS_POPOVER) { result in
             log.verbose("To dismiss the popover")
-            AppInstance.instance.player = nil
+            
             self.tabBarController?.dismissPopupBar(animated: true, completion: nil)
         }
-        SwiftEventBus.onMainThread(self, name:   "PlayerReload") { result in
+        SwiftEventBus.onMainThread(self, name: "PlayerReload") { result in
             let stringValue = result?.object as? String
             self.view.makeToast(stringValue)
-            log.verbose(stringValue)
+            log.verbose(stringValue ?? "")
+        }
+        
+        if isProduct {
+            self.DeletePlaylist.isHidden = true
+            self.EditPlaylist.isHidden = true
+            self.playlistLabel.text = "Product"
+        }
+        
+        if isEvent {
+            self.DeletePlaylist.isHidden = true
+            self.EditPlaylist.isHidden = true
+            self.playlistLabel.text = "Events"
         }
     }
     
-    @IBAction func copyPressed(_ sender: Any){
+    @IBAction func copyPressed(_ sender: UIButton) {
+        if isProduct || isEvent {
+            self.dismiss(animated: true) {
+                self.productDelegate?.copyBtn(sender)
+            }
+            return
+        }
         UIPasteboard.general.string = playlistObject?.url ?? ""
        self.copyDelegate?.showToastString(string: "Text copied to clipboard")
         self.dismiss(animated: true, completion: nil)
     }
-    @IBAction func sharePressed(_ sender: Any){
+    
+    @IBAction func sharePressed(_ sender: UIButton){
+        if isProduct || isEvent {
+            self.dismiss(animated: true) {
+                self.productDelegate?.shareBtn(sender)
+            }
+            return
+        }
         self.share(shareString: playlistObject?.url ?? "")
     }
-    @IBAction func editPressed(_ sender: Any){
+    
+    @IBAction func editPressed(_ sender: UIButton){
         self.dismiss(animated: true) {
             self.updatePlaylistDelegate?.updatePlaylistPlaylist(status: true, object:self.playlistObject!)
         }
     }
-    @IBAction func deletePressed(_ sender: Any){
+    
+    @IBAction func deletePressed(_ sender: UIButton){
         self.dismiss(animated: true) {
             self.delegate?.deletePlaylistPopup(status: true, playlistID: self.playlistObject?.id ?? 0)
         }
         
     }
-    @IBAction func closePressed(_ sender: Any){
+    
+    @IBAction func closePressed(_ sender: UIButton){
         self.dismiss(animated: true, completion: nil)
     }
-    private func share(shareString:String?){
+    
+    private func share(shareString:String?) {
         // text to share
         let text = shareString ?? ""
         

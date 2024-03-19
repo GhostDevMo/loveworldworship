@@ -1,627 +1,325 @@
-
 import UIKit
 import Async
 import DeepSoundSDK
 import SwiftEventBus
 import Async
+import Toast_Swift
+import SDWebImage
+import GoogleSignIn
+
+struct SettingsModel {
+    let title: String?
+    let image: UIImage?
+}
+
 class SettingsVC: BaseVC {
     
+    // MARK: - IBOutlets
+    
+    @IBOutlet weak var userImageView: UIImageView!
+    @IBOutlet weak var userNameLabel: UILabel!
+    @IBOutlet weak var userEmailLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
+    
+    // MARK: - Properties
+    
+    var settingsArray: [SettingsModel] = []
+    
+    // MARK: - View Life Cycles
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.separatorStyle = .singleLineEtched
-        self.title = (NSLocalizedString("Settings", comment: ""))
-        self.setupUI()
-        SwiftEventBus.onMainThread(self, name:   EventBusConstants.EventBusConstantsUtils.EVENT_DISMISS_POPOVER) { result in
+        
+        self.initialConfig()
+        SwiftEventBus.onMainThread(self, name: EventBusConstants.EventBusConstantsUtils.EVENT_DISMISS_POPOVER) { result in
             log.verbose("To dismiss the popover")
-            AppInstance.instance.player = nil
             self.tabBarController?.dismissPopupBar(animated: true, completion: nil)
         }
-        SwiftEventBus.onMainThread(self, name:   "PlayerReload") { result in
+        SwiftEventBus.onMainThread(self, name: "PlayerReload") { result in
             let stringValue = result?.object as? String
             self.view.makeToast(stringValue)
-            log.verbose(stringValue)
+            log.verbose(stringValue ?? "")
         }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        navigationController?.setNavigationBarHidden(false, animated: true)
-        self.tabBarController?.tabBar.isHidden = true
-    }
-    override func viewWillDisappear(_ animated: Bool) {
-     
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        self.tabBarController?.tabBar.isHidden = true
+//    }
+    
+    // MARK: - Selectors
+    
+    // Back Button Action
+    @IBAction override func backButtonAction(_ sender: UIButton) {
+        self.view.endEditing(true)
+        self.navigationController?.popViewController(animated: true)
     }
     
+    // MARK: - Helper Functions
     
-    private func setupUI(){
+    // Initial Config
+    func initialConfig() {
+        self.setUserData()
+        self.tableViewSetup()
+        self.setData()
+    }
+    
+    // Table View Setup
+    private func tableViewSetup() {
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
         self.tableView.separatorStyle = .none
-        tableView.register(UINib(nibName: "SectionHeaderTableViewCell", bundle: nil), forCellReuseIdentifier: "SectionHeaderTableViewCell")
-        tableView.register(SettingsSectionOneTableItem.nib, forCellReuseIdentifier: SettingsSectionOneTableItem.identifier)
-        tableView.register(SettingsSectionTwoTableItem.nib, forCellReuseIdentifier: SettingsSectionTwoTableItem.identifier)
-        tableView.register(PremiumSubcriptionCell.nib, forCellReuseIdentifier: PremiumSubcriptionCell.identifier)
- 
-        
+        self.tableView.register(UINib(resource: R.nib.settingsTableViewCell), forCellReuseIdentifier: R.reuseIdentifier.settingsTableViewCell.identifier)
+        self.tableView.register(UINib(resource: R.nib.premiumSubcriptionCell), forCellReuseIdentifier: R.reuseIdentifier.premiumSubcriptionCell.identifier)
     }
     
-    private func logout(){
-        let alert = UIAlertController(title: (NSLocalizedString("Logout", comment: "")), message: (NSLocalizedString("Are you sure you want to logout", comment: "")), preferredStyle: .alert)
-        let logout = UIAlertAction(title: (NSLocalizedString("Logout", comment: "")), style: .destructive) { (action) in
-            self.logoutUser()
+    // Set Data
+    private func setData() {
+        self.settingsArray = [
+            SettingsModel(title: "Edit Profile Info", image: R.image.icProfileDark()),
+            SettingsModel(title: "My Account", image: R.image.icon_account_my()),
+            SettingsModel(title: "Become an artist", image: R.image.shieldDone()),
+            SettingsModel(title: "Notifications", image: R.image.icNotification()),
+            SettingsModel(title: "Blocked Users", image: R.image.icBlockBs()),
+            SettingsModel(title: "My Addresses", image: R.image.icon_address()),
+            SettingsModel(title: "Withdrawals", image: R.image.icon_withdraw()),
+            SettingsModel(title: "Wallet", image: R.image.icon_wallet()),
+            SettingsModel(title: "My Affiliates", image: R.image.icon_affilliates()),
+            SettingsModel(title: "Password", image: R.image.icon_password()),
+            SettingsModel(title: "Two-factor authentication", image: R.image.icon_two_factor()),
+            SettingsModel(title: "Manage Sessions", image: R.image.icon_manage_session()),
+            SettingsModel(title: "Theme", image: UIImage(named: "Show")),
+            SettingsModel(title: "Interest", image: R.image.category()),
+            SettingsModel(title: "Rate our App", image: R.image.icon_rate()),
+            SettingsModel(title: "Invite Friends", image: R.image.icon_invite_frds()),
+            SettingsModel(title: "Term of use", image: R.image.shieldDone()),
+            SettingsModel(title: "Help", image: UIImage(named: "DangerCircle")),
+            SettingsModel(title: "Delete Acoount", image: R.image.icon_delete_ac()),
+            SettingsModel(title: "Logout", image: R.image.icon_logout())
+        ]
+        if AppInstance.instance.userProfile?.data?.src != "" {
+            let index = settingsArray.firstIndex(where: { $0.title == "Password" }) ?? 0
+            settingsArray.remove(at: index)
         }
-        let cancel = UIAlertAction(title: (NSLocalizedString("Cancel", comment: "")), style: .cancel, handler: nil)
-        alert.addAction(logout)
-        alert.addAction(cancel)
-        self.present(alert, animated:true, completion: nil)
-        
+        self.tableView.reloadData()
     }
-    private func logoutUser(){
-        if Connectivity.isConnectedToNetwork(){
-            
+    
+    // Set User Data
+    func setUserData() {
+        self.userNameLabel.text = AppInstance.instance.userProfile?.data?.name ?? ""
+        self.userEmailLabel.text = AppInstance.instance.userProfile?.data?.email ?? ""
+        let profileImage = AppInstance.instance.userProfile?.data?.avatar ?? ""
+        let profileImageURL = URL.init(string: profileImage)
+        self.userImageView.sd_setImage(with: profileImageURL, placeholderImage: R.image.imagePlacholder())
+    }
+    
+    private func logout() {
+        let newVC = R.storyboard.popups.logoutPopupVC()
+        newVC?.delegate = self
+        newVC?.modalPresentationStyle = .custom
+        newVC?.transitioningDelegate = self
+        self.present(newVC!, animated: true)
+    }
+    
+}
+
+// MARK: - Extensions
+
+// MARK: TableView Setup
+extension SettingsVC: UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if ControlSettings.isGoProEnabled && (AppInstance.instance.userProfile?.data?.is_pro ?? 0) == 0 {
+            return self.settingsArray.count + 1
+        } else {
+            return self.settingsArray.count
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if ControlSettings.isGoProEnabled && (AppInstance.instance.userProfile?.data?.is_pro ?? 0) == 0 && indexPath.row == 0 {
+            let cell = self.tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.premiumSubcriptionCell.identifier, for: indexPath) as! PremiumSubcriptionCell
+            return cell
+        } else {
+            let cell = self.tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.settingsTableViewCell.identifier, for: indexPath) as! SettingsTableViewCell
+            let setting = ControlSettings.isGoProEnabled && (AppInstance.instance.userProfile?.data?.is_pro ?? 0) == 0 ? self.settingsArray[indexPath.row - 1] : self.settingsArray[indexPath.row]
+            cell.settingImage.image = setting.image
+            cell.titleLabel.text = setting.title
+            return cell
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        if ControlSettings.isGoProEnabled && (AppInstance.instance.userProfile?.data?.is_pro ?? 0) == 0 && indexPath.row == 0 {
+            if let newVC = R.storyboard.upgrade.upgradeProVC() {
+                self.navigationController?.pushViewController(newVC, animated: true)
+            }
+        } else {
+            let setting = ControlSettings.isGoProEnabled && (AppInstance.instance.userProfile?.data?.is_pro ?? 0) == 0 ? self.settingsArray[indexPath.row - 1] : self.settingsArray[indexPath.row]
+            switch setting.title {
+            case "Edit Profile Info":
+                if let newVC = R.storyboard.settings.editProfileVC() {
+                    self.navigationController?.pushViewController(newVC, animated: true)
+                }
+            case "My Account":
+                if let newVC = R.storyboard.settings.myAccountVC() {
+                    self.navigationController?.pushViewController(newVC, animated: true)
+                }
+            case "Become an artist":
+                if let newVC = R.storyboard.settings.becomeAnArtistVC() {
+                    self.navigationController?.pushViewController(newVC, animated: true)
+                }
+            case "Notifications":
+                if let newVC = R.storyboard.settings.settingNotificationVC() {
+                    navigationController?.pushViewController(newVC, animated: true)
+                }
+            case "Blocked Users":
+                if let newVC = R.storyboard.settings.blockUsersVC() {
+                    self.navigationController?.pushViewController(newVC, animated: true)
+                }
+            case "My Addresses":
+                if let newVC = R.storyboard.settings.myAddressesVC() {
+                    self.navigationController?.pushViewController(newVC, animated: true)
+                }
+            case "Withdrawals":
+                if let newVC = R.storyboard.upgrade.widthdrawalsVC() {
+                    self.navigationController?.pushViewController(newVC, animated: true)
+                }
+            case "Wallet":
+                if let newVC = R.storyboard.settings.settingWalletVC() {
+                    navigationController?.pushViewController(newVC, animated: true)
+                }
+            case "My Affiliates":
+                if let newVC = R.storyboard.settings.myAffliatesVC() {
+                    self.navigationController?.pushViewController(newVC, animated: true)
+                }
+            case "Password":
+                if let newVC = R.storyboard.settings.changePasswordVC() {
+                    self.navigationController?.pushViewController(newVC, animated: true)
+                }
+            case "Two-factor authentication":
+                if let newVC = R.storyboard.settings.settingsTwoFactorVC() {
+                    self.navigationController?.pushViewController(newVC, animated: true)
+                }
+            case "Manage Sessions":
+                if let newVC = R.storyboard.settings.manageSessionsVC() {
+                    self.navigationController?.pushViewController(newVC, animated: true)
+                }
+            case "Theme":
+                if let newVC = R.storyboard.popups.themePopupVC() {
+                    self.present(newVC, animated: true, completion: nil)
+                }
+            case "Interest":
+                if let newVC = R.storyboard.login.genresVC() {
+                    self.navigationController?.pushViewController(newVC, animated: true)
+                }
+            case "Rate our App":
+                let appStoreID = 1111111111
+                if let appStoreReviewURL = URL(string: "https://itunes.apple.com/app/id\(appStoreID)?mt=8&action=write-review") {
+                    if #available(iOS 10.0, *) {
+                        UIApplication.shared.open(appStoreReviewURL, options: [:], completionHandler: nil)
+                    } else {
+                        // Earlier versions
+                        if UIApplication.shared.canOpenURL(appStoreReviewURL) {
+                            UIApplication.shared.openURL(appStoreReviewURL)
+                        }
+                    }
+                }
+            case "Invite Friends":
+                if let newVC = R.storyboard.settings.inviteFriendsVC() {
+                    self.navigationController?.pushViewController(newVC, animated: true)
+                }
+            case "Term of use":
+                if let newVC = R.storyboard.settings.settingsWebViewVC() {
+                    newVC.headerText = "Terms of use"
+                    self.navigationController?.pushViewController(newVC, animated: true)
+                }
+            case "Help":
+                if let newVC = R.storyboard.settings.settingsWebViewVC() {
+                    newVC.headerText = "Help"
+                    self.navigationController?.pushViewController(newVC, animated: true)
+                }
+            case "Delete Acoount":
+                if let newVC = R.storyboard.settings.deleteAccountVC() {
+                    self.navigationController?.pushViewController(newVC, animated: true)
+                }
+            case "Logout":
+                self.logout()
+            default:
+                break
+            }
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+    
+}
+
+// MARK: UIViewControllerTransitioningDelegate Methods
+extension SettingsVC: UIViewControllerTransitioningDelegate {
+    
+    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        BottomSheetPresentationController(presentedViewController: presented, presenting: presenting)
+    }
+    
+}
+
+// MARK: LogoutPopupVCDelegate
+extension SettingsVC: LogoutPopupVCDelegate {
+    
+    func handleLogoutButtonTap() {
+        self.logoutUser()
+    }
+    
+    private func logoutUser() {
+        if Connectivity.isConnectedToNetwork() {
             self.showProgressDialog(text: (NSLocalizedString("Loading...", comment: "")))
             let accessToken = AppInstance.instance.accessToken ?? ""
-            
-            Async.background({
+            Async.background {
                 UserManager.instance.LogoutUser(AccessToken: accessToken, completionBlock: { (success, sessionError, error) in
                     if success != nil{
                         Async.main({
                             self.dismissProgressDialog {
                                 log.debug("success = \(success?.message ?? "")")
                                 self.view.makeToast(success?.message ?? "")
-                                let timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.update), userInfo: nil, repeats: false)
+                                self.updateLogout()
                             }
                         })
-                        
-                    }else if sessionError != nil{
-                        Async.main({
+                    } else if sessionError != nil {
+                        Async.main{
                             self.dismissProgressDialog {
                                 log.error("sessionError = \(sessionError?.error ?? "")")
                                 self.view.makeToast(sessionError?.error ?? "")
-                                
                             }
-                        })
-                    }else {
-                        Async.main({
+                        }
+                    } else {
+                        Async.main {
                             self.dismissProgressDialog {
                                 log.error("error = \(error?.localizedDescription ?? "")")
                                 self.view.makeToast(error?.localizedDescription ?? "")
                             }
-                        })
+                        }
                     }
                 })
-            })
-        }else{
+            }
+        } else {
             log.error("internetErrro = \(InterNetError)")
             self.view.makeToast(InterNetError)
         }
     }
-    @objc func update() {
+    
+    func updateLogout() {
+        GIDSignIn.sharedInstance().signOut()
         UserDefaults.standard.removeValuefromUserdefault(Key: Local.USER_SESSION.User_Session)
+        UserDefaults.standard.clearUserDefaults()
         AppInstance.instance.userProfile = nil
+        AppInstance.instance.accessToken = nil
+        AppInstance.instance.userId = nil
         let vc = R.storyboard.login.loginVC()
         appDelegate.window?.rootViewController = vc
-        self.dismiss(animated: true, completion: nil)
-        
-    }
-    private func theme(){
-        let alert = UIAlertController(title: (NSLocalizedString("Select Theme", comment: "")), message: "", preferredStyle: .alert)
-        let light = UIAlertAction(title: (NSLocalizedString("Light", comment: "")), style: .destructive) { (action) in
-            if #available(iOS 13.0, *) {
-                self.appDelegate.window?.overrideUserInterfaceStyle = .light
-                UserDefaults.standard.setDarkMode(value: false, ForKey: "darkMode")
-            }
-        }
-        let dark = UIAlertAction(title: "Dark", style: .destructive) { (action) in
-            if #available(iOS 13.0, *) {
-                self.appDelegate.window?.overrideUserInterfaceStyle = .dark
-                UserDefaults.standard.setDarkMode(value: true, ForKey: "darkMode")
-            }
-        }
-        let cancel = UIAlertAction(title: (NSLocalizedString("Cancel", comment: "")), style: .cancel, handler: nil)
-        alert.addAction(light)
-        alert.addAction(dark)
-        alert.addAction(cancel)
-        alert.popoverPresentationController?.sourceView = self.view
-        self.present(alert, animated:true, completion: nil)
-        
-    }
-}
-
-extension SettingsVC: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 0{
-            return UITableView.automaticDimension
-        }
-        else{
-            return 56
-        }
-    }
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 1{
-            return 10
-        }
-        else{
-            return 0
-        }
-        
-    }
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        if indexPath.section == 0{
-            if indexPath.row == 0{
-                let storyBoard: UIStoryboard = UIStoryboard(name: "Upgrade", bundle: nil)
-                 let vc = storyBoard.instantiateViewController(withIdentifier: "UpgradeToProVC") as! UpgradeToProVC
-                 self.navigationController?.pushViewController(vc, animated: true)
-//                let vc = R.storyboard.upgrade.upgradeToProVC()
-//                self.navigationController?.isNavigationBarHidden = false
-//                self.navigationController!.pushViewController(vc!, animated: true)
-            }
-        }
-        
-        if indexPath.section == 1 {
-            if ControlSettings.isGoProEnabled{
-                if AppInstance.instance.userProfile?.data?.isPro ?? 0 == 0{
-                    if indexPath.row == 0 {
-                        let vc = R.storyboard.settings.editProfileVC()
-                        self.navigationController?.isNavigationBarHidden = false
-                        self.navigationController!.pushViewController(vc!, animated: true)
-                    } else if indexPath.row == 1 {
-                        let vc = R.storyboard.settings.myAccountVC()
-                        self.navigationController?.pushViewController(vc!, animated: true)
-                    } else if indexPath.row == 2 {
-                        print("Move to Notification")
-                        
-                        let storyBoard: UIStoryboard = UIStoryboard(name: "Settings", bundle: nil)
-                        let vc = storyBoard.instantiateViewController(withIdentifier: "SettingNotificationVC") as! SettingNotificationVC
-                        navigationController?.pushViewController(vc, animated: true)
-                    } else if indexPath.row == 3 {
-                        let vc = R.storyboard.upgrade.widthdrawalsVC()
-                        self.navigationController?.pushViewController(vc!, animated: true)
-                    } else if indexPath.row == 4 {
-                        //                      if  ControlSettings.isApplePay!{
-                        //                                if let controller = PKPaymentAuthorizationViewController(paymentRequest: paymentRequest) {
-                        //                                    controller.delegate = self
-                        //                                    present(controller, animated: true, completion: nil)
-                        //                                }
-                        //                            }else{
-                        //
-                        //                            }
-        //                if AppInstance.instance.userProfile?.data?.isPro ?? 0 == 1{
-        //                    let vc = R.storyboard.popups.premiumPopupVC()
-        //                    self.present(vc!, animated: true, completion: nil)
-        //                }else{
-        //                    let vc = R.storyboard.upgrade.upgradeProVC()
-        //                    self.navigationController?.pushViewController(vc!, animated: true)
-        //                }
-                        let vc = R.storyboard.upgrade.upgradeProVC()
-                                           self.navigationController?.pushViewController(vc!, animated: true)
-                        
-                    } else if indexPath.row == 5 {
-
-                        let storyBoard: UIStoryboard = UIStoryboard(name: "Settings", bundle: nil)
-                        let vc = storyBoard.instantiateViewController(withIdentifier: "SettingWalletVC") as! SettingWalletVC
-                        navigationController?.pushViewController(vc, animated: true)
-                        print("walletVc")
-                        
-                    }else if indexPath.row == 6 {
-                        let vc = R.storyboard.settings.blockUsersVC()
-                        self.navigationController?.pushViewController(vc!, animated: true)
-                    }
-                }else{
-                    if indexPath.row == 0 {
-                        let vc = R.storyboard.settings.editProfileVC()
-                        self.navigationController?.pushViewController(vc!, animated: true)
-                    } else if indexPath.row == 1 {
-                        let vc = R.storyboard.settings.myAccountVC()
-                        self.navigationController?.pushViewController(vc!, animated: true)
-                    } else if indexPath.row == 2 {
-                        let vc = R.storyboard.upgrade.widthdrawalsVC()
-                        self.navigationController?.pushViewController(vc!, animated: true)
-                    } else if indexPath.row == 3 {
-                        let vc = R.storyboard.settings.articlesVC()
-                        self.navigationController?.pushViewController(vc!, animated: true)
-                        
-                    }else if indexPath.row == 4 {
-                        let vc = R.storyboard.settings.blockUsersVC()
-                        self.navigationController?.pushViewController(vc!, animated: true)
-                    }else if indexPath.row == 5{
-                        let storyBoard: UIStoryboard = UIStoryboard(name: "Settings", bundle: nil)
-                        let vc = storyBoard.instantiateViewController(withIdentifier: "SettingWalletVC") as! SettingWalletVC
-                        navigationController?.pushViewController(vc, animated: true)
-                    }
-                }
-            }else{
-                if indexPath.row == 0 {
-                    let vc = R.storyboard.settings.editProfileVC()
-                    self.navigationController?.pushViewController(vc!, animated: true)
-                } else if indexPath.row == 1 {
-                    let vc = R.storyboard.settings.myAccountVC()
-                    self.navigationController?.pushViewController(vc!, animated: true)
-                } else if indexPath.row == 2 {
-                    let vc = R.storyboard.upgrade.widthdrawalsVC()
-                    self.navigationController?.pushViewController(vc!, animated: true)
-                } else if indexPath.row == 3 {
-                    let vc = R.storyboard.settings.articlesVC()
-                    self.navigationController?.pushViewController(vc!, animated: true)
-                    
-                }else if indexPath.row == 4 {
-                    let vc = R.storyboard.settings.blockUsersVC()
-                    self.navigationController?.pushViewController(vc!, animated: true)
-                }else if indexPath.row == 5{
-                    let storyBoard: UIStoryboard = UIStoryboard(name: "Settings", bundle: nil)
-                    let vc = storyBoard.instantiateViewController(withIdentifier: "SettingWalletVC") as! SettingWalletVC
-                    navigationController?.pushViewController(vc, animated: true)
-                }
-            } 
-        }else if indexPath.section == 2{
-            switch indexPath.row {
-            case 0:
-                let vc = R.storyboard.settings.changePasswordVC()
-                self.navigationController?.pushViewController(vc!, animated: true)
-            case 1:
-                let vc = R.storyboard.settings.settingsTwoFactorVC()
-                self.navigationController?.pushViewController(vc!, animated: true)
-            case 2:
-                let vc = R.storyboard.settings.manageSessionsVC()
-                self.navigationController?.pushViewController(vc!, animated: true)
-                
-            default:
-                break
-            }
-            
-        }else if indexPath.section == 3 {
-            switch indexPath.row {
-            case 0:
-                self.theme()
-            default:
-                break
-            }
-            
-        }else if indexPath.section == 4 {
-            switch indexPath.row {
-            case 0:
-                let vc = R.storyboard.login.genresVC()
-                self.navigationController?.pushViewController(vc!, animated: true)
-            case 1:
-                let vc = R.storyboard.settings.articlesVC()
-                self.navigationController?.pushViewController(vc!, animated: true)
-                
-            default:
-                break
-            }
-            
-        }else if indexPath.section == 5{
-            switch indexPath.row {
-            case 0:
-                print("Rate out APP")
-                let rateAppURL = URL(string:  ControlSettings.rateApp)
-                UIApplication.shared.openURL(rateAppURL!)
-            case 1:
-                print("ABOUT")
-                let aboutUsURL = URL(string:  ControlSettings.aboutUs)
-                UIApplication.shared.openURL(aboutUsURL!)
-            case 2:
-                print("terms of use" )
-                let termOfUseURL = URL(string:  ControlSettings.termsOfUse)
-                UIApplication.shared.openURL(termOfUseURL!)
-//                let vc = R.storyboard.settings.deleteAccountVC()
-//                self.navigationController?.pushViewController(vc!, animated: true)
-            case 3:
-                let helpURL = URL(string: ControlSettings.HelpLink)
-                UIApplication.shared.openURL(helpURL!)
-                //self.logout()
-                
-            default:
-                break
-            }
-        }else if indexPath.section == 6{
-            switch indexPath.row {
-            case 0:
-                print("deleteAccountVC")
-                let vc = R.storyboard.settings.deleteAccountVC()
-                self.navigationController?.pushViewController(vc!, animated: true)
-                
-            case 1:
-                print("logout")
-                self.logout()
-            
-                
-            default:
-                break
-            }
-        }
     }
     
-//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//
-//        let view = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 56))
-//        view.backgroundColor = UIColor.systemBackground
-//
-//        let separatorView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 8))
-//
-//        separatorView.backgroundColor = UIColor(red: 220/255, green: 220/255, blue: 220/255, alpha: 1.0)
-////        separatorView.backgroundColor = UIColor.systemBackground
-//        let label = UILabel(frame: CGRect(x: 16, y: 8, width: view.frame.size.width, height: 48))
-//        label.textColor = UIColor.mainColor
-//        label.font = UIFont(name: "Poppins-Regular", size: 17)
-//        if section == 0{
-//            label.text = (NSLocalizedString("General", comment: ""))
-//
-//        } else if section == 1 {
-//            label.text = (NSLocalizedString("Security", comment: ""))
-//        } else if section == 2 {
-//            label.text = (NSLocalizedString("Display", comment: ""))
-//        } else if section == 3 {
-//            label.text = (NSLocalizedString("Interest", comment: ""))
-//        } else{
-//            label.text = (NSLocalizedString("Support", comment: ""))
-//        }
-//        view.addSubview(separatorView)
-//        view.addSubview(label)
-//        return view
-//
-//    }
-    
-//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-//        return 56
-//    }
-}
-
-extension SettingsVC: UITableViewDataSource {
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        
-        return 7
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        switch section {
-        case 0: return 1
-        case 1: return 2
-        case 2: return 1
-        case 3: return 0
-        case 4: return 0
-        case 5: return 4
-        case 6: return 2
-        default: return 0
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        switch indexPath.section {
-        case 0:
-            switch indexPath.row{
-//            case 0:
-//                let cell = tableView.dequeueReusableCell(withIdentifier:"SectionHeaderTableViewCell") as! SectionHeaderTableViewCell
-//                cell.bind()
-//                cell.isVerified.isHidden = true
-//
-////                cell.titleLabel.text = (NSLocalizedString("Password", comment: ""))
-////                cell.descriptionLabel.text = (NSLocalizedString("Change your password", comment: ""))
-//                return cell
-            case 0:
-                let cell = tableView.dequeueReusableCell(withIdentifier:PremiumSubcriptionCell.identifier) as! PremiumSubcriptionCell
-            return cell
-            default:
-                return UITableViewCell()
-            }
-        case 1:
-            if ControlSettings.isGoProEnabled{
-                if AppInstance.instance.userProfile?.data?.isPro ?? 0 == 0{
-                    switch indexPath.row {
-                    case 0:
-                    
-                        let cell = tableView.dequeueReusableCell(withIdentifier:SettingsSectionOneTableItem.identifier) as! SettingsSectionOneTableItem
-                        cell.titleLabel.text = (NSLocalizedString("Edit Profile Info", comment: ""))
-                        cell.tittleImage.image = R.image.icProfileDark()
-                        return cell
-                    case 1:
-                        let cell = tableView.dequeueReusableCell(withIdentifier: SettingsSectionOneTableItem.identifier) as! SettingsSectionOneTableItem
-                        cell.titleLabel.text = (NSLocalizedString("My Account", comment: ""))
-                        cell.tittleImage.image = UIImage(named: "ShieldDone")
-                        return cell
-                    case 2:
-                        let cell = tableView.dequeueReusableCell(withIdentifier: SettingsSectionOneTableItem.identifier) as! SettingsSectionOneTableItem
-                        cell.titleLabel.text = (NSLocalizedString("Notifications", comment: ""))
-                        cell.tittleImage.image = R.image.icNotification()
-                        return cell
-                    case 3:
-                        let cell = tableView.dequeueReusableCell(withIdentifier: SettingsSectionOneTableItem.identifier) as! SettingsSectionOneTableItem
-                        cell.titleLabel.text = (NSLocalizedString("Withdrawals", comment: ""))
-                        cell.tittleImage.image = UIImage(named: "Graph")
-                        return cell
-                    case 4:
-                        let cell = tableView.dequeueReusableCell(withIdentifier: SettingsSectionOneTableItem.identifier) as! SettingsSectionOneTableItem
-                        cell.titleLabel.text = (NSLocalizedString("Go Pro", comment: ""))
-                        cell.tittleImage.image = UIImage(named: "Bookmark")
-                        return cell
-                    case 5:
-                        let cell = tableView.dequeueReusableCell(withIdentifier: SettingsSectionOneTableItem.identifier) as! SettingsSectionOneTableItem
-                        cell.titleLabel.text = (NSLocalizedString("Wallet", comment: ""))
-                        cell.tittleImage.image = UIImage(named: "Wallet")
-                        return cell
-                    case 6:
-                        let cell = tableView.dequeueReusableCell(withIdentifier: SettingsSectionOneTableItem.identifier) as! SettingsSectionOneTableItem
-                        cell.titleLabel.text = (NSLocalizedString("Blocked Users", comment: ""))
-                        cell.introForwardImage.isHidden = false
-                        cell.tittleImage.image = R.image.icBlockBs()
-                        return cell
-                    default:
-                        return UITableViewCell()
-                    }
-                }else{
-                    switch indexPath.row {
-                    case 0:
-                    
-                        let cell = tableView.dequeueReusableCell(withIdentifier: SettingsSectionOneTableItem.identifier) as! SettingsSectionOneTableItem
-                        cell.titleLabel.text = (NSLocalizedString("Edit Profile Info", comment: ""))
-                        return cell
-                    case 1:
-                        let cell = tableView.dequeueReusableCell(withIdentifier: SettingsSectionOneTableItem.identifier) as! SettingsSectionOneTableItem
-                        cell.titleLabel.text = (NSLocalizedString("My Account", comment: ""))
-                        cell.tittleImage.image = UIImage(named: "ShieldDone")
-                        return cell
-                    case 2:
-                        let cell = tableView.dequeueReusableCell(withIdentifier: SettingsSectionOneTableItem.identifier) as! SettingsSectionOneTableItem
-                        cell.titleLabel.text = (NSLocalizedString("Withdrawals", comment: ""))
-                        cell.tittleImage.image = UIImage(named: "Graph")
-                        return cell
-                   
-                    case 3:
-                        let cell = tableView.dequeueReusableCell(withIdentifier: SettingsSectionOneTableItem.identifier) as! SettingsSectionOneTableItem
-                        cell.titleLabel.text = (NSLocalizedString("Articles", comment: ""))
-                        cell.tittleImage.image = UIImage(named: "ic-playlists-tb")
-                        return cell
-                   
-                    case 4:
-                        let cell = tableView.dequeueReusableCell(withIdentifier: SettingsSectionOneTableItem.identifier) as! SettingsSectionOneTableItem
-                        cell.titleLabel.text = (NSLocalizedString("Blocked Users", comment: ""))
-                        cell.tittleImage.image = R.image.icBlockBs()
-                        return cell
-                    case 5:
-                       let cell = tableView.dequeueReusableCell(withIdentifier: SettingsSectionOneTableItem.identifier) as! SettingsSectionOneTableItem
-                       cell.titleLabel.text = (NSLocalizedString("Wallet", comment: ""))
-                        cell.tittleImage.image = UIImage(named: "Wallet")
-                       return cell
-                    default:
-                        return UITableViewCell()
-                    }
-                }
-            }else{
-                switch indexPath.row {
-                case 0:
-                
-                    let cell = tableView.dequeueReusableCell(withIdentifier: SettingsSectionOneTableItem.identifier) as! SettingsSectionOneTableItem
-                    cell.titleLabel.text = (NSLocalizedString("Edit Profile Info", comment: ""))
-                    return cell
-                case 1:
-                    let cell = tableView.dequeueReusableCell(withIdentifier: SettingsSectionOneTableItem.identifier) as! SettingsSectionOneTableItem
-                    cell.titleLabel.text = (NSLocalizedString("My Account", comment: ""))
-                    cell.tittleImage.image = UIImage(named: "ShieldDone")
-                    return cell
-                case 2:
-                    let cell = tableView.dequeueReusableCell(withIdentifier: SettingsSectionOneTableItem.identifier) as! SettingsSectionOneTableItem
-                    cell.titleLabel.text = (NSLocalizedString("Withdrawals", comment: ""))
-                    cell.tittleImage.image = UIImage(named: "Graph")
-                    return cell
-               
-                case 3:
-                    let cell = tableView.dequeueReusableCell(withIdentifier: SettingsSectionOneTableItem.identifier) as! SettingsSectionOneTableItem
-                    cell.titleLabel.text = (NSLocalizedString("Articles", comment: ""))
-                    cell.tittleImage.image = UIImage(named: "ic-playlists-tb")
-                    return cell
-               
-                case 4:
-                    let cell = tableView.dequeueReusableCell(withIdentifier: SettingsSectionOneTableItem.identifier) as! SettingsSectionOneTableItem
-                    cell.titleLabel.text = (NSLocalizedString("Blocked Users", comment: ""))
-                    cell.tittleImage.image = R.image.icBlockBs()
-                    return cell
-                 case 5:
-                    let cell = tableView.dequeueReusableCell(withIdentifier: SettingsSectionOneTableItem.identifier) as! SettingsSectionOneTableItem
-                    cell.titleLabel.text = (NSLocalizedString("Wallet", comment: ""))
-                    cell.tittleImage.image = UIImage(named: "Wallet")
-                    return cell
-                default:
-                    return UITableViewCell()
-                }
-            }
-
-           
-        case 2:
-            switch indexPath.row{
-            case 0:
-                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsSectionOneTableItem.identifier) as! SettingsSectionOneTableItem
-                cell.titleLabel.text = (NSLocalizedString("Password", comment: ""))
-                cell.tittleImage.image = UIImage(named: "Lock")
-                return cell
-            case 1:
-                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsSectionOneTableItem.identifier) as! SettingsSectionOneTableItem
-                cell.titleLabel.text = (NSLocalizedString("Two-factor authentication", comment: ""))
-                cell.tittleImage.image = UIImage(named: "TickSquare")
-                
-                return cell
-            case 2:
-                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsSectionOneTableItem.identifier) as! SettingsSectionOneTableItem
-                cell.titleLabel.text = (NSLocalizedString("Manage Sessions", comment: ""))
-                cell.tittleImage.image = UIImage(named: "TimeSquare")
-                return cell
-            default:
-                return UITableViewCell()
-            }
-        case 3:
-            switch indexPath.row{
-                
-            case 0:
-                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsSectionOneTableItem.identifier) as! SettingsSectionOneTableItem
-                cell.titleLabel.text = (NSLocalizedString("Theme", comment: ""))
-                cell.tittleImage.image = UIImage(named: "Show")
-                return cell
-            default:
-                return UITableViewCell()
-            }
-        case 4:
-            switch indexPath.row{
-                
-            case 0:
-              let cell = tableView.dequeueReusableCell(withIdentifier: SettingsSectionOneTableItem.identifier) as! SettingsSectionOneTableItem
-                cell.titleLabel.text = (NSLocalizedString("Interest", comment: ""))
-                cell.tittleImage.image = UIImage(named: "Category")
-                return cell
-            case 1:
-                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsSectionOneTableItem.identifier) as! SettingsSectionOneTableItem
-                cell.titleLabel.text = (NSLocalizedString("Articles", comment: ""))
-                cell.tittleImage.image = UIImage(named: "ic-playlists-tb")
-                return cell
-            default:
-                return UITableViewCell()
-            }
-            
-        case 5:
-            switch indexPath.row {
-            case 0:
-                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsSectionOneTableItem.identifier) as! SettingsSectionOneTableItem
-                cell.titleLabel.text = (NSLocalizedString("Rate our App", comment: ""))
-                cell.tittleImage.image = UIImage(named: "Star")
-                return cell
-            case 1:
-                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsSectionOneTableItem.identifier) as! SettingsSectionOneTableItem
-                cell.titleLabel.text = (NSLocalizedString("About", comment: ""))
-                cell.tittleImage.image = UIImage(named: "2User")
-                return cell
-            case 2:
-                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsSectionOneTableItem.identifier) as! SettingsSectionOneTableItem
-                cell.titleLabel.text = (NSLocalizedString("Term of use", comment: ""))
-                cell.tittleImage.image = UIImage(named: "ShieldDone")
-                return cell
-            case 3:
-                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsSectionOneTableItem.identifier) as! SettingsSectionOneTableItem
-                cell.titleLabel.text = (NSLocalizedString("Help", comment: ""))
-                cell.tittleImage.image = UIImage(named: "DangerCircle")
-                return cell
-                
-            default:
-                return UITableViewCell()
-            }
-        case 6:
-            switch indexPath.row {
-            case 0:
-                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsSectionOneTableItem.identifier) as! SettingsSectionOneTableItem
-                cell.titleLabel.text = (NSLocalizedString("Delete Acoount", comment: ""))
-                cell.tittleImage.image = R.image.icDeleteBs()
-                return cell
-            case 1:
-                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsSectionOneTableItem.identifier) as! SettingsSectionOneTableItem
-                cell.titleLabel.text = (NSLocalizedString("Logout", comment: ""))
-                cell.introForwardImage.isHidden = true
-                cell.tittleImage.image = UIImage(named: "Logout")
-                return cell
-                
-            default:
-                return UITableViewCell()
-            }
-        default:
-            return UITableViewCell()
-        }
-    }
 }

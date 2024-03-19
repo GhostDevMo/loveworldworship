@@ -7,11 +7,9 @@
 //
 
 import Foundation
-class LikeModel:BaseModel{
-    
+class LikeModel: BaseModel {    
     struct LikeSuccessModel: Codable {
         let status: Int?
         let mode: String?
     }
-
 }

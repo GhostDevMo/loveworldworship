@@ -17,17 +17,11 @@ RSYNC_PROTECT_TMP_FILES=(--filter "P .*.??????")
 variant_for_slice()
 {
   case "$1" in
-  "PPRiskMagnes.xcframework/ios-arm64_x86_64-simulator")
-    echo "simulator"
-    ;;
   "PPRiskMagnes.xcframework/ios-arm64")
     echo ""
     ;;
-  "CardinalMobile.xcframework/ios-arm64_x86_64-simulator")
+  "PPRiskMagnes.xcframework/ios-arm64_x86_64-simulator")
     echo "simulator"
-    ;;
-  "CardinalMobile.xcframework/ios-arm64")
-    echo ""
     ;;
   esac
 }
@@ -35,17 +29,11 @@ variant_for_slice()
 archs_for_slice()
 {
   case "$1" in
-  "PPRiskMagnes.xcframework/ios-arm64_x86_64-simulator")
-    echo "arm64 x86_64"
-    ;;
   "PPRiskMagnes.xcframework/ios-arm64")
     echo "arm64"
     ;;
-  "CardinalMobile.xcframework/ios-arm64_x86_64-simulator")
+  "PPRiskMagnes.xcframework/ios-arm64_x86_64-simulator")
     echo "arm64 x86_64"
-    ;;
-  "CardinalMobile.xcframework/ios-arm64")
-    echo "arm64"
     ;;
   esac
 }
@@ -129,6 +117,5 @@ install_xcframework() {
   echo "Copied $source to $destination"
 }
 
-install_xcframework "${PODS_ROOT}/Braintree/Frameworks/XCFrameworks/PPRiskMagnes.xcframework" "Braintree/PayPalDataCollector" "framework" "ios-arm64_x86_64-simulator" "ios-arm64"
-install_xcframework "${PODS_ROOT}/Braintree/Frameworks/XCFrameworks/CardinalMobile.xcframework" "Braintree/ThreeDSecure" "framework" "ios-arm64_x86_64-simulator" "ios-arm64"
+install_xcframework "${PODS_ROOT}/Braintree/Frameworks/XCFrameworks/PPRiskMagnes.xcframework" "Braintree/PayPalDataCollector" "framework" "ios-arm64" "ios-arm64_x86_64-simulator"
 

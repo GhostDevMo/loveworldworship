@@ -1,5 +1,5 @@
 //
-//  Library-TableCell.swift
+//  Library_TableCell.swift
 //  DeepSoundiOS
 //
 //  Created by Macbook Pro on 17/04/2019.
@@ -9,10 +9,10 @@
 import UIKit
 
 class Library_TableCell: UITableViewCell {
-    @IBOutlet weak var backImage: UIImageView!
     
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var libraryImage: UIImageView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -24,4 +24,19 @@ class Library_TableCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
+    open override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        if let indicatorButton = allSubviews.compactMap({ $0 as? UIButton }).last {
+            let image = indicatorButton.backgroundImage(for: .normal)?.withRenderingMode(.alwaysTemplate)
+            indicatorButton.setBackgroundImage(image, for: .normal)
+            indicatorButton.tintColor = .black
+        }
+    }
+}
+
+extension UIView {
+   var allSubviews: [UIView] {
+      return subviews.flatMap { [$0] + $0.allSubviews }
+   }
 }

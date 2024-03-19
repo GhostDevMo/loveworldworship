@@ -17,7 +17,7 @@ protocol didSetInterestGenres {
     func didSetInterest(Label:UILabel,Image:UIImageView,status:Bool,idsArray:[GenresModel.Datum],Index:Int)
 }
 protocol followUserDelegate {
-    func followUser(index:Int,button:UIButton,status:Bool)
+    func followUser(_ index:Int, _ sender: UIButton)
 }
 protocol unFollowUserDelegate {
      func unFollowUser(index:Int)
@@ -35,21 +35,18 @@ protocol deletePlaylisttPopupDelegate {
     func deletePlaylistPopup(status:Bool,playlistID:Int)
 }
 protocol updatePlaylistDelegate {
-    func updatePlaylistPlaylist(status:Bool,object:PlaylistModel.Playlist)
-}
-
-protocol likeDislikeSongDelegate {
-    func likeDisLikeSong(status:Bool,button:UIButton,audioId:String)
+    func updatePlaylistPlaylist(status:Bool,object: Playlist)
 }
 
 protocol likeDislikeCommentDelegate {
-    func likeDisLikeComment(status:Bool,button:UIButton,commentId:Int)
+    func likeDisLikeComment(_ sender: UIButton, indexPath: Int)
 }
+
 protocol didSetPlaylistDelegate {
-    func didPlaylist(Image:UIImageView,status:Bool,idsArray:[PlaylistModel.Playlist],Index:Int)
+    func didPlaylist(Image: UIImageView, status: Bool, idsArray: [Playlist], Index: Int)
 }
 protocol didSetGenrestDelegate {
-    func didSetGenres(Image:UIImageView,status:Bool,idsArray:[GenresModel.Datum],Index:Int)
+    func didSetGenres(Image:UIImageView,status:Bool,idsArray:[GenresModel.Datum], Index:Int)
 }
 protocol didSetPriceDelegate {
     func didSetPrice(Image:UIImageView,status:Bool,idsArray:[PriceModel.Datum],Index:Int)
@@ -86,6 +83,23 @@ protocol didSelectTimeZoneDelegate{
 protocol  didSelectPaystackEmailDelegate {
     func didSelectPaystackEmail(email:String)
 }
-protocol didReceivePaystackReferenceIDDelegate {
+protocol DidReceivePaystackReferenceIDDelegate {
     func didReceivePaystackReferenceID(refID:String)
+}
+
+protocol PurchaseRequiredPopupDelegate {
+    func purchaseButtonPressed(_ sender: UIButton, _ songObject: Song?)
+}
+
+protocol WarningPopupVCDelegate {
+    func warningPopupOKButtonPressed(_ sender: UIButton, _ songObject: Song?)
+}
+
+protocol NoLoginTableDelegate {
+    func buttonPressed(_ sender: UIButton)
+}
+
+protocol SongsTableCellsDelegate {
+    func playButtonPressed(_ sender: UIButton, indexPath: IndexPath, cell: SongsTableCells)
+    func moreButtonPressed(_ sender: UIButton, indexPath: IndexPath, cell: SongsTableCells)
 }

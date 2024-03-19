@@ -14,23 +14,16 @@ enum UserDefaultsKeys : String {
     case userID
 }
 
-extension UserDefaults{
-    //MARK: Check Login
-    func setLoggedIn(value: Bool) {
-        set(value, forKey: UserDefaultsKeys.isLoggedIn.rawValue)
-        //synchronize()
-    }
-    
-    func isLoggedIn()-> Bool {
-        return bool(forKey: UserDefaultsKeys.isLoggedIn.rawValue)
-    }
+extension UserDefaults {
     
     //MARK: Save User Data
     func setUserSession(value: [String:Any], ForKey:String){
         set(value, forKey: ForKey)
         //synchronize()
     }
+    
     func getUserSessions(Key:String) -> [String:Any]{
         return (object(forKey: Key) as? [String:Any]) ?? [:]
     }
+    
 }

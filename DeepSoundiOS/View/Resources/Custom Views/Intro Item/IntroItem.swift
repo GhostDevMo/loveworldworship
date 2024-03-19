@@ -13,6 +13,7 @@ class IntroItem: UIView {
     @IBOutlet weak var secondLabel: UILabel!
     @IBOutlet weak var firstLabel: UILabel!
     @IBOutlet weak var imageLabel: UIImageView!
+    @IBOutlet weak var image2Label: UIImageView!
    
 
 }

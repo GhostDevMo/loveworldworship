@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="urbanist_medium.ttf">
+            <string>Urbanist-Medium</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="SearchTableViewCell" id="KGk-i7-Jjw" customClass="SearchTableViewCell" customModule="DeepSoundiOS" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="75"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="75"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="laZ-iO-6QE">
+                        <rect key="frame" x="24" y="12.666666666666664" width="272" height="50"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic-search" translatesAutoresizingMaskIntoConstraints="NO" id="Ffu-TQ-Ako">
+                                <rect key="frame" x="12" y="13" width="24" height="24"/>
+                                <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="Ffu-TQ-Ako" secondAttribute="height" multiplier="1:1" id="6Nc-N6-CTZ"/>
+                                    <constraint firstAttribute="height" constant="24" id="urZ-B4-hA6"/>
+                                </constraints>
+                            </imageView>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search " textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="06I-y4-GSw">
+                                <rect key="frame" x="46" y="5" width="216" height="40"/>
+                                <fontDescription key="fontDescription" name="Urbanist-Medium" family="Urbanist" pointSize="18"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="paddingLeftCustom">
+                                        <real key="value" value="5"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rD9-3f-9gE">
+                                <rect key="frame" x="0.0" y="0.0" width="272" height="50"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title=""/>
+                                <connections>
+                                    <action selector="searchBtnPressed:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="Y0w-BE-SUe"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="rD9-3f-9gE" firstAttribute="top" secondItem="laZ-iO-6QE" secondAttribute="top" id="4j4-DN-IcF"/>
+                            <constraint firstAttribute="height" constant="50" id="5Sn-lc-WdH"/>
+                            <constraint firstAttribute="bottom" secondItem="rD9-3f-9gE" secondAttribute="bottom" id="9GN-pO-DQc"/>
+                            <constraint firstItem="Ffu-TQ-Ako" firstAttribute="leading" secondItem="laZ-iO-6QE" secondAttribute="leading" constant="12" id="N3R-cb-94f"/>
+                            <constraint firstAttribute="trailing" secondItem="rD9-3f-9gE" secondAttribute="trailing" id="VY1-dT-UJl"/>
+                            <constraint firstItem="Ffu-TQ-Ako" firstAttribute="centerY" secondItem="laZ-iO-6QE" secondAttribute="centerY" id="Wac-PE-v39"/>
+                            <constraint firstItem="06I-y4-GSw" firstAttribute="leading" secondItem="Ffu-TQ-Ako" secondAttribute="trailing" constant="10" id="cwk-xb-8ST"/>
+                            <constraint firstItem="06I-y4-GSw" firstAttribute="top" secondItem="laZ-iO-6QE" secondAttribute="top" constant="5" id="igx-8Z-Ptw"/>
+                            <constraint firstAttribute="bottom" secondItem="06I-y4-GSw" secondAttribute="bottom" constant="5" id="jUn-kv-wEB"/>
+                            <constraint firstItem="rD9-3f-9gE" firstAttribute="leading" secondItem="laZ-iO-6QE" secondAttribute="leading" id="t9E-3e-vT1"/>
+                            <constraint firstAttribute="trailing" secondItem="06I-y4-GSw" secondAttribute="trailing" constant="10" id="xUz-KO-SC3"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadiusV">
+                                <real key="value" value="25"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="laZ-iO-6QE" secondAttribute="trailing" constant="24" id="Tfr-IT-mY3"/>
+                    <constraint firstItem="laZ-iO-6QE" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="24" id="mTl-BW-DuS"/>
+                    <constraint firstItem="laZ-iO-6QE" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="vG8-Gt-Hra"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="searchTF" destination="06I-y4-GSw" id="AhD-tO-VUS"/>
+            </connections>
+            <point key="canvasLocation" x="92" y="-32"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="ic-search" width="512" height="512"/>
+    </resources>
+</document>

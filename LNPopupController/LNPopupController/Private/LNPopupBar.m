@@ -737,7 +737,7 @@ static inline __attribute__((always_inline)) UIBlurEffectStyle _LNBlurEffectStyl
 		
 		if(leftViewLast == _imageView)
 		{
-			leftViewLastFrame.size.width += MIN(self.layoutMargins.left, 20);
+			leftViewLastFrame.size.width += MIN(self.layoutMargins.left, 10);
 		}
 	}
 	
@@ -748,7 +748,7 @@ static inline __attribute__((always_inline)) UIBlurEffectStyle _LNBlurEffectStyl
 		
 		if(rightViewFirst == _imageView)
 		{
-			rightViewFirstFrame.origin.x -= MIN(self.layoutMargins.left, 20);
+			rightViewFirstFrame.origin.x -= MIN(self.layoutMargins.left, 10);
 		}
 	}
 	
@@ -792,9 +792,9 @@ static inline __attribute__((always_inline)) UIBlurEffectStyle _LNBlurEffectStyl
 	if(_needsLabelsLayout == YES)
 	{
 		if(_titleLabel == nil)
-		{
-			_titleLabel = [self _newMarqueeLabel];
-			_titleLabel.font = _resolvedStyle == LNPopupBarStyleProminent ? [UIFont systemFontOfSize:18 weight:UIFontWeightRegular] : [UIFont systemFontOfSize:12];
+        {
+            _titleLabel = [self _newMarqueeLabel];
+            _titleLabel.font = [UIFont fontWithName: @"Urbanist-Medium" size:20];
 			[_titlesView addSubview:_titleLabel];
 		}
 		
@@ -973,7 +973,6 @@ static inline __attribute__((always_inline)) UIBlurEffectStyle _LNBlurEffectStyl
 	{
 		_titleLabel.textColor = _titleTextAttributes[NSForegroundColorAttributeName] ?: [UIColor labelColor];
 		_subtitleLabel.textColor = _subtitleTextAttributes[NSForegroundColorAttributeName] ?: [UIColor secondaryLabelColor];
-		
 		return;
 	}
 #endif

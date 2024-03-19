@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -11,6 +11,9 @@
     <customFonts key="customFonts">
         <array key="Poppins-SemiBold.otf">
             <string>Poppins-SemiBold</string>
+        </array>
+        <array key="urbanist_medium.ttf">
+            <string>Urbanist-Medium</string>
         </array>
     </customFonts>
     <scenes>
@@ -22,49 +25,112 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="e5Z-gC-Uuq">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="92"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notifications" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kgh-W3-6sz">
+                                        <rect key="frame" x="74" y="57" width="108.5" height="24"/>
+                                        <fontDescription key="fontDescription" name="Urbanist-Medium" family="Urbanist" pointSize="20"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nZp-GY-iuI">
+                                        <rect key="frame" x="17" y="53" width="32" height="32"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="32" id="qQd-Bl-i47"/>
+                                        </constraints>
+                                        <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" image="ic_action_back"/>
+                                        <connections>
+                                            <action selector="backButtonAction:" destination="Gne-h3-hVi" eventType="touchUpInside" id="Fd8-Kh-giJ"/>
+                                        </connections>
+                                    </button>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rnH-O6-sCK">
+                                        <rect key="frame" x="0.0" y="90" width="414" height="1"/>
+                                        <color key="backgroundColor" systemColor="separatorColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="1" id="314-FE-xY6"/>
+                                        </constraints>
+                                    </view>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oKY-Nw-D59">
+                                        <rect key="frame" x="365" y="53" width="32" height="32"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="32" id="7mU-1k-xwQ"/>
+                                        </constraints>
+                                        <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" image="notificationSettings"/>
+                                        <connections>
+                                            <action selector="notificationSettingsPressed:" destination="Gne-h3-hVi" eventType="touchUpInside" id="uaZ-B5-ARt"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstItem="nZp-GY-iuI" firstAttribute="leading" secondItem="e5Z-gC-Uuq" secondAttribute="leading" constant="17" id="68j-Xl-uQt"/>
+                                    <constraint firstItem="kgh-W3-6sz" firstAttribute="leading" secondItem="nZp-GY-iuI" secondAttribute="trailing" constant="25" id="7eq-B5-u08"/>
+                                    <constraint firstItem="oKY-Nw-D59" firstAttribute="width" secondItem="oKY-Nw-D59" secondAttribute="height" id="Bdl-iC-huY"/>
+                                    <constraint firstItem="nZp-GY-iuI" firstAttribute="width" secondItem="nZp-GY-iuI" secondAttribute="height" id="DdF-E8-bXI"/>
+                                    <constraint firstAttribute="trailing" secondItem="oKY-Nw-D59" secondAttribute="trailing" constant="17" id="Y8t-DF-kEw"/>
+                                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="kgh-W3-6sz" secondAttribute="trailing" constant="25" id="ZIc-Gr-aPg"/>
+                                    <constraint firstAttribute="trailing" secondItem="rnH-O6-sCK" secondAttribute="trailing" id="d3h-PH-s5h"/>
+                                    <constraint firstAttribute="bottom" secondItem="rnH-O6-sCK" secondAttribute="bottom" constant="1" id="ihB-hF-KLa"/>
+                                    <constraint firstItem="oKY-Nw-D59" firstAttribute="centerY" secondItem="nZp-GY-iuI" secondAttribute="centerY" id="qP6-sg-iRJ"/>
+                                    <constraint firstAttribute="bottom" secondItem="kgh-W3-6sz" secondAttribute="bottom" constant="11" id="qVm-Ne-o5q"/>
+                                    <constraint firstItem="nZp-GY-iuI" firstAttribute="centerY" secondItem="kgh-W3-6sz" secondAttribute="centerY" id="t1S-nM-pLE"/>
+                                    <constraint firstItem="rnH-O6-sCK" firstAttribute="leading" secondItem="e5Z-gC-Uuq" secondAttribute="leading" id="vlL-jl-f1q"/>
+                                </constraints>
+                            </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="ZmF-L5-Ye6">
-                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
+                                <rect key="frame" x="0.0" y="97" width="414" height="765"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <connections>
                                     <outlet property="dataSource" destination="Gne-h3-hVi" id="ryi-a4-H09"/>
                                     <outlet property="delegate" destination="Gne-h3-hVi" id="5hN-IH-M7N"/>
                                 </connections>
                             </tableView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="EmptyData" translatesAutoresizingMaskIntoConstraints="NO" id="BCW-xI-3hn">
-                                <rect key="frame" x="37" y="282" width="340" height="250"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="BCW-xI-3hn" secondAttribute="height" multiplier="1:1" constant="90" id="wMm-2p-Px6"/>
-                                </constraints>
-                            </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There is no Notification " textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="xss-vo-s2X">
-                                <rect key="frame" x="82.5" y="558" width="249" height="29.5"/>
-                                <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="21"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="26" translatesAutoresizingMaskIntoConstraints="NO" id="jdk-87-tiQ">
+                                <rect key="frame" x="40" y="297.5" width="334" height="301"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="EmptyData" translatesAutoresizingMaskIntoConstraints="NO" id="BCW-xI-3hn">
+                                        <rect key="frame" x="0.0" y="0.0" width="334" height="245.5"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="BCW-xI-3hn" secondAttribute="height" multiplier="87:64" id="9Y5-Ng-f4h"/>
+                                        </constraints>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There is no Notification " textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="xss-vo-s2X">
+                                        <rect key="frame" x="42.5" y="271.5" width="249" height="29.5"/>
+                                        <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="21"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="xay-jV-e7R"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="jdk-87-tiQ" firstAttribute="centerY" secondItem="vtl-2u-pAT" secondAttribute="centerY" id="16l-Z0-tVf"/>
+                            <constraint firstItem="xay-jV-e7R" firstAttribute="top" secondItem="kgh-W3-6sz" secondAttribute="bottom" constant="-33" id="3UW-Zo-C2E"/>
+                            <constraint firstItem="jdk-87-tiQ" firstAttribute="centerX" secondItem="vtl-2u-pAT" secondAttribute="centerX" id="56x-ry-OfJ"/>
+                            <constraint firstItem="e5Z-gC-Uuq" firstAttribute="top" secondItem="vtl-2u-pAT" secondAttribute="top" id="7nX-PY-MAz"/>
+                            <constraint firstAttribute="trailing" secondItem="jdk-87-tiQ" secondAttribute="trailing" constant="40" id="Afd-zi-6bo"/>
                             <constraint firstItem="xay-jV-e7R" firstAttribute="bottom" secondItem="ZmF-L5-Ye6" secondAttribute="bottom" id="Atf-Sj-3ug"/>
-                            <constraint firstItem="ZmF-L5-Ye6" firstAttribute="top" secondItem="xay-jV-e7R" secondAttribute="top" id="DrB-uv-BGt"/>
                             <constraint firstItem="ZmF-L5-Ye6" firstAttribute="leading" secondItem="xay-jV-e7R" secondAttribute="leading" id="JUR-ro-xeg"/>
-                            <constraint firstItem="BCW-xI-3hn" firstAttribute="width" secondItem="vtl-2u-pAT" secondAttribute="width" multiplier="0.4" constant="174.39999999999998" id="LG1-V7-e1r"/>
-                            <constraint firstItem="BCW-xI-3hn" firstAttribute="centerY" secondItem="xay-jV-e7R" secondAttribute="centerY" constant="-68" id="MGd-sf-kuX"/>
-                            <constraint firstItem="xss-vo-s2X" firstAttribute="centerX" secondItem="BCW-xI-3hn" secondAttribute="centerX" id="R7K-Tc-bS6"/>
-                            <constraint firstItem="BCW-xI-3hn" firstAttribute="centerX" secondItem="xay-jV-e7R" secondAttribute="centerX" id="WrA-3e-dg8"/>
+                            <constraint firstItem="ZmF-L5-Ye6" firstAttribute="top" secondItem="e5Z-gC-Uuq" secondAttribute="bottom" constant="5" id="S6x-00-HMi"/>
+                            <constraint firstItem="jdk-87-tiQ" firstAttribute="leading" secondItem="vtl-2u-pAT" secondAttribute="leading" constant="40" id="WGU-3W-bBJ"/>
+                            <constraint firstItem="e5Z-gC-Uuq" firstAttribute="leading" secondItem="vtl-2u-pAT" secondAttribute="leading" id="gbD-mp-S4K"/>
                             <constraint firstItem="xay-jV-e7R" firstAttribute="trailing" secondItem="ZmF-L5-Ye6" secondAttribute="trailing" id="le0-Kv-4PF"/>
-                            <constraint firstItem="xss-vo-s2X" firstAttribute="top" secondItem="BCW-xI-3hn" secondAttribute="bottom" constant="26" id="yM3-eN-SUz"/>
+                            <constraint firstItem="xay-jV-e7R" firstAttribute="trailing" secondItem="e5Z-gC-Uuq" secondAttribute="trailing" id="lgk-7S-f9M"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="eM9-md-GvM">
-                        <barButtonItem key="rightBarButtonItem" image="notificationSettings" id="Ntr-ej-FaQ">
-                            <connections>
-                                <action selector="notificationSettingsPressed:" destination="Gne-h3-hVi" id="wWJ-6N-DYq"/>
-                            </connections>
-                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="notificationSettings" id="Ntr-ej-FaQ"/>
                     </navigationItem>
-                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="showImage" destination="BCW-xI-3hn" id="A0a-Na-4kr"/>
                         <outlet property="showLabel" destination="xss-vo-s2X" id="kPy-JE-f28"/>
@@ -78,7 +144,11 @@
     </scenes>
     <resources>
         <image name="EmptyData" width="696" height="512"/>
+        <image name="ic_action_back" width="128" height="128"/>
         <image name="notificationSettings" width="24" height="24"/>
+        <systemColor name="separatorColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

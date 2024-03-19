@@ -11,156 +11,262 @@ import Async
 import DeepSoundSDK
 import SwiftEventBus
 import GoogleMobileAds
+import Toast_Swift
+
 class SettingNotificationVC: BaseVC {
     
-    @IBOutlet weak var tableview: UITableView!
+    // MARK: - IBOutlets
+    
+    @IBOutlet weak var tableView: UITableView!
+    
+    // MARK: - View Life Cycles
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableview.estimatedRowHeight = 70
-        tableview.register(UINib(nibName: "SettingNotificationItem", bundle: nil), forCellReuseIdentifier: "SettingNotificationItem")
+        
+        self.initialConfig()
+    }
+    
+    // MARK: - Selectors
+    
+    // Back Button Action
+    @IBAction override func backButtonAction(_ sender: UIButton) {
+        self.view.endEditing(true)
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    // MARK: - Helper Functions
+    
+    // Initial Config
+    func initialConfig() {
+        self.tableViewSetup()
+    }
+    
+    // TableView Setup
+    func tableViewSetup() {
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+        self.tableView.register(UINib(resource: R.nib.settingNotificationItem), forCellReuseIdentifier: R.reuseIdentifier.settingNotificationItem.identifier)
     }
 
 }
 
-extension SettingNotificationVC:UITableViewDelegate,UITableViewDataSource{
+// MARK: - Extensions
+
+// MARK: TableView Setup
+extension SettingNotificationVC: UITableViewDelegate, UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 8
+        return 9
     }
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch indexPath.row{
+        let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.settingNotificationItem.identifier) as! SettingNotificationItem
+        cell.delegate = self
+        cell.indexPath = indexPath.row
+        switch indexPath.row {
         case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier:"SettingNotificationItem") as! SettingNotificationItem
             cell.notificationLabel.text = "Someone followed me"
-            cell.bind(AppInstance.instance.userProfile?.data?.emailOnFollowUser ?? 0)
-            cell.valueStatus = AppInstance.instance.userProfile?.data?.emailOnFollowUser ?? 0
-            cell.delegate = self
-            cell.indexPath = indexPath.row
-            
-            return cell
+            switch AppInstance.instance.userProfile?.data?.email_on_follow_user {
+            case .string(let value) :
+                cell.bind(Int(value) ?? 0)
+                cell.valueStatus = Int(value)
+            case .integer(let value) :
+                cell.bind(value)
+                cell.valueStatus = Int(value)
+            case .double(let value) :
+                cell.bind(Int(value))
+                cell.valueStatus = Int(value)
+            case .none:
+                break
+            }
         case 1:
-            let cell = tableView.dequeueReusableCell(withIdentifier:"SettingNotificationItem") as! SettingNotificationItem
-            cell.notificationLabel.text = "Someone like/dislike on of my track"
-            cell.bind(AppInstance.instance.userProfile?.data?.emailOnLikedTrack ?? 0)
-            cell.indexPath = indexPath.row
-            cell.valueStatus = AppInstance.instance.userProfile?.data?.emailOnLikedTrack ?? 0
-            cell.delegate = self
-            return cell
+            cell.notificationLabel.text = "Someone like/dislike one of my tracks"
+            switch AppInstance.instance.userProfile?.data?.email_on_liked_track {
+            case .string(let value) :
+                cell.bind(Int(value) ?? 0)
+                cell.valueStatus = Int(value)
+            case .integer(let value) :
+                cell.bind(value)
+                cell.valueStatus = Int(value)
+            case .double(let value) :
+                cell.bind(Int(value))
+                cell.valueStatus = Int(value)
+            case .none:
+                break
+            }
         case 02:
-            let cell = tableView.dequeueReusableCell(withIdentifier:"SettingNotificationItem") as! SettingNotificationItem
-            cell.notificationLabel.text = "Someone liked on of my comments"
-            cell.bind(AppInstance.instance.userProfile?.data?.emailOnLikedComment ?? 0)
-            cell.indexPath = indexPath.row
-            
-            cell.valueStatus = AppInstance.instance.userProfile?.data?.emailOnLikedComment ?? 0
-            cell.delegate = self
-            return cell
+            cell.notificationLabel.text = "Someone reviewed one of my tracks"
+            switch AppInstance.instance.userProfile?.data?.email_on_reviewed_track {
+            case .string(let value):
+                cell.bind(Int(value) ?? 0)
+                cell.valueStatus = Int(value)
+            case .integer(let value):
+                cell.bind(value)
+                cell.valueStatus = Int(value)
+            case .double(let value):
+                cell.bind(Int(value))
+                cell.valueStatus = Int(value)
+            case .none:
+                break
+            }
         case 03:
-            let cell = tableView.dequeueReusableCell(withIdentifier:"SettingNotificationItem") as! SettingNotificationItem
-            cell.notificationLabel.text = "Approve/Disapprove artist request"
-            cell.bind(AppInstance.instance.userProfile?.data?.emailOnArtistStatusChanged ?? 0)
-            cell.indexPath = indexPath.row
-            
-            cell.valueStatus = AppInstance.instance.userProfile?.data?.emailOnArtistStatusChanged ?? 0
-            cell.delegate = self
+            cell.notificationLabel.text = "Someone liked one of my comments"
+            switch AppInstance.instance.userProfile?.data?.email_on_liked_comment {
+            case .string(let value) :
+                cell.bind(Int(value) ?? 0)
+                cell.valueStatus = Int(value)
+            case .integer(let value) :
+                cell.bind(value)
+                cell.valueStatus = Int(value)
+            case .double(let value) :
+                cell.bind(Int(value))
+                cell.valueStatus = Int(value)
+            case .none:
+                break
+            }
             return cell
         case 04:
-            let cell = tableView.dequeueReusableCell(withIdentifier:"SettingNotificationItem") as! SettingNotificationItem
-            cell.notificationLabel.text = "Approve/Disapprove bank payment request"
-            cell.bind(AppInstance.instance.userProfile?.data?.emailOnReceiptStatusChanged ?? 0)
-            cell.indexPath = indexPath.row
-            
-            cell.valueStatus = AppInstance.instance.userProfile?.data?.emailOnReceiptStatusChanged ?? 0
-            cell.delegate = self
+            cell.notificationLabel.text = "Approve/Disapprove artist request(s)"
+            switch AppInstance.instance.userProfile?.data?.email_on_artist_status_changed {
+            case .string(let value) :
+                cell.bind(Int(value) ?? 0)
+                cell.valueStatus = Int(value)
+            case .integer(let value) :
+                cell.bind(value)
+                cell.valueStatus = Int(value)
+            case .double(let value) :
+                cell.bind(Int(value))
+                cell.valueStatus = Int(value)
+            case .none:
+                break
+            }
             return cell
         case 05:
-            let cell = tableView.dequeueReusableCell(withIdentifier:"SettingNotificationItem") as! SettingNotificationItem
-            cell.notificationLabel.text = "One of my following artists uploaded a new track"
-            cell.bind(AppInstance.instance.userProfile?.data?.emailOnNewTrack ?? 0)
-            cell.indexPath = indexPath.row
-            cell.valueStatus = AppInstance.instance.userProfile?.data?.emailOnNewTrack ?? 0
-            cell.delegate = self
-            return cell
+            cell.notificationLabel.text = "Approve/Disapprove bank payment request(s)"
+            switch AppInstance.instance.userProfile?.data?.email_on_receipt_status_changed {
+            case .string(let value) :
+                cell.bind(Int(value) ?? 0)
+                cell.valueStatus = Int(value)
+            case .integer(let value) :
+                cell.bind(value)
+                cell.valueStatus = Int(value)
+            case .double(let value) :
+                cell.bind(Int(value))
+                cell.valueStatus = Int(value)
+            case .none:
+                break
+            }
         case 06:
-            let cell = tableView.dequeueReusableCell(withIdentifier:"SettingNotificationItem") as! SettingNotificationItem
-            cell.notificationLabel.text = "One of my followers mentioned me in a comments "
-            cell.bind(AppInstance.instance.userProfile?.data?.emailOnReviewedTrack ?? 0)
-            cell.indexPath = indexPath.row
-            
-            cell.valueStatus = AppInstance.instance.userProfile?.data?.emailOnReviewedTrack ?? 0
-            cell.delegate = self
-            return cell
+            cell.notificationLabel.text = "One of my following artists uploaded a new track"
+            switch AppInstance.instance.userProfile?.data?.email_on_new_track {
+            case .string(let value) :
+                cell.bind(Int(value) ?? 0)
+                cell.valueStatus = Int(value)
+            case .integer(let value) :
+                cell.bind(value)
+                cell.valueStatus = Int(value)
+            case .double(let value) :
+                cell.bind(Int(value))
+                cell.valueStatus = Int(value)
+            case .none:
+                break
+            }
         case 07:
-            let cell = tableView.dequeueReusableCell(withIdentifier:"SettingNotificationItem") as! SettingNotificationItem
+            cell.notificationLabel.text = "One of my followers mentioned me in a comment"
+            switch AppInstance.instance.userProfile?.data?.email_on_comment_mention {
+            case .string(let value):
+                cell.bind(Int(value) ?? 0)
+                cell.valueStatus = Int(value)
+            case .integer(let value):
+                cell.bind(value)
+                cell.valueStatus = Int(value)
+            case .double(let value):
+                cell.bind(Int(value))
+                cell.valueStatus = Int(value)
+            case .none:
+                break
+            }
+        case 08:
             cell.notificationLabel.text = "One of my followers mentioned me in a comment's reply"
-            cell.indexPath = indexPath.row
-            cell.delegate = self
-            return cell
-            
+            switch AppInstance.instance.userProfile?.data?.email_on_comment_replay_mention {
+            case .string(let value):
+                cell.bind(Int(value) ?? 0)
+                cell.valueStatus = Int(value)
+            case .integer(let value):
+                cell.bind(value)
+                cell.valueStatus = Int(value)
+            case .double(let value):
+                cell.bind(Int(value))
+                cell.valueStatus = Int(value)
+            case .none:
+                break
+            }
         default:
-            return UITableViewCell()
+            break
         }
-    }
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
+        return cell
     }
     
 }
-extension SettingNotificationVC:OnNotificationSettingsDelegate{
+
+// MARK: OnNotificationSettingsDelegate Methods
+extension SettingNotificationVC: OnNotificationSettingsDelegate {
+    
     func OnNotificationSettingsChanged(value: Int, index: Int, status: Bool) {
-        if index == 0{
-            updateNotification(key: "email_on_follow_user", Value: value)
-        }else if index == 1{
-            updateNotification(key: "email_on_liked_track", Value: value)
-        }else if index == 2{
-            updateNotification(key: "email_on_liked_comment", Value: value)
-        }else if index == 3{
-            updateNotification(key: "email_on_artist_status_changed", Value: value)
-        }else if index == 4{
-            updateNotification(key: "email_on_receipt_status_changed", Value: value)
-        }else if index == 5{
-            updateNotification(key: "email_on_new_track", Value: value)
-        }else if index == 6{
-            updateNotification(key: "email_on_reviewed_track", Value: value)
-        }
-        else if index == 7{
-            updateNotification(key: "email_on_reviewed_track", Value: value)
+        switch index {
+        case 0:
+            self.updateNotification(key: "email_on_follow_user", value: value)
+        case 1:
+            self.updateNotification(key: "email_on_liked_track", value: value)
+        case 2:
+            self.updateNotification(key: "email_on_reviewed_track", value: value)
+        case 3:
+            self.updateNotification(key: "email_on_liked_comment", value: value)
+        case 4:
+            self.updateNotification(key: "email_on_artist_status_changed", value: value)
+        case 5:
+            self.updateNotification(key: "email_on_receipt_status_changed", value: value)
+        case 6:
+            self.updateNotification(key: "email_on_new_track", value: value)
+        case 7:
+            self.updateNotification(key: "email_on_comment_mention", value: value)
+        case 8:
+            self.updateNotification(key: "email_on_comment_replay_mention", value: value)
+        default:
+            break
         }
     }
-    func updateNotification(key:String,Value:Int)  {
+    
+    func updateNotification(key: String, value: Int) {
         let accessToken = AppInstance.instance.accessToken ?? ""
         let userID = AppInstance.instance.userId ?? 0
-        Async.background({
-            NotificationManager.instance.updateNotificationSetting(AccessToken: accessToken, userID: userID, key: key, Value: Value) { success, sessionError, error in
-                if success != nil{
-                    Async.main({
+        Async.background {
+            NotificationManager.instance.updateNotificationSetting(AccessToken: accessToken, userID: userID, key: key, Value: value) { success, sessionError, error in
+                if success != nil {
+                    Async.main {
                         self.dismissProgressDialog {
                             log.verbose(success ?? "")
                             self.view.makeToast(success ?? "")
                         }
-                    })
-                }else if sessionError != nil{
-                    Async.main({
+                    }
+                } else if sessionError != nil {
+                    Async.main {
                         self.dismissProgressDialog {
-                            
                             self.view.makeToast((NSLocalizedString(sessionError ?? "", comment: "")))
                             log.error("sessionError = \(sessionError ?? "")")
                         }
-                    })
-                }else {
-                    Async.main({
+                    }
+                } else {
+                    Async.main {
                         self.dismissProgressDialog {
-                            
                             self.view.makeToast((NSLocalizedString(error?.localizedDescription ?? "", comment: "")))
                             log.error("error = \(error?.localizedDescription ?? "")")
                         }
-                    })
+                    }
                 }
             }
-        })
-        
+        }
     }
     
 }

@@ -8,9 +8,11 @@
 
 import Foundation
 
-class WidthdrawModel:BaseModel{
+class WidthdrawModel: BaseModel {
+    
     struct WidthdrawSuccessModel: Codable {
         let status: Int?
         let data: String?
     }
+    
 }

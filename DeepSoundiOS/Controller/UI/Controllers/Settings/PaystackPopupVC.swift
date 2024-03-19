@@ -15,15 +15,15 @@ class PaystackPopupVC: UIViewController {
     var delegate:didSelectPaystackEmailDelegate?
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.emailTextField.text = AppInstance.instance.userProfile?.data?.email
     }
     
-    @IBAction func CancelPressed(_ sender: Any) {
+    @IBAction func CancelPressed(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil
         )
     }
     
-    @IBAction func payNowPressed(_ sender: Any) {
+    @IBAction func payNowPressed(_ sender: UIButton) {
         if emailTextField.text?.isEmpty ?? false{
             self.view.makeToast("Please enter email.")
         }else{

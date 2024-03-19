@@ -1,22 +1,24 @@
 {
   "images" : [
     {
+      "filename" : "Style=None, Theme=Default, State=Unchecked, Component=Checkbox.png",
       "idiom" : "universal",
-      "filename" : "favicon (19).png",
       "scale" : "1x"
     },
     {
+      "filename" : "Style=None, Theme=Default, State=Unchecked, Component=Checkbox@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "Style=None, Theme=Default, State=Unchecked, Component=Checkbox@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
   ],
   "info" : {
-    "version" : 1,
-    "author" : "xcode"
+    "author" : "xcode",
+    "version" : 1
   },
   "properties" : {
     "template-rendering-intent" : "template"

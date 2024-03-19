@@ -10,187 +10,210 @@ import UIKit
 import Async
 import SwiftEventBus
 import DeepSoundSDK
+import Toast_Swift
+import SDWebImage
+import EmptyDataSet_Swift
 
 class BlockUsersVC: BaseVC {
     
+    // MARK: - IBOutlets
     
-    @IBOutlet weak var blockUsersTableView: UITableView!
-    @IBOutlet weak var showImage: UIImageView!
-    @IBOutlet weak var showLabel: UILabel!
+    @IBOutlet weak var tableView: UITableView!
     
-    private var blockUsersArray = [GetBlockUsersModel.Datum]()
-    private var refreshControl = UIRefreshControl()
-    private var fetchSatus:Bool? = true
+    // MARK: - Properties
+    
+    private var blockUsersArray = [Publisher]()
+    private var fetchSatus: Bool? = true
+    
+    // MARK: - View Life Cycles
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.setupUI()
-        self.showImage.tintColor = .mainColor
-        self.showLabel.text = (NSLocalizedString("There are no users", comment: ""))
-        self.fetchBlockUsers()
-        SwiftEventBus.onMainThread(self, name:   EventBusConstants.EventBusConstantsUtils.EVENT_DISMISS_POPOVER) { result in
+        self.initialConfig()
+        SwiftEventBus.onMainThread(self, name: EventBusConstants.EventBusConstantsUtils.EVENT_DISMISS_POPOVER) { result in
             log.verbose("To dismiss the popover")
-            AppInstance.instance.player = nil
             self.tabBarController?.dismissPopupBar(animated: true, completion: nil)
         }
-        SwiftEventBus.onMainThread(self, name:   "PlayerReload") { result in
+        SwiftEventBus.onMainThread(self, name: "PlayerReload") { result in
             let stringValue = result?.object as? String
             self.view.makeToast(stringValue)
-            log.verbose(stringValue)
+            log.verbose(stringValue ?? "")
         }
-        
     }
+    
     override func viewWillDisappear(_ animated: Bool) {
         SwiftEventBus.unregister(self)
     }
-    deinit{
+    
+    deinit {
         SwiftEventBus.unregister(self)
     }
-    private func setupUI(){
-        self.title = (NSLocalizedString("Block Users", comment: ""))
-        self.showImage.isHidden = true
-        self.showLabel.isHidden = true
-        self.blockUsersTableView.separatorStyle = .none
-        blockUsersTableView.register(BlockedUsers_TableCell.nib, forCellReuseIdentifier: BlockedUsers_TableCell.identifier)
-        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
-        refreshControl.addTarget(self, action: #selector(self.refresh(sender:)), for: UIControl.Event.valueChanged)
-        blockUsersTableView.addSubview(refreshControl)
+    
+    // MARK: - Selectors
+    
+    // Back Button Action
+    @IBAction override func backButtonAction(_ sender: UIButton) {
+        self.view.endEditing(true)
+        self.navigationController?.popViewController(animated: true)
     }
-    @objc func refresh(sender:AnyObject) {
-        self.blockUsersArray.removeAll()
-        self.blockUsersTableView.reloadData()
+    
+    // MARK: - Helper Functions
+    
+    // Initial Config
+    func initialConfig() {
+        self.tableViewSetUp()
         self.fetchBlockUsers()
-        refreshControl.endRefreshing()
     }
-    private func fetchBlockUsers(){
-        if Connectivity.isConnectedToNetwork(){
+    
+    // TableView SetUp
+    func tableViewSetUp() {
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+        self.tableView.emptyDataSetSource = self
+        self.tableView.emptyDataSetDelegate = self
+        self.tableView.separatorStyle = .none
+        self.tableView.register(UINib(resource: R.nib.blockedUsers_TableCell), forCellReuseIdentifier: R.reuseIdentifier.blockedUsers_TableCell.identifier)
+        self.tableView.addPullToRefresh {
+            self.tableView.reloadEmptyDataSet()
             self.blockUsersArray.removeAll()
-            
-            if fetchSatus!{
+            self.tableView.reloadData()
+            self.fetchBlockUsers()
+        }
+    }
+    
+    private func fetchBlockUsers() {
+        if Connectivity.isConnectedToNetwork() {
+            if fetchSatus! {
                 fetchSatus = false
                 self.showProgressDialog(text: (NSLocalizedString("Loading...", comment: "")))
-            }else{
+            } else {
                 log.verbose("will not show Hud more...")
             }
             let accessToken = AppInstance.instance.accessToken ?? ""
             let userId = AppInstance.instance.userId ?? 0
-            Async.background({
+            Async.background {
                 BlockUsersManager.instance.getBlockUsers(Id: userId, AccessToken: accessToken, Offset: 0, Limit: 5, completionBlock: { (success, sessionError, error) in
-                    if success != nil{
-                        Async.main({
+                    Async.main {
+                        self.tableView.stopPullToRefresh()
+                    }
+                    if success != nil {
+                        Async.main {
                             self.dismissProgressDialog {
-                                
                                 log.debug("userList = \(success?.data?.data ?? [])")
                                 self.blockUsersArray = success?.data?.data ?? []
-                                if self.blockUsersArray.isEmpty{
-                                    self.showImage.isHidden = false
-                                    self.showLabel.isHidden = false
-                                    self.blockUsersTableView.reloadData()
-                                }else{
-                                    self.showImage.isHidden = true
-                                    self.showLabel.isHidden = true
-                                    self.blockUsersTableView.reloadData()
-                                }
+                                self.tableView.reloadData()
                             }
-                        })
-                    }else if sessionError != nil{
-                        Async.main({
+                        }
+                    } else if sessionError != nil {
+                        Async.main {
                             self.dismissProgressDialog {
-                                
                                 self.view.makeToast(sessionError?.error ?? "")
                                 log.error("sessionError = \(sessionError?.error ?? "")")
                             }
-                        })
-                    }else {
-                        Async.main({
+                        }
+                    } else {
+                        Async.main {
                             self.dismissProgressDialog {
                                 self.view.makeToast(error?.localizedDescription ?? "")
                                 log.error("error = \(error?.localizedDescription ?? "")")
                             }
-                        })
+                        }
                     }
                 })
-            })
-        }else{
+            }
+        } else {
             log.error("internetError = \(InterNetError)")
             self.view.makeToast(InterNetError)
         }
     }
-    private func UnblockUserPopup(id:Int,name:String,index:Int){
-        let alert = UIAlertController(title: (NSLocalizedString("Unblock", comment: "")), message: (NSLocalizedString("Are you sure you want to unblock this \(name)", comment: "")), preferredStyle: .alert)
-        let unblock = UIAlertAction(title: (NSLocalizedString("UNBLOCK", comment: "")), style: .default) { (action) in
-            log.verbose("Unblock")
-            self.unblockUser(id: id, index: index)
+    
+    private func UnblockUserPopup(id: Int, name: String, index: Int) {
+        self.view.endEditing(true)
+        guard let newVC = R.storyboard.popups.unblockUserPopUpVC() else {return}
+        newVC.id = id
+        newVC.name = name
+        newVC.successHandler = { success in
+            if success {
+                self.fetchBlockUsers()
+            }
         }
-        let cancel = UIAlertAction(title: (NSLocalizedString("CANCEL", comment: "")), style: .cancel, handler: nil)
-        alert.addAction(unblock)
-        alert.addAction(cancel)
-        self.present(alert, animated: true, completion: nil)
+        self.present(newVC, animated: true)
     }
-    private func unblockUser(id:Int,index:Int){
-          if Connectivity.isConnectedToNetwork(){
-              
-              self.showProgressDialog(text: (NSLocalizedString("Loading...", comment: "")))
-              let accessToken = AppInstance.instance.accessToken ?? ""
-              Async.background({
-                  BlockUsersManager.instance.unBlockUser(Id: id, AccessToken: accessToken, completionBlock: { (success, sessionError, error) in
-                      if success != nil{
-                          Async.main({
-                              self.dismissProgressDialog {
-                                  log.debug("success = \(success?.status ?? 0)")
+    
+    private func unblockUser(id: Int, index: Int) {
+        if Connectivity.isConnectedToNetwork() {
+            self.showProgressDialog(text: (NSLocalizedString("Loading...", comment: "")))
+            let accessToken = AppInstance.instance.accessToken ?? ""
+            Async.background {
+                BlockUsersManager.instance.unBlockUser(Id: id, AccessToken: accessToken, completionBlock: { (success, sessionError, error) in
+                    if success != nil {
+                        Async.main {
+                            self.dismissProgressDialog {
+                                log.debug("success = \(success?.status ?? 0)")
                                 self.blockUsersArray.remove(at: index)
-                                self.blockUsersTableView.reloadData()
-                              }
-                          })
-                          
-                      }else if sessionError != nil{
-                          Async.main({
-                              self.dismissProgressDialog {
-                                  log.error("sessionError = \(sessionError?.error ?? "")")
-                                  self.view.makeToast(sessionError?.error ?? "")
-                              }
-                          })
-                      }else {
-                          Async.main({
-                              self.dismissProgressDialog {
-                                  log.error("error = \(error?.localizedDescription ?? "")")
-                                  self.view.makeToast(error?.localizedDescription ?? "")
-                              }
-                          })
-                      }
-                  })
-              })
-          }else{
-              log.error("internetErrro = \(InterNetError)")
-              self.view.makeToast(InterNetError)
-          }
-      }
+                                self.tableView.reloadData()
+                            }
+                        }
+                    } else if sessionError != nil {
+                        Async.main {
+                            self.dismissProgressDialog {
+                                log.error("sessionError = \(sessionError?.error ?? "")")
+                                self.view.makeToast(sessionError?.error ?? "")
+                            }
+                        }
+                    } else {
+                        Async.main {
+                            self.dismissProgressDialog {
+                                log.error("error = \(error?.localizedDescription ?? "")")
+                                self.view.makeToast(error?.localizedDescription ?? "")
+                            }
+                        }
+                    }
+                })
+            }
+        } else {
+            log.error("internetErrro = \(InterNetError)")
+            self.view.makeToast(InterNetError)
+        }
+    }
+    
 }
-extension BlockUsersVC:UITableViewDelegate,UITableViewDataSource{
+
+// MARK: - Extensions
+
+// MARK: TableView Setup
+extension BlockUsersVC: UITableViewDelegate, UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.blockUsersArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier:BlockedUsers_TableCell.identifier) as? BlockedUsers_TableCell
-        cell?.selectionStyle = .none
+        let cell = self.tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.blockedUsers_TableCell.identifier) as! BlockedUsers_TableCell
+        cell.selectionStyle = .none
         let object = self.blockUsersArray[indexPath.row]
-        cell?.usernameLabel.text = object.username ?? ""
-        let url = URL.init(string:object.avatar ?? "")
-        cell?.userProfileImage.sd_setImage(with: url , placeholderImage:R.image.imagePlacholder())
-        return cell!
-        
+        cell.usernameLabel.text = object.name ?? ""
+        let url = URL.init(string: object.avatar ?? "")
+        cell.userProfileImage.sd_setImage(with: url, placeholderImage: R.image.imagePlacholder())
+        return cell
     }
     
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 90
-        
-    }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.UnblockUserPopup(id:  self.blockUsersArray[indexPath.row].id ?? 0, name:  self.blockUsersArray[indexPath.row].name ?? "", index: indexPath.row)
-     
+        self.UnblockUserPopup(id:  self.blockUsersArray[indexPath.row].id ?? 0,
+                              name:  self.blockUsersArray[indexPath.row].name ?? "",
+                              index: indexPath.row)
     }
-    
 }
 
+extension BlockUsersVC: EmptyDataSetSource, EmptyDataSetDelegate {
+    func title(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
+        return NSAttributedString(string: "No Users Found", attributes: [NSAttributedString.Key.font : R.font.urbanistBold(size: 24) ?? UIFont.boldSystemFont(ofSize: 24), .foregroundColor : UIColor.textColor])
+    }
+    func description(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
+        return NSAttributedString(string: "You don't have any block users.", attributes: [NSAttributedString.Key.font : R.font.urbanistMedium(size: 14) ?? UIFont.systemFont(ofSize: 14)])
+    }
+    func image(forEmptyDataSet scrollView: UIScrollView) -> UIImage? {
+        let width = UIScreen.main.bounds.width - 100
+        return R.image.emptyData()?.resizeImage(targetSize: CGSize(width: width, height: width))
+    }
+}

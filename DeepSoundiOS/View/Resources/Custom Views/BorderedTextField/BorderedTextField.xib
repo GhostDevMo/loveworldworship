@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -11,9 +11,12 @@
         <array key="AvertaStd-Regular.ttf">
             <string>AvertaStd-Regular</string>
         </array>
+        <array key="Urbanist_SemiBold.ttf">
+            <string>Urbanist-SemiBold</string>
+        </array>
     </customFonts>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="BorderedTextField" customModule="EDYOU" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="BorderedTextField" customModule="DeepSoundiOS" customModuleProvider="target">
             <connections>
                 <outlet property="activityIndicator" destination="RPO-vB-OAS" id="f5W-vy-sJO"/>
                 <outlet property="cstLeftIconImageViewHeight" destination="sdu-TY-A16" id="HGF-dR-Z95"/>
@@ -24,6 +27,7 @@
                 <outlet property="errorLabel" destination="HVr-XJ-YWl" id="XHc-oR-Nqm"/>
                 <outlet property="leftIconImageView" destination="pGP-qp-9xB" id="boa-JZ-UZ0"/>
                 <outlet property="leftSeparatorView" destination="YW2-Nj-zx2" id="u7W-WU-sUC"/>
+                <outlet property="rightButton" destination="1O7-Wd-2ec" id="RdF-50-R3V"/>
                 <outlet property="rightIconImageView" destination="whc-vh-fJ0" id="vWr-zd-Gzu"/>
                 <outlet property="textField" destination="7t6-t0-eLz" id="7N7-ah-Kvs"/>
                 <outlet property="viewBgActivityIndicator" destination="QHF-qi-uMk" id="F27-iP-dU6"/>
@@ -34,9 +38,10 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
             <subviews>
                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Placeholder" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7t6-t0-eLz">
-                    <rect key="frame" x="13" y="0.0" width="379" height="56"/>
-                    <color key="textColor" name="label_text_color"/>
-                    <fontDescription key="fontDescription" name="AvertaStd-Regular" family="AvertaStd-Regular" pointSize="13"/>
+                    <rect key="frame" x="13" y="0.0" width="373" height="56"/>
+                    <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="textColor" name="textColor"/>
+                    <fontDescription key="fontDescription" name="Urbanist-SemiBold" family="Urbanist" pointSize="14"/>
                     <textInputTraits key="textInputTraits"/>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="color" keyPath="placeholderLabel.textColor">
@@ -66,15 +71,22 @@
                         <constraint firstAttribute="width" constant="1" id="A0y-T1-n7i"/>
                     </constraints>
                 </view>
-                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="right_arrow_black_icon" translatesAutoresizingMaskIntoConstraints="NO" id="whc-vh-fJ0">
-                    <rect key="frame" x="410" y="28" width="0.0" height="0.0"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="whc-vh-fJ0">
+                    <rect key="frame" x="404" y="28" width="0.0" height="0.0"/>
                     <color key="tintColor" red="0.29411764705882354" green="0.30196078431372547" blue="0.32549019607843138" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" id="B89-bb-JYI"/>
                     </constraints>
                 </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1O7-Wd-2ec">
+                    <rect key="frame" x="404" y="28" width="0.0" height="0.0"/>
+                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                    <connections>
+                        <action selector="rightButtonAction:" destination="-1" eventType="touchUpInside" id="3cf-xq-UlL"/>
+                    </connections>
+                </button>
                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QHF-qi-uMk">
-                    <rect key="frame" x="378" y="15" width="26" height="26"/>
+                    <rect key="frame" x="372" y="15" width="26" height="26"/>
                     <subviews>
                         <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="RPO-vB-OAS">
                             <rect key="frame" x="3" y="3" width="20" height="20"/>
@@ -101,19 +113,23 @@
             <constraints>
                 <constraint firstItem="whc-vh-fJ0" firstAttribute="leading" secondItem="QHF-qi-uMk" secondAttribute="trailing" constant="6" id="1A1-Pb-zp9"/>
                 <constraint firstItem="HVr-XJ-YWl" firstAttribute="top" secondItem="c4s-l0-fhM" secondAttribute="top" constant="8" id="7tb-7m-Gxs"/>
+                <constraint firstItem="1O7-Wd-2ec" firstAttribute="leading" secondItem="whc-vh-fJ0" secondAttribute="leading" id="9rj-qE-2Jv"/>
                 <constraint firstAttribute="trailing" secondItem="HVr-XJ-YWl" secondAttribute="trailing" constant="12" id="ESO-IT-gXy"/>
                 <constraint firstAttribute="bottom" secondItem="YW2-Nj-zx2" secondAttribute="bottom" constant="12" id="Fji-2q-l6f"/>
                 <constraint firstItem="whc-vh-fJ0" firstAttribute="width" secondItem="whc-vh-fJ0" secondAttribute="height" multiplier="1:1" id="HhV-aL-3hg"/>
                 <constraint firstItem="YW2-Nj-zx2" firstAttribute="top" secondItem="c4s-l0-fhM" secondAttribute="top" constant="12" id="LLL-S3-rqx"/>
+                <constraint firstItem="1O7-Wd-2ec" firstAttribute="bottom" secondItem="whc-vh-fJ0" secondAttribute="bottom" id="M4Q-Us-9SE"/>
                 <constraint firstItem="pGP-qp-9xB" firstAttribute="leading" secondItem="c4s-l0-fhM" secondAttribute="leading" id="Mgc-3b-h1R"/>
                 <constraint firstAttribute="bottom" secondItem="7t6-t0-eLz" secondAttribute="bottom" id="Nhm-ED-bFv"/>
                 <constraint firstItem="pGP-qp-9xB" firstAttribute="centerY" secondItem="c4s-l0-fhM" secondAttribute="centerY" id="R5U-Y5-Ov1"/>
                 <constraint firstItem="QHF-qi-uMk" firstAttribute="centerY" secondItem="c4s-l0-fhM" secondAttribute="centerY" id="Rv1-TX-w2N"/>
-                <constraint firstAttribute="trailing" secondItem="whc-vh-fJ0" secondAttribute="trailing" constant="4" id="T8y-YI-dJ2"/>
+                <constraint firstAttribute="trailing" secondItem="whc-vh-fJ0" secondAttribute="trailing" constant="10" id="T8y-YI-dJ2"/>
                 <constraint firstItem="whc-vh-fJ0" firstAttribute="centerY" secondItem="7t6-t0-eLz" secondAttribute="centerY" id="V17-Ca-zq7"/>
+                <constraint firstItem="1O7-Wd-2ec" firstAttribute="trailing" secondItem="whc-vh-fJ0" secondAttribute="trailing" id="Wfi-sK-YHg"/>
                 <constraint firstItem="pGP-qp-9xB" firstAttribute="width" secondItem="pGP-qp-9xB" secondAttribute="height" multiplier="1:1" id="aNV-6N-JEU"/>
                 <constraint firstItem="7t6-t0-eLz" firstAttribute="top" secondItem="c4s-l0-fhM" secondAttribute="top" id="clQ-fu-y8q"/>
                 <constraint firstItem="7t6-t0-eLz" firstAttribute="leading" secondItem="YW2-Nj-zx2" secondAttribute="trailing" constant="12" id="h83-j3-Vp4"/>
+                <constraint firstItem="1O7-Wd-2ec" firstAttribute="top" secondItem="whc-vh-fJ0" secondAttribute="top" id="tOV-Bl-27B"/>
                 <constraint firstItem="whc-vh-fJ0" firstAttribute="leading" secondItem="7t6-t0-eLz" secondAttribute="trailing" constant="18" id="tYg-wJ-dJr"/>
                 <constraint firstItem="YW2-Nj-zx2" firstAttribute="leading" secondItem="pGP-qp-9xB" secondAttribute="trailing" id="xZI-58-ghK"/>
             </constraints>
@@ -134,8 +150,8 @@
     </objects>
     <resources>
         <image name="right_arrow_black_icon" width="19.5" height="34.5"/>
-        <namedColor name="label_text_color">
-            <color red="0.12156862745098039" green="0.18823529411764706" blue="0.28235294117647058" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <namedColor name="textColor">
+            <color red="0.12941176470588237" green="0.12941176470588237" blue="0.12941176470588237" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

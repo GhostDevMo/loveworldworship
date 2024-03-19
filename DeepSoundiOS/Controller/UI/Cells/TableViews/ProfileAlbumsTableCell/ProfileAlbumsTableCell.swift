@@ -29,61 +29,86 @@ class ProfileAlbumsTableCell: UITableViewCell {
         priceView.cornerRadiusV = self.priceView.frame.height / 2
         self.bgView.backgroundColor = .mainColor
         self.categoryView.backgroundColor = .mainColor
-        self.playBtn.backgroundColor = .mainColor
+        self.playBtn.cornerRadiusV = self.playBtn.frame.height / 2
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        
-        
     }
-    func bind(_ object:ProfileModel.AlbumElement){
+    
+    func bind(_ object: Album){
+        let thumbnailURL = URL.init(string:object.thumbnail ?? "")
+        self.thumbnailImage.sd_setImage(with: thumbnailURL , placeholderImage:R.image.imagePlacholder())
+        titleLabel.text = object.title ?? ""
+        nameLAbel.text = "\(object.publisher?.name ?? "")"
+        categoryNameLAbel.text = object.category_name ?? ""
+        songsCountLabel.text = "\(object.count_songs ?? 0) \(NSLocalizedString("Songs", comment: "Songs"))"
+        if object.is_purchased == 1 {
+            self.priceView.isHidden = true
+        }else {
+            if object.price?.intValue == 0 {
+                self.priceView.isHidden = true
+            }else{
+                self.priceView.isHidden = false
+                switch object.price {
+                case .double(let value):
+                    self.priceCountLabel.text  = "$\(value.rounded(toPlaces: 2))"
+                case .integer(let value):
+                    self.priceCountLabel.text  = "$\(value)"
+                case .string(let value):
+                    self.priceCountLabel.text  = "$\(value)"
+                case .none:
+                    break
+                }
+            }
+        }
+    }
+    
+    func publicAlbumBind(_ object: Album){
         let thumbnailURL = URL.init(string:object.thumbnail ?? "")
         self.thumbnailImage.sd_setImage(with: thumbnailURL , placeholderImage:R.image.imagePlacholder())
         
         titleLabel.text = object.title ?? ""
         nameLAbel.text = "\(object.publisher?.name ?? "")"
-        categoryNameLAbel.text = object.categoryName ?? ""
-        songsCountLabel.text = "\(object.countSongs ?? 0) \(NSLocalizedString("Songs", comment: "Songs"))"
-        if object.price == 0.0{
+        categoryNameLAbel.text = object.category_name ?? ""
+        songsCountLabel.text = "\(object.count_songs ?? 0) \(NSLocalizedString("Songs", comment: "Songs"))"
+        if object.price?.intValue == 0 {
             self.priceView.isHidden = true
         }else{
             self.priceView.isHidden = false
-            self.priceCountLabel.text  = "$\(object.price?.rounded(toPlaces: 2) ?? 0.0)"
+            switch object.price {
+            case .double(let value):
+                self.priceCountLabel.text  = "$\(value.rounded(toPlaces: 2))"
+            case .integer(let value):
+                self.priceCountLabel.text  = "$\(value)"
+            case .string(let value):
+                self.priceCountLabel.text  = "$\(value)"
+            case .none:
+                break
+            }
         }
     }
-    func publicAlbumBind(_ object:TrendingModel.TopAlbum){
+    func searchAlbumBind(_ object: Album){
         let thumbnailURL = URL.init(string:object.thumbnail ?? "")
         self.thumbnailImage.sd_setImage(with: thumbnailURL , placeholderImage:R.image.imagePlacholder())
-        
         titleLabel.text = object.title ?? ""
         nameLAbel.text = "\(object.publisher?.name ?? "")"
-        categoryNameLAbel.text = object.categoryName ?? ""
-        songsCountLabel.text = "\(object.countSongs ?? 0) \(NSLocalizedString("Songs", comment: "Songs"))"
-        if object.price == 0.0{
-                   self.priceView.isHidden = true
-               }else{
-                   self.priceView.isHidden = false
-            self.priceCountLabel.text  = "$\(object.price?.rounded(toPlaces: 2) ?? 0.0)"
-               }
+        categoryNameLAbel.text = object.category_name ?? ""
+        songsCountLabel.text = "\(object.count_songs ?? 0) \(NSLocalizedString("Songs", comment: "Songs"))"
+        if object.price?.intValue == 0 {
+            self.priceView.isHidden = true
+        }else{
+            self.priceView.isHidden = false
+            switch object.price {
+            case .double(let value):
+                self.priceCountLabel.text  = "$\(value.rounded(toPlaces: 2))"
+            case .integer(let value):
+                self.priceCountLabel.text  = "$\(value)"
+            case .string(let value):
+                self.priceCountLabel.text  = "$\(value)"
+            case .none:
+                break
+            }
+        }
     }
-    func searchAlbumBind(_ object:SearchModel.Album){
-        let thumbnailURL = URL.init(string:object.thumbnail ?? "")
-        self.thumbnailImage.sd_setImage(with: thumbnailURL , placeholderImage:R.image.imagePlacholder())
-        
-        titleLabel.text = object.title ?? ""
-        nameLAbel.text = "\(object.publisher?.name ?? "")"
-        categoryNameLAbel.text = object.categoryName ?? ""
-        songsCountLabel.text = "\(object.countSongs ?? 0) \(NSLocalizedString("Songs", comment: "Songs"))"
-        if object.price == 0.0{
-                   self.priceView.isHidden = true
-               }else{
-                   self.priceView.isHidden = false
-            self.priceCountLabel.text  = "$\(object.price?.rounded(toPlaces: 2) ?? 0.0)"
-               }
-    }
-    
-    
-    
-    
 }

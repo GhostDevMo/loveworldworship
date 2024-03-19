@@ -13,6 +13,7 @@ import SwiftEventBus
 import IQKeyboardManagerSwift
 import SwiftyBeaver
 import Async
+import OneSignal
 import FBSDKLoginKit
 import GoogleSignIn
 import CoreData
@@ -24,7 +25,7 @@ import Braintree
 let log = SwiftyBeaver.self
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate,OSSubscriptionObserver {
     
     var window: UIWindow?
     var isInternetConnected = Connectivity.isConnectedToNetwork()
@@ -34,14 +35,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
+        if #available(iOS 15.0, *) {
+            UITableView.appearance().isPrefetchingEnabled = false
+            UITableView.appearance().sectionHeaderTopPadding = 0
+        }
         startHost(at: 0)
         initFrameworks(application: application, launchOptions: launchOptions)
-        DropDown.startListeningToKeyboard()
         FBSDKCoreKit.ApplicationDelegate.shared.application(
-                   application,
-                   didFinishLaunchingWithOptions: launchOptions
-               )
+            application,
+            didFinishLaunchingWithOptions: launchOptions
+        )
         // Override point for customization after application launch.
         return true
     }
@@ -76,44 +79,45 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         /* Decryption of Cert Key */
         ServerCredentials.setServerDataWithKey(key: AppConstant.key)
-        
+        AppInstance.instance.fetchContacts()
         let preferredLanguage = NSLocale.preferredLanguages[0]
         if preferredLanguage.starts(with: "ar"){
             UIView.appearance().semanticContentAttribute = .forceRightToLeft
         } else{
             UIView.appearance().semanticContentAttribute = .forceLeftToRight
         }
-
+        
         let status = UserDefaults.standard.getDarkMode(Key: "darkMode")
-               if #available(iOS 13.0, *) {
-                   if status{
-                       window?.overrideUserInterfaceStyle = .dark
-                       
-                   }else{
-                       window?.overrideUserInterfaceStyle = .light
-
-                   }
-               }
+        let isSystemTheme = UserDefaults.standard.getSystemTheme(Key: "SystemTheme")
+        if #available(iOS 13.0, *) {
+            if isSystemTheme {
+                window?.overrideUserInterfaceStyle = UIScreen.main.traitCollection.userInterfaceStyle
+            }else {
+                if status {
+                    window?.overrideUserInterfaceStyle = .dark
+                } else {
+                    window?.overrideUserInterfaceStyle = .light
+                }
+            }
+        }
         UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.mainColor]
-
+        
         GADMobileAds.sharedInstance().start(completionHandler: nil)
         
-//        PayPalMobile.initializeWithClientIds(forEnvironments: [PayPalEnvironmentProduction:"",PayPalEnvironmentSandbox:"AYQj_efvWzS7BgDU42nwInlwmetwd3ZT5WloT2ePnfinLw59GcR_EzEhnG8AtRBp9frGuvs09HsKagKJ"])
+        //        PayPalMobile.initializeWithClientIds(forEnvironments: [PayPalEnvironmentProduction:"",PayPalEnvironmentSandbox:"AYQj_efvWzS7BgDU42nwInlwmetwd3ZT5WloT2ePnfinLw59GcR_EzEhnG8AtRBp9frGuvs09HsKagKJ"])
         
         
         BTAppContextSwitcher.setReturnURLScheme(ControlSettings.BrainTreeURLScheme)
- 
-
-      
+        
+        
+        
         /*
          Uncomment all these to set seperately and comment setServerDataWithKey before uncommenting it
          */
-        // to set Your webURL seperateLy
-        ServerCredentials.setBaseUrl(url: "https://loveworldworship.com/worship/")
-        // to set your App server key seperatelu
-        ServerCredentials.setServerKey(serverKey: "ef3e877924314cfbb635cd5b1e0121cce6c0bbf1")
-        // to set your Purchase code
-        ServerCredentials.setPurchaseCode(purchaseCode: "b8cee1a6-4125-4a67-95f4-99a20153a79a")
+        
+        //        ServerCredentials.setBaseUrl(url: <#T##String#>)  to set Your webURL seperateLy
+        //         ServerCredentials.setServerKey(url: <#T##String#>) to set your App server key seperatelu
+        //         ServerCredentials.setPurchaseCode(url: <#T##String#>) to set your Purchase code
         
         /* Init Swifty Beaver */
         let console = ConsoleDestination()
@@ -122,7 +126,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         log.addDestination(file)
         
         /* Stripe of Setup */
-     //   Stripe.setDefaultPublishableKey("pk_test_PT6I0ZbUz3Kie6yMvWLPrO5f00scXxDHaQ")
+        //   Stripe.setDefaultPublishableKey("pk_test_PT6I0ZbUz3Kie6yMvWLPrO5f00scXxDHaQ")
         
         /* IQ Keyboard */
         
@@ -130,9 +134,43 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         DropDown.startListeningToKeyboard()
         GIDSignIn.sharedInstance().clientID = ControlSettings.googleClientKey
         
+        //         OneSignal initialization
+        let onesignalInitSettings = [kOSSettingsKeyAutoPrompt: false,kOSSettingsKeyInAppLaunchURL: false]
         
+        // Replace 'YOUR_APP_ID' with your OneSignal App ID.
+        OneSignal.initWithLaunchOptions(launchOptions,
+                                        appId: ControlSettings.oneSignalAppId,
+                                        handleNotificationAction: nil,
+                                        settings: onesignalInitSettings)
+        
+        OneSignal.inFocusDisplayType = OSNotificationDisplayType.notification
+        
+        // Recommend moving the below line to prompt for push after informing the user about
+        //   how your app will use them.
+        OneSignal.promptForPushNotifications(userResponse: { accepted in
+            log.verbose("User accepted notifications: \(accepted)")
+        })
+        OneSignal.add(self as OSSubscriptionObserver)
+        
+        let userId = OneSignal.getPermissionSubscriptionState().subscriptionStatus.userId
+        log.verbose("Current playerId \(userId)")
+        
+        let backgroundSessionIdentifier = "com.example.app.backgroundsession"
+        URLSessionConfiguration.background(withIdentifier: backgroundSessionIdentifier)
     }
     
+    func onOSSubscriptionChanged(_ stateChanges: OSSubscriptionStateChanges!) {
+        if !stateChanges.from.subscribed && stateChanges.to.subscribed {
+            print("Subscribed for OneSignal push notifications!")
+        }
+        print("SubscriptionStateChange: \n\(stateChanges)")
+        
+        //The player id is inside stateChanges. But be careful, this value can be nil if the user has not granted you permission to send notifications.
+        if let playerId = stateChanges.to.userId {
+            print("Current playerId \(playerId)")
+            UserDefaults.standard.setDeviceId(value: playerId ?? "", ForKey: Local.DEVICE_ID.DeviceId)
+        }
+    }
     
     func startHost(at index: Int) {
         stopNotifier()
@@ -165,7 +203,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         do {
             try reachability?.startNotifier()
         } catch {
-            
             return
         }
     }

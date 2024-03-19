@@ -8,12 +8,19 @@
 
 import UIKit
 
+protocol ArticleSectionDelegate {
+    func moreBtnAction(_ sender: UIButton)
+}
+
 class ArticlesSectionFourTableItem: UITableViewCell {
     
     @IBOutlet weak var viewsLabel: UILabel!
+    @IBOutlet weak var btnMore: UIButton!
+    
+    var delegate: ArticleSectionDelegate?
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -25,4 +32,7 @@ class ArticlesSectionFourTableItem: UITableViewCell {
         self.viewsLabel.text = "\(object) \(NSLocalizedString("Views", comment: "Views"))"
     }
     
+    @IBAction func moreBtn(_ sender: UIButton) {
+        self.delegate?.moreBtnAction(sender)
+    }
 }

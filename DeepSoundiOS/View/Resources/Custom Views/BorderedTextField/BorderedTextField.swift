@@ -32,6 +32,7 @@ class BorderedTextField: UIView, EDTextField {
     @IBOutlet weak var viewBgActivityIndicator: UIView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var leftSeparatorView: UIView!
+    @IBOutlet weak var rightButton: UIButton!
     
     @IBOutlet weak var cstLeftIconImageViewLeading: NSLayoutConstraint!
     @IBOutlet weak var cstLeftIconImageViewTrailing: NSLayoutConstraint!
@@ -48,6 +49,8 @@ class BorderedTextField: UIView, EDTextField {
     
     public var validations = [Validation]()
     public var validateTrimmedText = false
+    
+    public var rightButtonHandler: ((_ sender: UIButton, _ imageView: UIImageView) -> Void)?
     
     struct BTColors {
         static let separator = UIColor(red: 230 / 255, green: 230 / 255, blue: 230 / 255, alpha: 1)
@@ -121,6 +124,7 @@ class BorderedTextField: UIView, EDTextField {
         }
         set {
             rightIconTrailing = newValue
+            print(rightIconImage != nil ? rightIconTrailing : 0)
             cstRightIconImageViewTrailing.constant = rightIconImage != nil ? rightIconTrailing : 0
             view?.layoutIfNeeded()
         }
@@ -132,6 +136,7 @@ class BorderedTextField: UIView, EDTextField {
         set {
             rightIconImageView.image = newValue
             cstRightIconImageViewHeight.constant = newValue != nil ? rightIconHeight : 0
+            cstRightIconImageViewTrailing.constant = newValue != nil ? rightIconTrailing : 0
             view?.layoutIfNeeded()
         }
     }
@@ -180,6 +185,9 @@ class BorderedTextField: UIView, EDTextField {
         setError(nil)
     }
     
+    @IBAction func rightButtonAction(_ sender: UIButton) {
+        self.rightButtonHandler?(sender, self.rightIconImageView)
+    }
     
     
 }
@@ -226,13 +234,19 @@ extension BorderedTextField {
         if let dateFormat = dateFormat {
             self.dateFormat = dateFormat
         }
-        self.datePicker.preferredDatePickerStyle = .wheels
+        if #available(iOS 13.4, *) {
+            self.datePicker.preferredDatePickerStyle = .wheels
+        } else {
+            // Fallback on earlier versions
+            //self.datePicker.datePickerStyle = .wheels
+            
+        }
         self.datePicker.datePickerMode = .date
         self.datePicker.removeTarget(self, action: nil, for: .allEvents)
         self.datePicker.addTarget(self, action: #selector(didChangeDate), for: .valueChanged)
-        self.textField.addDoneOnKeyboardWithTarget(self, action: #selector(didDoneTapped))
+        self.textField.iq.addDone(target: self, action: #selector(didDoneTapped))
         self.textField.inputView = self.datePicker
-        self.textField.keyboardToolbar.doneBarButton.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: UIControl.State.normal)
+        self.textField.iq.toolbar.doneBarButton.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: UIControl.State.normal)
 
     }
     

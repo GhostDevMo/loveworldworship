@@ -42,7 +42,7 @@ class StationsTableItem: UITableViewCell {
         
     }
     
-    @IBAction func addPressed(_ sender: Any) {
+    @IBAction func addPressed(_ sender: UIButton) {
 //        self.delegate?.addStation(object: self.object)
         let accessToken = AppInstance.instance.accessToken ?? ""
         let id = object["radio_id"] as? String

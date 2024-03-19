@@ -16,7 +16,7 @@ class MyPlayList_CollectionCell: UICollectionViewCell {
     @IBOutlet weak var songsCountLabel: UILabel!
     
     var delegate:showPlaylistPopupDelegate?
-    var indexPath:Int? = 0
+    var indexPath:Int = 0
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -24,8 +24,8 @@ class MyPlayList_CollectionCell: UICollectionViewCell {
        
     }
     
-    @IBAction func morePressed(_ sender: Any) {
-        self.delegate?.showPlaylistPopup(status:true,index:self.indexPath ?? 0)
+    @IBAction func morePressed(_ sender: UIButton) {
+        self.delegate?.showPlaylistPopup(status:true,index:self.indexPath)
     }
     
 }

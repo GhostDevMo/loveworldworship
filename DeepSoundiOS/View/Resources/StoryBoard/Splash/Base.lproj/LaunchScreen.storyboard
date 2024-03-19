@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="urbanist_bold.ttf">
+            <string>Urbanist-Bold</string>
+        </array>
+        <array key="urbanist_regular.ttf">
+            <string>Urbanist-Regular</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--View Controller-->
         <scene sceneID="EHf-IW-A2E">
@@ -17,8 +25,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" alignment="bottom" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="mGb-nn-w1x">
-                                <rect key="frame" x="177" y="418" width="60" height="60"/>
+                            <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" alignment="bottom" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="mGb-nn-w1x">
+                                <rect key="frame" x="49" y="418" width="316" height="60"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="CircleLogo" translatesAutoresizingMaskIntoConstraints="NO" id="ALd-qA-hHI">
                                         <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
@@ -27,21 +35,53 @@
                                             <constraint firstAttribute="height" constant="60" id="TNm-nv-XNv"/>
                                         </constraints>
                                     </imageView>
-                                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loveworld Worship" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" highlighted="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nf3-J0-cs7">
-                                        <rect key="frame" x="0.0" y="0.5" width="0.0" height="59.5"/>
-                                        <fontDescription key="fontDescription" name="MuktaMahee-Regular" family="Mukta Mahee" pointSize="35"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DeepSound" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nf3-J0-cs7">
+                                        <rect key="frame" x="68" y="2" width="248" height="58"/>
+                                        <fontDescription key="fontDescription" name="Urbanist-Regular" family="Urbanist" pointSize="48"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
-                                        <color key="shadowColor" systemColor="labelColor"/>
                                     </label>
                                 </subviews>
                             </stackView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NGh-pG-vWH">
+                                <rect key="frame" x="125.5" y="428" width="163" height="40"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="main_logo" translatesAutoresizingMaskIntoConstraints="NO" id="gMo-g0-9hV">
+                                        <rect key="frame" x="0.0" y="5" width="27.5" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="aYS-ck-8ee"/>
+                                            <constraint firstAttribute="width" secondItem="gMo-g0-9hV" secondAttribute="height" multiplier="89:96" id="hLz-6a-bO1"/>
+                                        </constraints>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DeepSound" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lde-84-ysu">
+                                        <rect key="frame" x="37.5" y="5" width="125.5" height="30"/>
+                                        <fontDescription key="fontDescription" name="Urbanist-Bold" family="Urbanist" pointSize="24"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstItem="gMo-g0-9hV" firstAttribute="centerY" secondItem="NGh-pG-vWH" secondAttribute="centerY" id="2ZL-ia-lpS"/>
+                                    <constraint firstAttribute="bottom" secondItem="gMo-g0-9hV" secondAttribute="bottom" constant="5" id="GOI-8F-IHL"/>
+                                    <constraint firstItem="Lde-84-ysu" firstAttribute="top" secondItem="NGh-pG-vWH" secondAttribute="top" constant="5" id="Gs1-YP-Rpk"/>
+                                    <constraint firstItem="Lde-84-ysu" firstAttribute="leading" secondItem="gMo-g0-9hV" secondAttribute="trailing" constant="10" id="R9h-Wm-Cfw"/>
+                                    <constraint firstAttribute="trailing" secondItem="Lde-84-ysu" secondAttribute="trailing" id="crg-Fy-Wpp"/>
+                                    <constraint firstAttribute="bottom" secondItem="Lde-84-ysu" secondAttribute="bottom" constant="5" id="jEg-HX-N8b"/>
+                                    <constraint firstItem="gMo-g0-9hV" firstAttribute="leading" secondItem="NGh-pG-vWH" secondAttribute="leading" id="luq-k5-8SF"/>
+                                    <constraint firstItem="gMo-g0-9hV" firstAttribute="top" secondItem="NGh-pG-vWH" secondAttribute="top" constant="5" id="onH-AH-x3u"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" systemColor="systemOrangeColor"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="mGb-nn-w1x" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="3au-Hu-Myt"/>
                             <constraint firstItem="mGb-nn-w1x" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="LtT-ef-XpR"/>
+                            <constraint firstItem="NGh-pG-vWH" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="N6z-gY-9W0"/>
+                            <constraint firstItem="mGb-nn-w1x" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="NQh-te-BO5"/>
+                            <constraint firstItem="mGb-nn-w1x" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="dd6-dH-JyJ"/>
+                            <constraint firstItem="NGh-pG-vWH" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="ydf-ly-9HH"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -52,11 +92,9 @@
     </scenes>
     <resources>
         <image name="CircleLogo" width="60" height="60"/>
-        <systemColor name="labelColor">
-            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemOrangeColor">
-            <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <image name="main_logo" width="89" height="96"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
     </resources>
 </document>

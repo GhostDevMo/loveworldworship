@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="urbanist_medium.ttf">
+            <string>Urbanist-Medium</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="SearchCategoryCell" id="KGk-i7-Jjw" customClass="SearchCategoryCell" customModule="DeepSoundiOS" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="trend" translatesAutoresizingMaskIntoConstraints="NO" id="9Hq-nR-ZLR">
+                        <rect key="frame" x="20" y="14" width="20" height="20"/>
+                        <color key="tintColor" name="mainColor"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="20" id="Yux-ck-xDC"/>
+                            <constraint firstAttribute="width" secondItem="9Hq-nR-ZLR" secondAttribute="height" id="dQt-6b-Apt"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ty1-fG-Ned">
+                        <rect key="frame" x="52" y="13.333333333333334" width="256" height="21.666666666666664"/>
+                        <fontDescription key="fontDescription" name="Urbanist-Medium" family="Urbanist" pointSize="18"/>
+                        <color key="textColor" name="Label_Colors_Primary"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="9Hq-nR-ZLR" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="14" id="1IB-Bv-yvi"/>
+                    <constraint firstAttribute="trailing" secondItem="ty1-fG-Ned" secondAttribute="trailing" constant="12" id="SWl-Nf-xJf"/>
+                    <constraint firstAttribute="bottom" secondItem="9Hq-nR-ZLR" secondAttribute="bottom" constant="14" id="ULS-tu-Cdy"/>
+                    <constraint firstItem="9Hq-nR-ZLR" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="YNG-U4-xRY"/>
+                    <constraint firstItem="ty1-fG-Ned" firstAttribute="centerY" secondItem="9Hq-nR-ZLR" secondAttribute="centerY" id="gbM-eB-Wcc"/>
+                    <constraint firstItem="ty1-fG-Ned" firstAttribute="leading" secondItem="9Hq-nR-ZLR" secondAttribute="trailing" constant="12" id="qKR-dZ-8su"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="titleLabel" destination="ty1-fG-Ned" id="wYp-wO-Dtk"/>
+            </connections>
+            <point key="canvasLocation" x="24" y="-32"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="trend" width="512" height="512"/>
+        <namedColor name="Label_Colors_Primary">
+            <color red="0.0" green="0.0078431372549019607" blue="0.058823529411764705" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="mainColor">
+            <color red="1" green="0.59607843137254901" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

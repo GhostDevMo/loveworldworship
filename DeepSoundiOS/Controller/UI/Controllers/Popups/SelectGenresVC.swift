@@ -22,7 +22,7 @@ class SelectGenresVC: BaseVC {
     private var idsArray = [Int]()
     private var nameArray = [String]()
     private var genresIdString:String? = ""
-   private var genresNameString:String? = ""
+    private var genresNameString:String? = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,39 +31,39 @@ class SelectGenresVC: BaseVC {
         self.ChooseGenres.text = (NSLocalizedString("Choose Genres", comment: ""))
         self.setupUI()
         self.fetchGenres()
-        SwiftEventBus.onMainThread(self, name:   EventBusConstants.EventBusConstantsUtils.EVENT_DISMISS_POPOVER) { result in
+        SwiftEventBus.onMainThread(self, name: EventBusConstants.EventBusConstantsUtils.EVENT_DISMISS_POPOVER) { result in
             log.verbose("To dismiss the popover")
-            AppInstance.instance.player = nil
+            
             self.tabBarController?.dismissPopupBar(animated: true, completion: nil)
         }
-        SwiftEventBus.onMainThread(self, name:   "PlayerReload") { result in
+        SwiftEventBus.onMainThread(self, name: "PlayerReload") { result in
             let stringValue = result?.object as? String
             self.view.makeToast(stringValue)
-            log.verbose(stringValue)
+            log.verbose(stringValue ?? "")
         }
     }
     
-    @IBAction func donePressed(_ sender: Any) {
+    @IBAction func donePressed(_ sender: UIButton) {
         
-        var stringArray = self.idsArray.map { String($0) }
+        let stringArray = self.idsArray.map { String($0) }
         self.genresIdString = stringArray.joined(separator: ",")
-        log.verbose("genresIdString = \(self.genresIdString)")
+        log.verbose("genresIdString = \(self.genresIdString ?? "")")
         
-        var nameStringArray = self.nameArray.map { String($0) }
+        let nameStringArray = self.nameArray.map { String($0) }
         self.genresNameString = nameStringArray.joined(separator: ",")
-        log.verbose("priceNameString = \(self.genresNameString)")
+        log.verbose("priceNameString = \(self.genresNameString ?? "")")
         self.dismiss(animated: true) {
             self.delegate.getGenresString(String: self.genresIdString ?? "", nameString: self.genresNameString ?? "")
           
         }
     }
-    @IBAction func closePressed(_ sender: Any) {
+    @IBAction func closePressed(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
     }
     
     private func setupUI(){
         self.tableView.separatorStyle = .none
-        tableView.register(SelectGenres_TableCell.nib, forCellReuseIdentifier: SelectGenres_TableCell.identifier)
+        tableView.register(UINib(resource: R.nib.selectGenres_TableCell), forCellReuseIdentifier: R.reuseIdentifier.selectGenres_TableCell.identifier)
     }
     
     private func fetchGenres(){
@@ -108,7 +108,7 @@ extension SelectGenresVC:UITableViewDelegate,UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: SelectGenres_TableCell.identifier) as? SelectGenres_TableCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.selectGenres_TableCell.identifier, for: indexPath) as? SelectGenres_TableCell
         cell?.genresNameLabel.text = self.genresArray[indexPath.row].cateogryName ?? ""
         cell?.delegate = self
         cell?.genresIdArray = self.genresArray
@@ -116,23 +116,18 @@ extension SelectGenresVC:UITableViewDelegate,UITableViewDataSource{
         return cell!
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 44.0
+        return 50.0
     }
-    
 }
-extension SelectGenresVC:didSetGenrestDelegate{
+extension SelectGenresVC: didSetGenrestDelegate {
     func didSetGenres(Image: UIImageView, status: Bool, idsArray: [GenresModel.Datum], Index: Int) {
-        if status{
-            
-            Image.image = R.image.ic_checked()
+        if status {
+            Image.image = R.image.icCheckbox()
             self.idsArray.append(idsArray[Index].id ?? 0)
              self.nameArray.append(idsArray[Index].cateogryName ?? "")
             log.verbose("genresIdArray = \(self.idsArray)")
             log.verbose("nameArray = \(self.nameArray)")
-
-            
-        }else{
-            
+        } else {
             Image.image = R.image.ic_uncheck()
             for (index,values) in self.idsArray.enumerated(){
                 if values == idsArray[Index].id{
@@ -141,14 +136,14 @@ extension SelectGenresVC:didSetGenrestDelegate{
                 }
             }
             for (index,values) in self.nameArray.enumerated(){
-                if values == idsArray[Index].cateogryName{
+                if values == idsArray[Index].cateogryName {
                     self.nameArray.remove(at: index)
                     break
                 }
             }
             log.verbose("genresString = \(genresIdString)")
             log.verbose("genresIdArray = \(self.idsArray)")
-             log.verbose("nameArray = \(self.nameArray)")
+            log.verbose("nameArray = \(self.nameArray)")
         }
     }
 }

@@ -1,56 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
-        <array key="urbanist_bold.ttf">
-            <string>Urbanist-Bold</string>
+        <array key="urbanist_medium.ttf">
+            <string>Urbanist-Medium</string>
         </array>
     </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="55" id="KGk-i7-Jjw" customClass="SectionHeaderTableItem" customModule="DeepSoundiOS" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="55"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SectionHeaderTableItem" rowHeight="55" id="KGk-i7-Jjw" customClass="SectionHeaderTableItem" customModule="DeepSoundiOS" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="45"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="55"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="45"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nHX-rG-vz9">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="55"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="45"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JP7-RE-AFq">
-                                <rect key="frame" x="231" y="12" width="69" height="35"/>
+                                <rect key="frame" x="235" y="7" width="70" height="31"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="35" id="kzh-qM-txc"/>
-                                    <constraint firstAttribute="width" constant="69" id="ooa-hM-iFb"/>
+                                    <constraint firstAttribute="width" constant="70" id="SqU-7R-D6r"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="Urbanist-Bold" family="Urbanist" pointSize="12"/>
+                                <fontDescription key="fontDescription" name="Urbanist-Medium" family="Urbanist" pointSize="16"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="See More">
                                     <color key="titleColor" red="0.91096323729999995" green="0.58094030620000003" blue="0.2391001582" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 </state>
                                 <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isHiddenWhenSkeletonIsActive" value="YES"/>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
                                 </userDefinedRuntimeAttributes>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xuf-G5-Nh9">
-                                <rect key="frame" x="20" y="12" width="38" height="35"/>
-                                <fontDescription key="fontDescription" name="Urbanist-Bold" family="Urbanist" pointSize="19"/>
+                                <rect key="frame" x="15" y="10.5" width="38" height="24"/>
+                                <fontDescription key="fontDescription" name="Urbanist-Medium" family="Urbanist" pointSize="20"/>
                                 <nil key="highlightedColor"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
                                 </userDefinedRuntimeAttributes>
                             </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bQ9-y8-mJD">
-                                <rect key="frame" x="0.0" y="54.5" width="320" height="0.5"/>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bQ9-y8-mJD">
+                                <rect key="frame" x="0.0" y="44.5" width="320" height="0.5"/>
                                 <color key="backgroundColor" systemColor="systemGray5Color"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="0.5" id="iUX-ar-W5v"/>
@@ -59,15 +59,15 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="JP7-RE-AFq" secondAttribute="trailing" constant="20" symbolic="YES" id="1dC-qk-SIf"/>
-                            <constraint firstItem="bQ9-y8-mJD" firstAttribute="top" secondItem="JP7-RE-AFq" secondAttribute="bottom" constant="7.5" id="8D9-0X-LVo"/>
-                            <constraint firstItem="JP7-RE-AFq" firstAttribute="top" secondItem="nHX-rG-vz9" secondAttribute="top" constant="12" id="8ki-Oe-iwD"/>
+                            <constraint firstAttribute="height" constant="45" id="12j-xd-dXN"/>
+                            <constraint firstAttribute="trailing" secondItem="JP7-RE-AFq" secondAttribute="trailing" constant="15" id="1dC-qk-SIf"/>
+                            <constraint firstItem="JP7-RE-AFq" firstAttribute="centerY" secondItem="xuf-G5-Nh9" secondAttribute="centerY" id="4uY-5m-teq"/>
+                            <constraint firstItem="JP7-RE-AFq" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="xuf-G5-Nh9" secondAttribute="trailing" constant="15" id="8JS-Mb-NSC"/>
                             <constraint firstAttribute="trailing" secondItem="bQ9-y8-mJD" secondAttribute="trailing" id="HXX-6F-NQR"/>
-                            <constraint firstItem="xuf-G5-Nh9" firstAttribute="leading" secondItem="nHX-rG-vz9" secondAttribute="leading" constant="20" symbolic="YES" id="JIs-Rl-aWj"/>
-                            <constraint firstItem="xuf-G5-Nh9" firstAttribute="top" secondItem="nHX-rG-vz9" secondAttribute="top" constant="12" id="TSs-hG-B0A"/>
+                            <constraint firstItem="xuf-G5-Nh9" firstAttribute="leading" secondItem="nHX-rG-vz9" secondAttribute="leading" constant="15" id="JIs-Rl-aWj"/>
                             <constraint firstItem="bQ9-y8-mJD" firstAttribute="leading" secondItem="nHX-rG-vz9" secondAttribute="leading" id="ZIe-h6-lZi"/>
                             <constraint firstAttribute="bottom" secondItem="bQ9-y8-mJD" secondAttribute="bottom" id="eJN-jR-8rW"/>
-                            <constraint firstItem="bQ9-y8-mJD" firstAttribute="top" secondItem="xuf-G5-Nh9" secondAttribute="bottom" constant="7.5" id="v71-6d-ETY"/>
+                            <constraint firstItem="xuf-G5-Nh9" firstAttribute="centerY" secondItem="nHX-rG-vz9" secondAttribute="centerY" id="yBG-L3-clz"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>

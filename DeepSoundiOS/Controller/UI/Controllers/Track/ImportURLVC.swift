@@ -10,24 +10,37 @@ import UIKit
 import DeepSoundSDK
 import Async
 class ImportURLVC: BaseVC {
+    
     @IBOutlet weak var urlTextFIeld: UITextField!
     
-    @IBOutlet weak var importBtn: UIButton!
-    @IBOutlet weak var bgView: UIView!
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.bgView.backgroundColor = .mainColor
-        self.importBtn.backgroundColor = .ButtonColor
-        self.title = "Import"
+        if let data = UIPasteboard.general.string {
+            if data.contains("https") {
+                self.urlTextFIeld.text = data
+            }
+        }
     }
     
-    @IBAction func importPressed(_ sender: Any) {
-        if self.urlTextFIeld.text!.isEmpty{
-            self.view.makeToast("Please Enter URL ")
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.tabBarController?.tabBar.isHidden = false
+    }
+    
+    @IBAction func importPressed(_ sender: UIButton) {
+        if self.urlTextFIeld.text?.trimmingCharacters(in: .whitespacesAndNewlines).count == 0 {
+            self.view.makeToast("Please Enter Your URL")
+            return
         }else{
             self.importURL()
         }
     }
+    
     private func importURL(){
         if Connectivity.isConnectedToNetwork(){
             self.showProgressDialog(text: "Loading...")
@@ -41,7 +54,7 @@ class ImportURLVC: BaseVC {
                             self.dismissProgressDialog {
                                 self.view.makeToast("Playlist has been created")
                                 self.navigationController?.popViewController(animated: true)
-                              
+                                
                             }
                         })
                         
@@ -66,6 +79,5 @@ class ImportURLVC: BaseVC {
             log.error("internetErrro = \(InterNetError)")
             self.view.makeToast(InterNetError)
         }
-    }
-    
+    }    
 }

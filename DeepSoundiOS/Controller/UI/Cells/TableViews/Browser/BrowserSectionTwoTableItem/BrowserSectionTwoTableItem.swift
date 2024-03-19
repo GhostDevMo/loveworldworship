@@ -17,6 +17,7 @@ class BrowserSectionTwoTableItem: UITableViewCell {
     @IBOutlet weak var nameLAbel: UILabel!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var thumbnailImage: UIImageView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         categoryBackgroundView.cornerRadiusV = self.categoryBackgroundView.frame.height / 2
@@ -28,13 +29,13 @@ class BrowserSectionTwoTableItem: UITableViewCell {
         
         
     }
-    func bind(_ object:ProfileModel.AlbumElement){
+    func bind(_ object: Album){
         let thumbnailURL = URL.init(string:object.thumbnail ?? "")
         self.thumbnailImage.sd_setImage(with: thumbnailURL , placeholderImage:R.image.imagePlacholder())
                 titleLabel.text = object.title ?? ""
         nameLAbel.text = "\(object.publisher?.name ?? "")"
-        categoryNameLAbel.text = object.categoryName ?? ""
-        songsCountLabel.text = "\(object.countSongs ?? 0) \(NSLocalizedString("Songs", comment: "Songs"))"
+        categoryNameLAbel.text = object.category_name ?? ""
+        songsCountLabel.text = "\(object.count_songs ?? 0) \(NSLocalizedString("Songs", comment: "Songs"))"
     }
     
 }

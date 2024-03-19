@@ -7,7 +7,7 @@
 //
 
 import Foundation
-class PurchaseTrackModel:BaseModel{
+class PurchaseTrackModel: BaseModel {
     struct PurchaseTrackSuccessModel: Codable {
         let status: Int?
         let message: String?

@@ -24,7 +24,7 @@ class UpdatePlaylistVC: BaseVC {
     @IBOutlet weak var playlistNameTextField: UITextField!
     
     @IBOutlet weak var selectPictureBtn: UIButton!
-    var playlistObject:PlaylistModel.Playlist?
+    var playlistObject: Playlist?
     private let imagePickerController = UIImagePickerController()
     private var privacyText:Int? = 1
     private var selectedImage:UIImage? = nil
@@ -43,15 +43,15 @@ class UpdatePlaylistVC: BaseVC {
         self.topLabel.text = NSLocalizedString("Cerate and share playlist. Each playlist is custom created and organized to help you find the best music for your preference.", comment: "Cerate and share playlist. Each playlist is custom created and organized to help you find the best music for your preference.")
         self.selectPictureBtn.setTitle(NSLocalizedString("Select Pictures", comment: "Select Pictures"), for: .normal)
         self.updateBtn.backgroundColor = .ButtonColor
-        SwiftEventBus.onMainThread(self, name:   EventBusConstants.EventBusConstantsUtils.EVENT_DISMISS_POPOVER) { result in
+        SwiftEventBus.onMainThread(self, name: EventBusConstants.EventBusConstantsUtils.EVENT_DISMISS_POPOVER) { result in
             log.verbose("To dismiss the popover")
-            AppInstance.instance.player = nil
+            
             self.tabBarController?.dismissPopupBar(animated: true, completion: nil)
         }
-        SwiftEventBus.onMainThread(self, name:   "PlayerReload") { result in
+        SwiftEventBus.onMainThread(self, name: "PlayerReload") { result in
             let stringValue = result?.object as? String
             self.view.makeToast(stringValue)
-            log.verbose(stringValue)
+            log.verbose(stringValue ?? "")
         }
         
     }
@@ -63,17 +63,17 @@ class UpdatePlaylistVC: BaseVC {
         self.tabBarController?.tabBar.isHidden = false
     }
     
-    @IBAction func privatePressed(_ sender: Any) {
+    @IBAction func privatePressed(_ sender: UIButton) {
         self.privateBtn.setImage(R.image.ic_check_radio(), for: .normal)
         self.publicBtn.setImage(R.image.ic_uncheck_radio(), for: .normal)
         self.privacyText = 0
     }
-    @IBAction func publicPressed(_ sender: Any) {
+    @IBAction func publicPressed(_ sender: UIButton) {
         self.publicBtn.setImage(R.image.ic_check_radio(), for: .normal)
         self.privateBtn.setImage(R.image.ic_uncheck_radio(), for: .normal)
         self.privacyText = 1
     }
-    @IBAction func selectPicturePressed(_ sender: Any) {
+    @IBAction func selectPicturePressed(_ sender: UIButton) {
         let alert = UIAlertController(title: "", message: "Select Source", preferredStyle: .alert)
         let camera = UIAlertAction(title: "Camera", style: .default) { (action) in
             self.imagePickerController.delegate = self
@@ -93,13 +93,13 @@ class UpdatePlaylistVC: BaseVC {
         alert.addAction(cancel)
         self.present(alert, animated: true, completion: nil)
     }
-    @IBAction func crossPressed(_ sender: Any) {
+    @IBAction func crossPressed(_ sender: UIButton) {
         self.playlistImage.image = R.image.imagePlacholder()
         self.crossBtn.isHidden = true
         
     }
     
-    @IBAction func createPressed(_ sender: Any) {
+    @IBAction func createPressed(_ sender: UIButton) {
         if self.playlistNameTextField.text!.isEmpty{
             self.view.makeToast("Enter playlist name")
             
@@ -180,7 +180,7 @@ extension  UpdatePlaylistVC:UIImagePickerControllerDelegate, UINavigationControl
         let image = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
         
         self.playlistImage.image = image
-        self.selectedImage = image ?? UIImage()
+        self.selectedImage = image 
         if self.selectedImage == nil{
             self.crossBtn.isHidden = true
         }else{

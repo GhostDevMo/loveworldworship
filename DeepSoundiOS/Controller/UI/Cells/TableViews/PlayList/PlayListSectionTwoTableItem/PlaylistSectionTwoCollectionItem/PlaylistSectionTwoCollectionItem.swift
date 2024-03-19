@@ -20,12 +20,12 @@ class PlaylistSectionTwoCollectionItem: UICollectionViewCell {
         self.categoryBackgroundView.cornerRadiusV = self.categoryBackgroundView.frame.height / 2
 
     }
-    func bind(_ object: PlaylistModel.Playlist){
-           titleLabel.text = object.name ?? ""
+    func bind(_ object: Playlist){
+        titleLabel.text = object.name ?? ""
         self.songCountLabel.text = "\(object.songs ?? 0) \(NSLocalizedString("Songs", comment: "Songs"))"
-        self.categoryLabel.text =  object.privacyText ?? ""
-             let url = URL.init(string:object.thumbnailReady ?? "")
-             thumbnailIamge.sd_setImage(with: url , placeholderImage:R.image.imagePlacholder())
-         }
+        self.categoryLabel.text =  object.privacy_text ?? ""
+        let url = URL.init(string:object.thumbnail_ready ?? "")
+        thumbnailIamge.sd_setImage(with: url , placeholderImage:R.image.imagePlacholder())
+    }
 
 }

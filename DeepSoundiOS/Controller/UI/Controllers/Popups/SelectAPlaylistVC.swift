@@ -12,131 +12,137 @@ import DeepSoundSDK
 import SwiftEventBus
 class SelectAPlaylistVC: BaseVC {
     
+    @IBOutlet weak var tableViewHeight: NSLayoutConstraint!
     @IBOutlet weak var close: UIButton!
     @IBOutlet weak var done: UIButton!
     @IBOutlet weak var create: UIButton!
     @IBOutlet weak var selectPlayList: UILabel!
     @IBOutlet weak var tableView: UITableView!
     
-    private var PlaylistArray = [PlaylistModel.Playlist]()
-    private var idsArray = [Int]()
-    private var playlistIdString:String? = ""
-    var createPlaylistDelegate:createPlaylistDelegate?
+    private var playlistArray = [Playlist]()
+    private var selectedIndexPath: IndexPath?
+    private var playlistIdString:Int?
+    var createPlaylistDelegate: createPlaylistDelegate?
     var trackId:Int?  = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.close.setTitle((NSLocalizedString("CLOSE", comment: "")), for: .normal)
-        self.done.setTitle((NSLocalizedString("DONE", comment: "")), for: .normal)
-        self.create.setTitle((NSLocalizedString("CREATE", comment: "")), for: .normal)
-        self.selectPlayList.text = (NSLocalizedString("Select a playlist", comment: ""))
         self.setupUI()
         self.fetchPlaylist()
-        SwiftEventBus.onMainThread(self, name:   EventBusConstants.EventBusConstantsUtils.EVENT_DISMISS_POPOVER) { result in
+        SwiftEventBus.onMainThread(self, name: EventBusConstants.EventBusConstantsUtils.EVENT_DISMISS_POPOVER) { result in
             log.verbose("To dismiss the popover")
-            AppInstance.instance.player = nil
             self.tabBarController?.dismissPopupBar(animated: true, completion: nil)
         }
-        SwiftEventBus.onMainThread(self, name:   "PlayerReload") { result in
+        SwiftEventBus.onMainThread(self, name: "PlayerReload") { result in
             let stringValue = result?.object as? String
             self.view.makeToast(stringValue)
-            log.verbose(stringValue)
+            log.verbose(stringValue ?? "")
         }
     }
     
-    @IBAction func closePressed(_ sender: Any) {
+    @IBAction func closePressed(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
     }
-    @IBAction func donePressed(_ sender: Any) {
-        var stringArray = self.idsArray.map { String($0) }
-        self.playlistIdString = stringArray.joined(separator: ",")
-        log.verbose("playlistIdString = \(playlistIdString)")
+    
+    @IBAction func donePressed(_ sender: UIButton) {
+        if self.playlistIdString == nil {
+            self.view.makeToast("Please Select Playlist")
+            return
+        }
         self.save()
     }
     
-    @IBAction func createPressed(_ sender: Any) {
+    @IBAction func createPressed(_ sender: UIButton) {
         self.dismiss(animated: true) {
             self.createPlaylistDelegate?.createPlaylist(status: true)
         }
     }
     
-    private func setupUI(){
-        
+    private func setupUI() {
         self.tableView.separatorStyle = .none
-        tableView.register(SelectPlaylist_TableCell.nib, forCellReuseIdentifier: SelectPlaylist_TableCell.identifier)
-    }
-    private func save(){
-        self.showProgressDialog(text: (NSLocalizedString("Loading...", comment: "")))
-        let accessToken = AppInstance.instance.accessToken ?? ""
-        let trackId = self.trackId ?? 0
-        let playlistIdString = self.playlistIdString ?? ""
-        
-        Async.background({
-            PlaylistManager.instance.addToPlaylist(trackId: trackId, AccessToken: accessToken, PlaylistIdString: playlistIdString, completionBlock: { (success, sessionError, error) in
-                if success != nil{
-                    Async.main({
-                        self.dismissProgressDialog {
-                            self.dismiss(animated: true, completion: {
-                                log.debug("statusCODE = \(success?.status ?? 0)")
-                                self.view.makeToast(NSLocalizedString(("Song has been added in playlist"), comment: ""))
-                            })
-                        }
-                    })
-                }else if sessionError != nil{
-                    Async.main({
-                        self.dismissProgressDialog {
-                            
-                            self.view.makeToast(sessionError?.error ?? "")
-                            log.error("sessionError = \(sessionError?.error ?? "")")
-                        }
-                    })
-                }else {
-                    Async.main({
-                        self.dismissProgressDialog {
-                            
-                            self.view.makeToast(error?.localizedDescription ?? "")
-                            log.error("error = \(error?.localizedDescription ?? "")")
-                        }
-                    })
-                }
-            })
-            
-        })
+        self.tableView.register(UINib(resource: R.nib.selectPlaylist_TableCell), forCellReuseIdentifier: R.reuseIdentifier.selectPlaylist_TableCell.identifier)
     }
     
-    private func fetchPlaylist(){
+    private func save() {
         if Connectivity.isConnectedToNetwork(){
-            self.PlaylistArray.removeAll()
+            self.showProgressDialog(text: (NSLocalizedString("Loading...", comment: "")))
+            let accessToken = AppInstance.instance.accessToken ?? ""
+            let trackId = self.trackId ?? 0
+            let playlistIdString = self.playlistIdString ?? 0
+            Async.background({
+                PlaylistManager.instance.addToPlaylist(trackId: trackId, AccessToken: accessToken, PlaylistIdString: playlistIdString, completionBlock: { (success, sessionError, error) in
+                    if success != nil{
+                        Async.main({
+                            self.dismissProgressDialog {
+                                self.dismiss(animated: true, completion: {
+                                    log.debug("statusCODE = \(success?.status ?? 0)")
+                                    self.appDelegate.window?.rootViewController?.view.makeToast(NSLocalizedString(("Song has been added in playlist"), comment: ""))
+                                })
+                            }
+                        })
+                    }else if sessionError != nil{
+                        Async.main({
+                            self.dismissProgressDialog {
+                                self.appDelegate.window?.rootViewController?.view.makeToast(sessionError?.error ?? "")
+                                log.error("sessionError = \(sessionError?.error ?? "")")
+                            }
+                        })
+                    }else {
+                        Async.main({
+                            self.dismissProgressDialog {
+                                self.appDelegate.window?.rootViewController?.view.makeToast(error?.localizedDescription ?? "")
+                                log.error("error = \(error?.localizedDescription ?? "")")
+                            }
+                        })
+                    }
+                })
+            })
+        }else{
+            log.error("internetError = \(InterNetError)")
+            self.view.makeToast(InterNetError)
+        }
+    }
+    
+    private func fetchPlaylist() {
+        if Connectivity.isConnectedToNetwork(){
+            self.playlistArray.removeAll()
             let accessToken = AppInstance.instance.accessToken ?? ""
             let userId = AppInstance.instance.userId ?? 0
-            Async.background({ PlaylistManager.instance.getPlayList(UserId:userId,AccessToken: accessToken, Limit: 10, Offset: 0, completionBlock: { (success, sessionError, error) in
-                if success != nil{
-                    Async.main({
-                        self.dismissProgressDialog {
-                            log.debug("userList = \(success?.status ?? 0)")
-                            self.PlaylistArray = success?.playlists ?? []
-                            self.tableView.reloadData()
-                        }
-                        
-                    })
-                }else if sessionError != nil{
-                    Async.main({
-                        self.dismissProgressDialog {
-                            
-                            self.view.makeToast(sessionError?.error ?? "")
-                            log.error("sessionError = \(sessionError?.error ?? "")")
-                        }
-                    })
-                }else {
-                    Async.main({
-                        self.dismissProgressDialog {
-                            self.view.makeToast(error?.localizedDescription ?? "")
-                            log.error("error = \(error?.localizedDescription ?? "")")
-                        }
-                    })
+            Async.background {
+                PlaylistManager.instance.getPlayList(UserId:userId,AccessToken: accessToken, Limit: 10, Offset: 0) { (success, sessionError, error) in
+                    if success != nil{
+                        Async.main({
+                            self.dismissProgressDialog {
+                                log.debug("userList = \(success?.status ?? 0)")
+                                self.playlistArray = success?.playlists ?? []
+                                self.tableView.reloadData()
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                                    if self.tableView.contentSize.height > (self.view.frame.height * 0.6) {
+                                        self.tableViewHeight.constant = (self.view.frame.height * 0.6)
+                                    } else {
+                                        self.tableViewHeight.constant = self.tableView.contentSize.height
+                                    }
+                                }
+                            }
+                        })
+                    }else if sessionError != nil{
+                        Async.main({
+                            self.dismissProgressDialog {
+                                
+                                self.view.makeToast(sessionError?.error ?? "")
+                                log.error("sessionError = \(sessionError?.error ?? "")")
+                            }
+                        })
+                    }else {
+                        Async.main({
+                            self.dismissProgressDialog {
+                                self.view.makeToast(error?.localizedDescription ?? "")
+                                log.error("error = \(error?.localizedDescription ?? "")")
+                            }
+                        })
+                    }
                 }
-            })
-            })
+            }
         }else{
             log.error("internetError = \(InterNetError)")
             self.view.makeToast(InterNetError)
@@ -146,47 +152,24 @@ class SelectAPlaylistVC: BaseVC {
 }
 extension SelectAPlaylistVC:UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.PlaylistArray.count
+        return self.playlistArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: SelectPlaylist_TableCell.identifier) as? SelectPlaylist_TableCell
-        cell?.delegate = self
-        cell?.playListIdArray = self.PlaylistArray
-        cell?.indexPath = indexPath.row
-        let object = self.PlaylistArray[indexPath.row]
-        cell?.playlistNameLabel.text = object.name ?? ""
-        
-        return cell!
+        let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.selectPlaylist_TableCell.identifier) as! SelectPlaylist_TableCell
+        cell.playListIdArray = self.playlistArray
+        cell.indexPath = indexPath.row
+        let object = self.playlistArray[indexPath.row]
+        cell.playlistNameLabel.text = object.name ?? ""
+        let image = (self.selectedIndexPath == indexPath) ? R.image.icon_checkmark() : R.image.icon_uncheckmark()
+        cell.checkImage.image = image
+        return cell
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 50.0
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let object = self.playlistArray[indexPath.row]
+        self.selectedIndexPath = indexPath
+        self.playlistIdString = object.id
+        self.tableView.reloadData()
     }
-}
-extension SelectAPlaylistVC:didSetPlaylistDelegate{
-    
-    func didPlaylist(Image: UIImageView, status: Bool, idsArray: [PlaylistModel.Playlist], Index: Int) {
-        if status{
-            
-            Image.image = R.image.ic_checked()
-            self.idsArray.append(idsArray[Index].id ?? 0)
-            log.verbose("genresIdArray = \(self.idsArray)")
-            
-        }else{
-            
-            Image.image = R.image.ic_uncheck()
-            for (index,values) in self.idsArray.enumerated(){
-                if values == idsArray[Index].id{
-                    self.idsArray.remove(at: index)
-                    break
-                }
-                
-            }
-            log.verbose("genresString = \(playlistIdString)")
-            log.verbose("genresIdArray = \(self.idsArray)")
-        }
-    }
-    
-    
 }

@@ -22,10 +22,10 @@ class ConfirmCodeVC: BaseVC {
         self.topLabel.text = NSLocalizedString(" A confirmation email has been sent", comment: "")
     }
     
-    @IBAction func cancelPressed(_ sender: Any) {
+    @IBAction func cancelPressed(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
     }
-    @IBAction func sendPressed(_ sender: Any) {
+    @IBAction func sendPressed(_ sender: UIButton) {
         if self.codeTextField.text!.isEmpty{
             self.view.makeToast(NSLocalizedString(("Please enter code"), comment: ""))
         }else{
@@ -43,7 +43,9 @@ class ConfirmCodeVC: BaseVC {
                         self.dismissProgressDialog {
                             self.view.makeToast(success?.data ?? "")
                             self.dismiss(animated: true) {
-                                AppInstance.instance.fetchUserProfile()
+                                AppInstance.instance.fetchUserProfile { success in
+                                    print(success)
+                                }
                             }
                             
                         }

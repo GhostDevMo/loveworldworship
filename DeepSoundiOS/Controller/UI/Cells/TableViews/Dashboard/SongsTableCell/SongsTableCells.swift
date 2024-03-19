@@ -17,183 +17,15 @@ class SongsTableCells: UITableViewCell {
     @IBOutlet weak var lblSongTittle: UILabel!
     @IBOutlet weak var imgSong: UIImageView!
     @IBOutlet weak var septView: UIView!
-    var loggedInVC:Dashboard1VC?
+   
+    var delegate: SongsTableCellsDelegate?
+    var indexPath: IndexPath?
+    var isPlaying = false
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
-    func bind(_ object:DiscoverModel.Song?){
-        self.lblSongTittle.text = object?.title?.htmlAttributedString ?? ""
-        if object?.duration == ""{
-            self.lblSongDuration.text = "\(object?.demoDuration ?? "")"
-        }
-        else{
-            self.lblSongDuration.text = "\(object?.duration ?? "")"
-        }
-        if  object?.publisher?.name == ""{
-            lblSongDesc.text = object?.publisher?.username ?? ""
-        }
-        else{
-            lblSongDesc.text = object?.publisher?.name ?? ""
-        }
-       
-        
-        let url = URL.init(string:object?.thumbnail ?? "")
-        self.imgSong.sd_setImage(with: url , placeholderImage:R.image.imagePlacholder())
-    }
-    
-    func bindinfoList(_ object:UserInfoModel.Latestsong?){
-        self.lblSongTittle.text = object?.title?.htmlAttributedString ?? ""
-        if object?.duration == ""{
-            self.lblSongDuration.text = "\(object?.demoDuration ?? "")"
-        }
-        else{
-            self.lblSongDuration.text = "\(object?.duration ?? "")"
-        }
-        if  object?.publisher?.name == ""{
-            lblSongDesc.text = object?.publisher?.username ?? ""
-        }
-        else{
-            lblSongDesc.text = object?.publisher?.name ?? ""
-        }
-       
-        
-        let url = URL.init(string:object?.thumbnail ?? "")
-        self.imgSong.sd_setImage(with: url , placeholderImage:R.image.imagePlacholder())
-    }
-    
-    func bindTopSong(_ object:TrendingModel.TopSong?){
-        self.lblSongTittle.text = object?.title?.htmlAttributedString ?? ""
-        if object?.duration == ""{
-            self.lblSongDuration.text = "\(object?.demoDuration ?? "")"
-        }
-        else{
-            self.lblSongDuration.text = "\(object?.duration ?? "")"
-        }
-        if  object?.publisher?.name == ""{
-            lblSongDesc.text = object?.publisher?.username ?? ""
-        }
-        else{
-            lblSongDesc.text = object?.publisher?.name ?? ""
-        }
-       
-        
-        let url = URL.init(string:object?.thumbnail ?? "")
-        self.imgSong.sd_setImage(with: url , placeholderImage:R.image.imagePlacholder())
-    }
-    
-    func bindFavourite(_ object:FavoriteModel.Datum, index :Int){
-        let thumbnailURL = URL.init(string:object.thumbnail ?? "")
-        self.imgSong.sd_setImage(with: thumbnailURL , placeholderImage:R.image.imagePlacholder())
-        self.lblSongTittle.text = object.title ?? ""
-        self.lblSongDesc.text = "\(object.categoryName ?? "") - \(object.publisher?.name ?? "")"
-        self.lblSongDuration.text = object.duration ?? ""
-     
-      
-        
-    }
-    func bindSearchSong(_ object:SearchModel.Song, index :Int){
-        let thumbnailURL = URL.init(string:object.thumbnail ?? "")
-        self.imgSong.sd_setImage(with: thumbnailURL , placeholderImage:R.image.imagePlacholder())
-        self.lblSongTittle.text = object.title ?? ""
-        self.lblSongDesc.text = "\(object.categoryName ?? "") - \(object.publisher?.name ?? "")"
-        self.lblSongDuration.text = object.duration ?? ""
-     
-      
-        
-    }
-    func bindProfileSong(_ object:ProfileModel.Latestsong, index :Int){
-        let thumbnailURL = URL.init(string:object.thumbnail ?? "")
-        self.imgSong.sd_setImage(with: thumbnailURL , placeholderImage:R.image.imagePlacholder())
-        self.lblSongTittle.text = object.title ?? ""
-        self.lblSongDesc.text = "\(object.categoryName ?? "") - \(object.publisher?.name ?? "")"
-        self.lblSongDuration.text = object.duration ?? ""
-
-    }
-    
-    func bindPlaylistSong(_ object: GetPlaylistSongsModel.Song, index :Int){
-        let thumbnailURL = URL.init(string:object.thumbnail ?? "")
-        self.imgSong.sd_setImage(with: thumbnailURL , placeholderImage:R.image.imagePlacholder())
-        self.lblSongTittle.text = object.title ?? ""
-        self.lblSongDesc.text = "\(object.categoryName ?? "") - \(object.publisher?.name ?? "")"
-        self.lblSongDuration.text = object.duration ?? ""
-    }
-    func bindLikeSong(_ object:LikedModel.Datum, index :Int){
-        let thumbnailURL = URL.init(string:object.thumbnail ?? "")
-        self.imgSong.sd_setImage(with: thumbnailURL , placeholderImage:R.image.imagePlacholder())
-        self.lblSongTittle.text = object.title ?? ""
-        self.lblSongDesc.text = "\(object.categoryName ?? "") - \(object.publisher?.name ?? "")"
-        self.lblSongDuration.text = object.duration ?? ""
-    }
-    func bindLike(_ object:ProfileModel.Latestsong, index :Int){
-        let thumbnailURL = URL.init(string:object.thumbnail ?? "")
-        self.imgSong.sd_setImage(with: thumbnailURL , placeholderImage:R.image.imagePlacholder())
-        self.lblSongTittle.text = object.title ?? ""
-        self.lblSongDesc.text = "\(object.categoryName ?? "") - \(object.publisher?.name ?? "")"
-        self.lblSongDuration.text = object.duration ?? ""
-    }
-    
-    func bindProfilePlayList(_ object:PlaylistModel.Playlist, index :Int){
-        let thumbnailURL = URL.init(string:object.thumbnailReady ?? "")
-        self.imgSong.sd_setImage(with: thumbnailURL , placeholderImage:R.image.imagePlacholder())
-        self.lblSongTittle.text = object.name ?? ""
-        self.lblSongDesc.text = "\(object.songs ?? 0 ) Songs"
-        self.lblSongDuration.text = ""
-        self.septView.isHidden = true
-       
-    }
-    func bindSharedSong(_ object:MusicPlayerModel, index :Int){
-        let thumbnailURL = URL.init(string:object.ThumbnailImageString ?? "")
-        self.imgSong.sd_setImage(with: thumbnailURL , placeholderImage:R.image.imagePlacholder())
-        self.lblSongTittle.text = object.name ?? ""
-       // self.lblSongDesc.text = "\(object.songs ?? 0 ) Songs"
-        self.lblSongDuration.text = ""
-        self.septView.isHidden = true
-       
-    }
-    func bindRecentPlayedSong(_ object:DiscoverModel.Song?){
-        
-        self.lblSongTittle.text = object?.title?.htmlAttributedString ?? ""
-        if object?.duration == ""{
-            self.lblSongDuration.text = "\(object?.demoDuration ?? "")"
-        }
-        else{
-            self.lblSongDuration.text = "\(object?.duration ?? "")"
-        }
-        if  object?.publisher?.name == ""{
-            lblSongDesc.text = object?.publisher?.username ?? ""
-        }
-        else{
-            lblSongDesc.text = object?.publisher?.name ?? ""
-        }
-       
-        
-        let url = URL.init(string:object?.thumbnail ?? "")
-        self.imgSong.sd_setImage(with: url , placeholderImage:R.image.imagePlacholder())
-    }
-    
-    
-    func bindAlbumSong(_ object:GetAlbumSongsModel.Song?){
-        
-        self.lblSongTittle.text = object?.title?.htmlAttributedString ?? ""
-        if object?.duration == ""{
-            self.lblSongDuration.text = "\(object?.demoDuration ?? "")"
-        }
-        else{
-            self.lblSongDuration.text = "\(object?.duration ?? "")"
-        }
-        if  object?.publisher?.name == ""{
-            lblSongDesc.text = object?.publisher?.username ?? ""
-        }
-        else{
-            lblSongDesc.text = object?.publisher?.name ?? ""
-        }
-       
-        
-        let url = URL.init(string:object?.thumbnail ?? "")
-        self.imgSong.sd_setImage(with: url , placeholderImage:R.image.imagePlacholder())
-    }
-    
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
@@ -201,4 +33,73 @@ class SongsTableCells: UITableViewCell {
         // Configure the view for the selected state
     }
     
+    func bind(_ object: Song) {
+        self.lblSongTittle.text = object.title?.htmlAttributedString ?? ""
+        if object.duration == "" {
+            self.lblSongDuration.text = "\(object.demo_duration ?? "")"
+        } else {
+            let time = object.duration?.components(separatedBy: ":").first
+            let timeSTR = (Int(time ?? "") == 0) ? " Sec" : " Min"
+            self.lblSongDuration.text = "\(object.duration ?? "")" + timeSTR
+        }
+        if object.publisher?.name == "" {
+            lblSongDesc.text = object.publisher?.username ?? ""
+        } else {
+            lblSongDesc.text = object.publisher?.name ?? ""
+        }
+        let url = URL.init(string:object.thumbnail ?? "")
+        self.imgSong.sd_setImage(with: url , placeholderImage:R.image.imagePlacholder())
+        
+        if (popupContentController?.musicObject?.id == object.id) {
+            self.btnPlayPause.setImage(UIImage(named: (!AppInstance.instance.AlreadyPlayed) ? "ic-play-btn" : "ic-pause-btn"), for: .normal)
+        }else {
+            self.btnPlayPause.setImage(UIImage(named: "ic-play-btn"), for: .normal)
+        }
+    }
+    
+    func bind(_ object: Song, index:Int) {
+        self.lblSongTittle.text = object.title?.htmlAttributedString ?? ""
+        if object.duration == "" {
+            self.lblSongDuration.text = "\(object.demo_duration ?? "")"
+        } else {
+            let time = object.duration?.components(separatedBy: ":").first
+            let timeSTR = (Int(time ?? "") == 0) ? " Sec" : " Min"
+            self.lblSongDuration.text = "\(object.duration ?? "")" + timeSTR
+        }
+        if object.publisher?.name == "" {
+            lblSongDesc.text = "\(object.category_name ?? "") - \(object.publisher?.username ?? "")"
+        } else {
+            lblSongDesc.text = "\(object.category_name ?? "") - \(object.publisher?.name ?? "")"
+        }
+        let url = URL.init(string:object.thumbnail ?? "")
+        self.imgSong.sd_setImage(with: url , placeholderImage:R.image.imagePlacholder())
+        if (popupContentController?.musicObject?.id == object.id) {
+            self.btnPlayPause.setImage(UIImage(named: (!AppInstance.instance.AlreadyPlayed) ? "ic-play-btn" : "ic-pause-btn"), for: .normal)
+        }else {
+            self.btnPlayPause.setImage(UIImage(named: "ic-play-btn"), for: .normal)
+        }
+    }
+    
+    func bindProfilePlayList(_ object: Playlist, index :Int){
+        let thumbnailURL = URL.init(string:object.thumbnail_ready ?? "")
+        self.imgSong.sd_setImage(with: thumbnailURL , placeholderImage:R.image.imagePlacholder())
+        self.lblSongTittle.text = object.name ?? ""
+        self.lblSongDesc.text = "\(object.songs ?? 0 ) Songs"
+        self.lblSongDuration.text = ""
+        self.btnPlayPause.isHidden = true
+        self.lblSongDuration.isHidden = true
+        self.septView.isHidden = true
+    }
+   
+    @IBAction func playButtonPressed(_ sender: UIButton) {
+        if let indexPath = indexPath {
+            self.delegate?.playButtonPressed(sender, indexPath: indexPath, cell: self)
+        }
+    }
+    
+    @IBAction func moreButtonPressed(_ sender: UIButton) {
+        if let indexPath = indexPath {
+            self.delegate?.moreButtonPressed(sender, indexPath: indexPath, cell: self)
+        }
+    }
 }

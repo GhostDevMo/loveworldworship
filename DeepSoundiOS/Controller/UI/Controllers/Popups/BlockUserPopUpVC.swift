@@ -25,30 +25,30 @@ class BlockUserPopUpVC: BaseVC {
         self.closeButton.setTitle((NSLocalizedString("CLOSE", comment: "")), for: .normal)
         self.copLink.setTitle((NSLocalizedString("Copy Profile's lInk", comment: "")), for: .normal)
         self.blockButton.setTitle((NSLocalizedString("Block", comment: "")), for: .normal)
-        SwiftEventBus.onMainThread(self, name:   EventBusConstants.EventBusConstantsUtils.EVENT_DISMISS_POPOVER) { result in
+        SwiftEventBus.onMainThread(self, name: EventBusConstants.EventBusConstantsUtils.EVENT_DISMISS_POPOVER) { result in
             log.verbose("To dismiss the popover")
-            AppInstance.instance.player = nil
+            
             self.tabBarController?.dismissPopupBar(animated: true, completion: nil)
         }
-        SwiftEventBus.onMainThread(self, name:   "PlayerReload") { result in
+        SwiftEventBus.onMainThread(self, name: "PlayerReload") { result in
             let stringValue = result?.object as? String
             self.view.makeToast(stringValue)
-            log.verbose(stringValue)
+            log.verbose(stringValue ?? "")
         }
     }
     
     
-    @IBAction func blockUserPressed(_ sender: Any) {
+    @IBAction func blockUserPressed(_ sender: UIButton) {
         blockUser()
         
     }
     
-    @IBAction func closedPressed(_ sender: Any) {
+    @IBAction func closedPressed(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
         
     }
     
-    @IBAction func copyLinkToProfilePressed(_ sender: Any) {
+    @IBAction func copyLinkToProfilePressed(_ sender: UIButton) {
         UIPasteboard.general.string = urlString ?? ""
         self.delegate?.showToastStringForBlockUser(string: "Copied text to Clipboard", status: false)
         self.dismiss(animated: true, completion: nil)

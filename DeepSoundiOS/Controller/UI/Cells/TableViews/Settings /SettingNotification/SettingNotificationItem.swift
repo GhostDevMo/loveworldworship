@@ -12,20 +12,21 @@ import UIKit
 class SettingNotificationItem: UITableViewCell {
 
     @IBOutlet weak var notificationLabel: UILabel!
-    @IBOutlet weak var notificationSwitch: UISwitch!
+    @IBOutlet weak var notificationSwitch: CustomSwitch!
     
-    var delegate:OnNotificationSettingsDelegate?
-    var indexPath:Int? = 0
-    var valueStatus:Int? = 0
+    var delegate: OnNotificationSettingsDelegate?
+    var indexPath: Int = 0
+    var valueStatus: Int? = 0
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
-    func bind(_ objectValue:Int){
-        if objectValue == 0{
+    
+    func bind(_ objectValue: Int) {
+        if objectValue == 0 {
             self.notificationSwitch.isOn = false
-        }else{
+        } else {
             self.notificationSwitch.isOn = true
         }
     }
@@ -35,14 +36,12 @@ class SettingNotificationItem: UITableViewCell {
     }
     
     
-    @IBAction func swtichToggled(_ sender: Any) {
-        if valueStatus == 0{
-            self.delegate?.OnNotificationSettingsChanged(value: 1, index: indexPath ?? 0, status: notificationSwitch.isOn)
-        }else{
-            self.delegate?.OnNotificationSettingsChanged(value: 0, index: indexPath ?? 0, status: notificationSwitch.isOn)
+    @IBAction func swtichToggled(_ sender: UIButton) {
+        if valueStatus == 0 {
+            self.delegate?.OnNotificationSettingsChanged(value: 1, index: indexPath, status: notificationSwitch.isOn)
+        } else {
+            self.delegate?.OnNotificationSettingsChanged(value: 0, index: indexPath, status: notificationSwitch.isOn)
         }
-       
-      
-        
     }
+    
 }

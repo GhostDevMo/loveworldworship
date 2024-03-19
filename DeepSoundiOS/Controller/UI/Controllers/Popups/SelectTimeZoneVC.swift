@@ -244,7 +244,7 @@ class SelectTimeZoneVC: UIViewController {
     }
     
 
-    @IBAction func closePressed(_ sender: Any) {
+    @IBAction func closePressed(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
     }
     

@@ -9,79 +9,48 @@
 import UIKit
 import Async
 import DeepSoundSDK
+
 class PurchaseTableItem: UITableViewCell {
     
     @IBOutlet weak var thumbnailImage: UIImageView!
-    @IBOutlet weak var timeDurationlabel: UILabel!
+    @IBOutlet weak var priceLabel: UILabel!
     @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var countLabel: UILabel!
-    @IBOutlet weak var categoryLabel: UILabel!
-    @IBOutlet weak var heartBtn: UIButton!
-    var likeDelegate:likeDislikeSongDelegate?
-
-    var indexPath:Int? = 0
-    var songLink:String? = ""
-    var trackID:Int? = 0
-    var likeStatus:Bool? = false
-    var audioId:String? = ""
-    var vc:PurchasesVC?
-    
+    @IBOutlet weak var mainView: UIView!
+    @IBOutlet weak var typeLabel: UILabel!
+        
+    var indexPath:Int = 0
+    var songLink:String = ""
+    var trackID:Int = 0
+    var audioId:String = ""
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        self.mainView.addShadow()
         // Initialization code
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        
-        
     }
-    @IBAction func heartPresserd(_ sender: Any) {
-        
-        self.likeStatus = !self.likeStatus!
-               if self.likeStatus!{
-                   log.verbose("Status = \(likeStatus!)")
-                   self.likeDelegate?.likeDisLikeSong(status: likeStatus!,button: heartBtn,audioId: self.audioId  ?? "")
-               }else{
-                   log.verbose("Status = \(likeStatus!)")
-                   self.likeDelegate?.likeDisLikeSong(status: likeStatus!,button: heartBtn,audioId:self.audioId  ?? "")
-               }
-    }
-    func bind(_ object:GetPurchaseModel.Datum, index :Int){
-        let thumbnailURL = URL.init(string:object.thumbnail ?? "")
+    
+    func bind(_ object: Purchase, index: Int) {
+        let thumbnailURL = URL.init(string:object.songData?.thumbnail ?? "")
         self.thumbnailImage.sd_setImage(with: thumbnailURL , placeholderImage:R.image.imagePlacholder())
         titleLabel.text = object.title ?? ""
-        categoryLabel.text = "\(object.categoryName ?? "") - \(object.publisher?.name ?? "")"
-        timeDurationlabel.text = object.duration ?? ""
-        if object.isLiked!{
-            heartBtn.setImage(R.image.ic_heartRed(), for: .normal)
-            
-        }else{
-            heartBtn.setImage(R.image.heart(), for: .normal)
-            
-        }
-        if index > 9{
-            self.countLabel.text = "\(index)"
-        }else{
-            self.countLabel.text = "0\(index)"
-            
-        }
-                   self.likeStatus = object.isLiked ?? false
-                   self.audioId = object.audioID ?? ""
+        self.priceLabel.text = "Price: $\(object.price?.rounded(toPlaces: 2) ?? 0)" + "\t" + "Date: \(object.timestamp ?? "")"
+        self.audioId = object.songData?.audio_id ?? ""
         self.trackID = object.id ?? 0
-        //           self.indexPath = index
-        self.songLink = object.audioLocation ?? ""
+        self.songLink = object.songData?.audio_location ?? ""
         
     }
-    func showMoreAlert(){
+    /*func showMoreAlert(){
         let alert = UIAlertController(title: NSLocalizedString("Song", comment: "Song"), message: "", preferredStyle: .actionSheet)
         
         let ReportSong = UIAlertAction(title: NSLocalizedString("Report This Song", comment: "Report This Song"), style: .default) { (action) in
-            self.reportSong(trackID: self.trackID ?? 0)
+            self.reportSong(trackID: self.trackID)
         }
         let CopySong = UIAlertAction(title: NSLocalizedString("Copy", comment: "Copy"), style: .default) { (action) in
-            UIPasteboard.general.string = self.songLink ?? ""
+            UIPasteboard.general.string = self.songLink
             if self.vc != nil{
                 self.vc?.view.makeToast(NSLocalizedString("Text copy to clipboad", comment: "Text copy to clipboad"))
             }
@@ -146,8 +115,8 @@ class PurchaseTableItem: UITableViewCell {
         }
     }
     
-    @IBAction func morePressed(_ sender: Any) {
-//        self.delegate!.showReportScreen(Status: true,IndexPath: indexPath ?? 0, songLink: self.songLink ?? "")
+    @IBAction func morePressed(_ sender: UIButton) {
+        //        self.delegate!.showReportScreen(Status: true,IndexPath: indexPath, songLink: self.songLink ?? "")
         self.showMoreAlert()
-    }
+    }*/
 }

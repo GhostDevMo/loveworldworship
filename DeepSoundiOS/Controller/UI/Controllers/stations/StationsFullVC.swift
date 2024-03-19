@@ -9,12 +9,12 @@
 import UIKit
 import Async
 import DeepSoundSDK
-class StationsFullVC: BaseVC {
+import EmptyDataSet_Swift
 
-    @IBOutlet weak var showStack: UIStackView!
-    @IBOutlet weak var searchImage: UIImageView!
+class StationsFullVC: BaseVC {
+    
+    @IBOutlet weak var searchTF: UITextField!
     @IBOutlet weak var tableview: UITableView!
-    private lazy var searchBar = UISearchBar(frame: .zero)
     
     var stationArray = [[String:Any]]()
     
@@ -22,17 +22,29 @@ class StationsFullVC: BaseVC {
         super.viewDidLoad()
         self.setupUI()
     }
-    private func setupUI(){
-        self.tableview.separatorStyle = .none
-        self.tableview.register(StationsTableItem.nib, forCellReuseIdentifier: StationsTableItem.identifier)
-        searchBar.placeholder = NSLocalizedString("Search...", comment: "Search...")
-            searchBar.delegate = self
-        navigationItem.titleView = searchBar
-        self.searchImage.isHidden = false
-        self.showStack.isHidden = false
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = true
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.tabBarController?.tabBar.isHidden = false
+    }
+    
+    private func setupUI() {
+        self.tableview.separatorStyle = .none
+        self.tableview.register(UINib(resource: R.nib.stationsTableItem), forCellReuseIdentifier: R.reuseIdentifier.stationsTableItem.identifier)
+        searchTF.placeholder = NSLocalizedString("Search...", comment: "Search...")
+        searchTF.delegate = self
+        self.tableview.emptyDataSetSource = self
+        self.tableview.emptyDataSetDelegate = self
+    }
+    
     private func fetchStations(keyWord:String){
         if Connectivity.isConnectedToNetwork(){
+            self.showProgressDialog(text: "Loading...")
             let accessToken = AppInstance.instance.accessToken ?? ""
             let userId = AppInstance.instance.userId ?? 0
             Async.background({
@@ -40,22 +52,13 @@ class StationsFullVC: BaseVC {
                     if success != nil{
                         Async.main({
                             self.dismissProgressDialog {
-                                
                                 self.stationArray = success ?? []
-                                if self.stationArray.isEmpty {
-                                     self.searchImage.isHidden = false
-                                    self.showStack.isHidden = false
-                                }else{
-                                    self.searchImage.isHidden = true
-                                   self.showStack.isHidden = true
-                                }
                                 self.tableview.reloadData()
                             }
                         })
                     }else if sessionError != nil{
                         Async.main({
                             self.dismissProgressDialog {
-                                
                                 self.view.makeToast((NSLocalizedString(sessionError ?? "", comment: "")))
                                 log.error("sessionError = \(sessionError ?? "")")
                             }
@@ -70,7 +73,7 @@ class StationsFullVC: BaseVC {
                         })
                     }
                 }
-
+                
             })
         }else{
             log.error("internetError = \(InterNetError)")
@@ -83,49 +86,56 @@ extension StationsFullVC:UITableViewDelegate,UITableViewDataSource{
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.stationArray.count ?? 0
+        return self.stationArray.count
     }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: StationsTableItem.identifier) as? StationsTableItem
-//        cell.delegate = self
-        cell?.vc = self
-        cell?.selectionStyle = .none
+        let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.stationsTableItem.identifier) as! StationsTableItem
+        // cell.delegate = self
+        cell.vc = self
+        cell.selectionStyle = .none
         let object = self.stationArray[indexPath.row]
-        cell?.bind(object)
-        return cell!
+        cell.bind(object)
+        return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 120.0
     }
 }
-extension StationsFullVC: UISearchBarDelegate{
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar)
-    {
-        //Show Cancel
-        searchBar.setShowsCancelButton(true, animated: true)
-        searchBar.tintColor = .white
-        
+extension StationsFullVC: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return true
     }
     
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar){
-        let keyword = searchBar.text ?? ""
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        let keyword = textField.text ?? ""
         self.fetchStations(keyWord: keyword)
-        searchBar.setShowsCancelButton(false, animated: true)
-        searchBar.resignFirstResponder()
     }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar)
-    {
-        searchBar.setShowsCancelButton(false, animated: true)
-        searchBar.text = String()
-        searchBar.resignFirstResponder()
+}
+
+extension StationsFullVC: addStationDelegate {
+    func addStation(object: [String : Any]) {
         
     }
 }
-extension StationsFullVC: addStationDelegate{
-    func addStation(object: [String : Any]) {
-       
+
+// MARK: - EmptyView Delegate Methods -
+extension StationsFullVC: EmptyDataSetSource, EmptyDataSetDelegate {
+    func title(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
+        return NSAttributedString(string: "Sad No Result!....", attributes: [NSAttributedString.Key.font : R.font.urbanistBold(size: 24) ?? UIFont.boldSystemFont(ofSize: 24)])
+    }
+    
+    func description(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
+        return NSAttributedString(string: "We cannot find keyword you are searching for maybe a little spelling mistake?", attributes: [NSAttributedString.Key.font : R.font.urbanistMedium(size: 14) ?? UIFont.systemFont(ofSize: 14)])
+    }
+    
+    func image(forEmptyDataSet scrollView: UIScrollView) -> UIImage? {
+        let width = UIScreen.main.bounds.width - 100
+        return R.image.emptyData()?.resizeImage(targetSize: CGSize(width: width, height: width))
     }
 }

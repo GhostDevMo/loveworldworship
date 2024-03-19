@@ -11,6 +11,8 @@ import Async
 import UIKit
 import DeepSoundSDK
 import AVKit
+import Contacts
+
 class AppInstance {
     
     // MARK: - Properties
@@ -26,116 +28,111 @@ class AppInstance {
     var currentIndex:Int? = 0
     var popupPlayPauseSong:Bool? = false
     var offlinePlayPauseSong:Bool? = false
-    var AlreadyPlayed:Bool? = false
+    var AlreadyPlayed:Bool = false
     var addCount:Int? = 0
-     var player:AVPlayer? = nil
-    var options =  [String:Any]()
-    var latestSong = [DiscoverModel.Song]()
+    var player:AVPlayer? = nil
+    var optionsData: OptionsData?
+    //var latestSong = [Song]()
+    var isLoginUser = false
+    var contacts = [FetchedContact]()
     
     // MARK: -
     var userProfile:ProfileModel.ProfileSuccessModel?
-    var likedArray = [LikedModel.Datum]()
-    var playlistArray:[PlaylistModel.Playlist]?
+    /*var likedArray = [Song]()
+    var playlistArray:[Playlist]?*/
     
-    func getUserSession()->Bool{
+    func getUserSession() -> Bool {
         log.verbose("getUserSession = \(UserDefaults.standard.getUserSessions(Key: Local.USER_SESSION.User_Session))")
         let localUserSessionData = UserDefaults.standard.getUserSessions(Key: Local.USER_SESSION.User_Session)
-        if localUserSessionData.isEmpty{
+        if localUserSessionData.isEmpty {
             return false
         }else {
-            self.userId = (localUserSessionData[Local.USER_SESSION.User_id]  as! Int)
+            self.userId = (localUserSessionData[Local.USER_SESSION.User_id] as! Int)
             self.accessToken = localUserSessionData[Local.USER_SESSION.Access_token] as? String ?? ""
             return true
         }
     }
     
-    func fetchUserProfile(){
-        
+    func fetchUserProfile(isNew: Bool = false, completion: @escaping (Bool) -> Void) {
         let status = AppInstance.instance.getUserSession()
-        
-        if status{
-            let userId = AppInstance.instance.userId ?? 0
-            let accessToken = AppInstance.instance.accessToken ?? ""
-            Async.background({
-                ProfileManger.instance.getProfile(UserId: userId, AccessToken: accessToken, completionBlock: { (success, sessionError, error) in
-                    if success != nil{
-                        Async.main({
-                           
-                            AppInstance.instance.userProfile = success ?? nil
-                            
-                        })
-                    }else if sessionError != nil{
-                        Async.main({
-                            
-                            log.error("sessionError = \(sessionError?.error ?? "")")
-                        })
-                        
-                    }else {
-                        Async.main({
-                            log.error("error = \(error?.localizedDescription ?? "")")
-                        })
+        if Connectivity.isConnectedToNetwork() {
+            if status {
+                let userId = AppInstance.instance.userId ?? 0
+                let accessToken = AppInstance.instance.accessToken ?? ""
+                let fetch = !isNew ? "all" : "stations,followers,following,albums,playlists,blocks.favourites,recently_played,liked,store,events"
+                Async.background {
+                    ProfileManger.instance.getProfile(UserId: userId, fetch: fetch, AccessToken: accessToken) { (success, sessionError, error) in
+                        if let success = success {
+                            Async.main {
+                                AppInstance.instance.userProfile = success
+                                completion(true)
+                                log.debug("success")
+                            }
+                        }else if sessionError != nil{
+                            Async.main {
+                                log.error("sessionErrror = \(sessionError?.error ?? "")")
+                                appDelegate.window?.rootViewController?.view.makeToast(sessionError?.error)
+                                completion(false)
+                            }
+                        }else {
+                            Async.main {
+                                log.error("error = \(error?.localizedDescription ?? "")")
+                                // appDelegate.window?.rootViewController?.view.makeToast(error?.localizedDescription)
+                                completion(false)
+                            }
+                        }
                     }
-                })
-            })
+                }
+            }else {
+                completion(false)
+            }
         }else {
             log.error(InterNetError)
         }
     }
-    func getOptions(completionBlock: @escaping (_ Success:[String:Any]?,_ sessionError:String?, Error?) ->()){
-            Async.background({
-                GetOptionsManager.instance.getOptions { success, sessionError, error in
-                    if success != nil{
-                        Async.main({
-                            let data = success?["data"] as? [String:Any]
-                            AppInstance.instance.options = data ?? [:]
-                            completionBlock(data,nil,nil)
-                        })
-                    }else if sessionError != nil{
-                        Async.main({
-                            
-                            log.error("sessionError = \(sessionError ?? "")")
-                            completionBlock(nil,sessionError ?? "",nil)
-                        })
-                        
-                    }else {
-                        Async.main({
-                            log.error("error = \(error?.localizedDescription ?? "")")
-                            completionBlock(nil,nil,error)
-                        })
+    
+    func getOptions(completionBlock: @escaping (_ Success: OptionsModel?, _ sessionError: String?, Error?) ->()){
+        Async.background({
+            GetOptionsManager.instance.getOptions { success, sessionError, error in
+                if success != nil{
+                    Async.main {
+                        AppInstance.instance.optionsData = success?.data
+                        completionBlock(success, nil, nil)
+                    }
+                } else if sessionError != nil {
+                    Async.main {
+                        log.error("sessionError = \(sessionError ?? "")")
+                        completionBlock(nil, sessionError ?? "", nil)
+                    }
+                } else {
+                    Async.main {
+                        log.error("error = \(error?.localizedDescription ?? "")")
+                        completionBlock(nil, nil, error)
                     }
                 }
-            })
+            }
+        })
     }
     
-    func fetchLiked(){
+    /*func fetchLiked(){
         if Connectivity.isConnectedToNetwork(){
-            self.likedArray.removeAll()
+//            self.likedArray.removeAll()
             let accessToken = AppInstance.instance.accessToken ?? ""
             let userId = AppInstance.instance.userId ?? 0
             Async.background({
-                
                 LikedManager.instance.getLiked(UserId: userId, AccessToken: accessToken, Limit: 10, Offset: 0, completionBlock: { (success, sessionError, error) in
                     if success != nil{
                         Async.main({
-   
-                                log.debug("userList = \(success?.data?.data ?? [])")
-                            AppInstance.instance.likedArray = success?.data?.data ?? []
-                            
+                            log.debug("userList = \(success?.data?.data ?? [])")
+//                            AppInstance.instance.likedArray = success?.data?.data ?? []
                         })
                     }else if sessionError != nil{
                         Async.main({
-                           
-                                
-                                
-                                log.error("sessionError = \(sessionError?.error ?? "")")
-                        
+                            log.error("sessionError = \(sessionError?.error ?? "")")
                         })
                     }else {
                         Async.main({
-                     
-                               
-                                log.error("error = \(error?.localizedDescription ?? "")")
-                            
+                            log.error("error = \(error?.localizedDescription ?? "")")
                         })
                     }
                 })
@@ -147,42 +144,58 @@ class AppInstance {
     }
     
     func fetchMyPlaylist(){
-       if Connectivity.isConnectedToNetwork(){
-
-           let accessToken = AppInstance.instance.accessToken ?? ""
-           let userId = AppInstance.instance.userId ?? 0
-           Async.background({
-               PlaylistManager.instance.getPlayList(UserId:userId,AccessToken: accessToken, Limit: 10, Offset: 0, completionBlock: { (success, sessionError, error) in
-                   if success != nil{
-                       Async.main({
-                          
-                               log.debug("userList = \(success?.status ?? 0)")
-                        
-                          
-                           AppInstance.instance.playlistArray = success?.playlists
-                              // self.tableView.reloadData()
-                               
-                           
-                           
-                       })
-                   }else if sessionError != nil{
-                       Async.main({
-                               log.error("sessionError = \(sessionError?.error ?? "")")
-                           
-                       })
-                   }else {
-                       Async.main({
-                               log.error("error = \(error?.localizedDescription ?? "")")
-                
-                       })
-                   }
-               })
-           })
-       }else{
-           log.error("internetError = \(InterNetError)")
-
-       }
-   }
+        if Connectivity.isConnectedToNetwork(){
+            let accessToken = AppInstance.instance.accessToken ?? ""
+            let userId = AppInstance.instance.userId ?? 0
+            Async.background({
+                PlaylistManager.instance.getPlayList(UserId:userId,AccessToken: accessToken, Limit: 10, Offset: 0, completionBlock: { (success, sessionError, error) in
+                    if success != nil{
+                        Async.main({
+                            log.debug("userList = \(success?.status ?? 0)")
+//                            AppInstance.instance.playlistArray = success?.playlists
+                            // self.tableView.reloadData()
+                        })
+                    }else if sessionError != nil{
+                        Async.main({
+                            log.error("sessionError = \(sessionError?.error ?? "")")
+                        })
+                    }else {
+                        Async.main({
+                            log.error("error = \(error?.localizedDescription ?? "")")
+                        })
+                    }
+                })
+            })
+        }else{
+            log.error("internetError = \(InterNetError)")
+        }
+    }*/
+    
+    func fetchContacts() {
+        print("Attempting to fetch contacts")
+        let store = CNContactStore()
+        store.requestAccess(for: .contacts) { (granted, error) in
+            if let error = error {
+                print("failed to request access", error)
+                return
+            }
+            if granted {
+                print("access granted")
+                let keys = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey]
+                let request = CNContactFetchRequest(keysToFetch: keys as [CNKeyDescriptor])
+                do {
+                    try store.enumerateContacts(with: request, usingBlock: { (contact, stopPointer) in
+                        print(contact.givenName)
+                        self.contacts.append(FetchedContact(firstName: contact.givenName, lastName: contact.familyName, telephone: contact.phoneNumbers.first?.value.stringValue ?? ""))
+                    })
+                } catch let error {
+                    print("Failed to enumerate contact", error)
+                }
+            } else {
+                print("access denied")
+            }
+        }
+    }
     
 }
 

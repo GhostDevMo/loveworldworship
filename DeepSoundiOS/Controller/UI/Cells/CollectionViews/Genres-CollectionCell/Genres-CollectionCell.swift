@@ -8,29 +8,34 @@
 
 import UIKit
 
+protocol GenresCellDelegate {
+    func handleGenresTap(indexPath: IndexPath)
+}
+
 class Genres_CollectionCell: UICollectionViewCell {
     
+    @IBOutlet weak var bgView: UIView!
+    @IBOutlet weak var shadowView: UIView! {
+        didSet {
+            self.shadowView.addShadow(offset: CGSize(width: 0, height: 1))
+        }
+    }
     @IBOutlet weak var tickImage: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var backgroundImage: UIImageView!
+    @IBOutlet weak var backgroundImageTrailingConst: NSLayoutConstraint!
+    @IBOutlet weak var backgroundImageBottomConst: NSLayoutConstraint!
     
-    private var status:Bool? = false
-    var genresIdArray = [GenresModel.Datum]()
-    var indexPath:Int? = 0
-    var delegate: didSetInterestGenres?
+    var indexPath = IndexPath(row: 0, section: 0)
+    var delegate: GenresCellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
-    
-
-    @IBAction func genresPressed(_ sender: Any) {
-        self.status = !status!
-        if status!{
-            self.delegate?.didSetInterest(Label:self.nameLabel , Image: self.tickImage, status: status ?? false,idsArray:genresIdArray,Index:indexPath!)
-        }else{
-            self.delegate?.didSetInterest(Label:self.nameLabel , Image: self.tickImage, status: status ?? false,idsArray:genresIdArray,Index:indexPath!)
-        }
+        
+    @IBAction func genresPressed(_ sender: UIButton) {
+        self.delegate?.handleGenresTap(indexPath: self.indexPath)
     }
+    
 }

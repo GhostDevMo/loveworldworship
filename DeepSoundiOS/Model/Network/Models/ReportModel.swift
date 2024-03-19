@@ -7,7 +7,7 @@
 //
 
 import Foundation
-class ReportModel:BaseModel{
+class ReportModel: BaseModel {
     struct ReportSuccessModel: Codable {
         let status: Int?
     }

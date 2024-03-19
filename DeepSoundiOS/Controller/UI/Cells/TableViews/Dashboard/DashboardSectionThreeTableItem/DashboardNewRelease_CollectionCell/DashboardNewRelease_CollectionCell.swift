@@ -9,24 +9,28 @@
 import UIKit
 
 class DashboardNewRelease_CollectionCell: UICollectionViewCell {
-
-    @IBOutlet weak var MusicCountLabel: UILabel!
+    
+    //    @IBOutlet weak var MusicCountLabel: UILabel!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var thumbnailimage: UIImageView!
+    @IBOutlet weak var backShadowView: UIView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
+        self.backShadowView.addShadow()
+        
     }
-    func bind(_ object:DiscoverModel.Song){
+    
+    func bind(_ object: Song) {
         self.titleLabel.text = object.title?.htmlAttributedString ?? ""
-        self.MusicCountLabel.text = "\(object.categoryName ?? "") \(NSLocalizedString("Music", comment: "Music"))"
-        let url = URL.init(string:object.thumbnail ?? "")
+        let url = URL.init(string: object.thumbnail ?? "")
         self.thumbnailimage.sd_setImage(with: url , placeholderImage:R.image.imagePlacholder())
     }
-    func notLoggedBind(_ object:DiscoverModel.Song){
-           self.titleLabel.text = object.title?.htmlAttributedString ?? ""
-           self.MusicCountLabel.text = "\(object.categoryName ?? "") \(NSLocalizedString("Music", comment: "Music"))"
-           let url = URL.init(string:object.thumbnail ?? "")
-           self.thumbnailimage.sd_setImage(with: url , placeholderImage:R.image.imagePlacholder())
-       }
-
+    
+    
+    func bindPlaylist(_ object: Playlist) {
+        self.titleLabel.text = object.name
+        let url = URL.init(string: object.thumbnail_ready ?? "")
+        self.thumbnailimage.sd_setImage(with: url , placeholderImage:R.image.imagePlacholder())
+    }
 }

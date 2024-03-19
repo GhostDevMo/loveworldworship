@@ -11,23 +11,8 @@
 		</dict>
 		<key>OneSignalNotificationServiceExtension.xcscheme_^#shared#^_</key>
 		<dict>
-			<key>isShown</key>
-			<true/>
 			<key>orderHint</key>
-			<integer>58</integer>
-		</dict>
-	</dict>
-	<key>SuppressBuildableAutocreation</key>
-	<dict>
-		<key>523C360822C3B4270036FFD5</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>52B474F422613719006B881F</key>
-		<dict>
-			<key>primary</key>
-			<true/>
+			<integer>19</integer>
 		</dict>
 	</dict>
 </dict>

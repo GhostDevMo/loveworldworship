@@ -9,6 +9,11 @@
 import UIKit
 
 class ExpandableReviewTableItem: UITableViewCell {
+    
+    @IBOutlet weak var lblName: UILabel!
+    @IBOutlet weak var lblRating: UILabel!
+    @IBOutlet weak var lblDescription: UILabel!
+    @IBOutlet weak var thumbailImage: UIImageView!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -20,4 +25,11 @@ class ExpandableReviewTableItem: UITableViewCell {
 
     }
     
+    func bind(_ object: ReviewModel) {
+        self.lblName.text = object.user_data.name
+        self.lblRating.text = "\(object.star)"
+        self.lblDescription.text =  object.review
+        let url = URL.init(string:object.user_data.avatar ?? "")
+        self.thumbailImage.sd_setImage(with: url, placeholderImage: R.image.imagePlacholder())
+    }
 }

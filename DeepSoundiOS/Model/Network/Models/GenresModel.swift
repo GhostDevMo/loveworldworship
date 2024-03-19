@@ -7,7 +7,7 @@
 //
 
 import Foundation
-class GenresModel:BaseModel{
+class GenresModel: BaseModel {
     
     struct GenresSuccessModel: Codable {
         let status: Int?
@@ -31,9 +31,10 @@ class GenresModel:BaseModel{
             case time
         }
     }
-
 }
-class UpdateInterestModel:BaseModel{
+
+
+class UpdateInterestModel: BaseModel {
     
     struct UpdateInterestSuccessModel: Codable {
         let status: Int?

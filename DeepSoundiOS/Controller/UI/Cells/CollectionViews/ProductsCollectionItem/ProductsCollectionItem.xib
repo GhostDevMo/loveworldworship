@@ -1,144 +1,196 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="Urbanist_SemiBold.ttf">
+            <string>Urbanist-SemiBold</string>
+        </array>
+        <array key="urbanist_medium.ttf">
+            <string>Urbanist-Medium</string>
+        </array>
+    </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="" id="gTV-IL-0wX" customClass="ProductsCollectionItem" customModule="DeepSoundiOS" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="502" height="393"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ProductsCollectionItem" id="gTV-IL-0wX" customClass="ProductsCollectionItem" customModule="DeepSoundiOS" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="420" height="416"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                <rect key="frame" x="0.0" y="0.0" width="502" height="393"/>
+                <rect key="frame" x="0.0" y="0.0" width="420" height="416"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VuK-iY-eX2">
-                        <rect key="frame" x="0.0" y="0.0" width="502" height="393"/>
+                        <rect key="frame" x="15" y="2" width="390" height="412"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Icon-App-83.5x83.5" translatesAutoresizingMaskIntoConstraints="NO" id="eCR-1X-jBc">
-                                <rect key="frame" x="0.0" y="0.0" width="502" height="200"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="200" id="Kf5-gA-hXN"/>
-                                </constraints>
+                                <rect key="frame" x="0.0" y="0.0" width="390" height="267"/>
                                 <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadiusV">
-                                        <real key="value" value="30"/>
-                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
                                 </userDefinedRuntimeAttributes>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ggN-3L-yQP">
-                                <rect key="frame" x="0.0" y="168" width="502" height="225"/>
+                                <rect key="frame" x="0.0" y="267" width="390" height="145"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HzM-aM-33T">
-                                        <rect key="frame" x="20" y="5" width="462" height="23"/>
-                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="19"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$ 123" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GGQ-ZP-5wB">
-                                        <rect key="frame" x="52" y="33" width="398" height="20.5"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j7F-Ue-DdR">
-                                        <rect key="frame" x="50" y="69.5" width="402" height="40"/>
-                                        <color key="backgroundColor" red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="1xo-qW-csR">
+                                        <rect key="frame" x="25" y="15" width="340" height="115"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HzM-aM-33T">
+                                                <rect key="frame" x="0.0" y="0.0" width="340" height="25"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="25" id="Icx-9b-7le"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="Urbanist-SemiBold" family="Urbanist" pointSize="20"/>
+                                                <color key="textColor" name="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$ 123" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GGQ-ZP-5wB">
+                                                <rect key="frame" x="0.0" y="40" width="340" height="20"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="20" id="g9Q-dA-mWX"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="Urbanist-Medium" family="Urbanist" pointSize="16"/>
+                                                <color key="textColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <nil key="highlightedColor"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j7F-Ue-DdR">
+                                                <rect key="frame" x="0.0" y="75" width="340" height="40"/>
+                                                <color key="backgroundColor" red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="40" id="nzv-xs-AsP"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="Urbanist-Medium" family="Urbanist" pointSize="16"/>
+                                                <color key="tintColor" systemColor="systemOrangeColor"/>
+                                                <state key="normal" title="ADD TO CART">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadiusV">
+                                                        <real key="value" value="20"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="addToCartPressed:" destination="gTV-IL-0wX" eventType="touchUpInside" id="BR1-m0-zPU"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="40" id="nzv-xs-AsP"/>
+                                            <constraint firstAttribute="trailing" secondItem="GGQ-ZP-5wB" secondAttribute="trailing" id="G5B-N4-5tI"/>
+                                            <constraint firstItem="GGQ-ZP-5wB" firstAttribute="leading" secondItem="1xo-qW-csR" secondAttribute="leading" id="WRf-tc-k45"/>
+                                            <constraint firstAttribute="trailing" secondItem="j7F-Ue-DdR" secondAttribute="trailing" id="ikb-0o-h0T"/>
+                                            <constraint firstItem="j7F-Ue-DdR" firstAttribute="leading" secondItem="1xo-qW-csR" secondAttribute="leading" id="pjl-21-pKN"/>
+                                            <constraint firstAttribute="trailing" secondItem="HzM-aM-33T" secondAttribute="trailing" id="qEO-CX-ZG6"/>
+                                            <constraint firstItem="HzM-aM-33T" firstAttribute="leading" secondItem="1xo-qW-csR" secondAttribute="leading" id="tQf-B3-iJn"/>
                                         </constraints>
-                                        <color key="tintColor" systemColor="systemOrangeColor"/>
-                                        <state key="normal" title="ADD TO CART">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
                                         <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadiusV">
-                                                <real key="value" value="10"/>
-                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
                                         </userDefinedRuntimeAttributes>
-                                        <connections>
-                                            <action selector="addToCartPressed:" destination="gTV-IL-0wX" eventType="touchUpInside" id="FYn-sD-YnR"/>
-                                        </connections>
-                                    </button>
+                                    </stackView>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="j7F-Ue-DdR" firstAttribute="width" secondItem="ggN-3L-yQP" secondAttribute="width" multiplier="0.8" id="4cM-sn-hCA"/>
-                                    <constraint firstAttribute="trailing" secondItem="HzM-aM-33T" secondAttribute="trailing" constant="20" id="8KF-Hm-0aa"/>
-                                    <constraint firstItem="GGQ-ZP-5wB" firstAttribute="top" secondItem="HzM-aM-33T" secondAttribute="bottom" constant="5" id="9tq-u0-KYX"/>
-                                    <constraint firstItem="j7F-Ue-DdR" firstAttribute="top" secondItem="GGQ-ZP-5wB" secondAttribute="bottom" constant="16" id="GB9-hq-jGj"/>
-                                    <constraint firstItem="GGQ-ZP-5wB" firstAttribute="leading" secondItem="ggN-3L-yQP" secondAttribute="leading" constant="52" id="J9J-oi-rhs"/>
-                                    <constraint firstItem="HzM-aM-33T" firstAttribute="top" secondItem="ggN-3L-yQP" secondAttribute="top" constant="5" id="Mcg-4k-G9F"/>
-                                    <constraint firstAttribute="trailing" secondItem="GGQ-ZP-5wB" secondAttribute="trailing" constant="52" id="VNY-0h-bwG"/>
-                                    <constraint firstItem="j7F-Ue-DdR" firstAttribute="centerX" secondItem="GGQ-ZP-5wB" secondAttribute="centerX" id="hxy-j3-EWc"/>
-                                    <constraint firstItem="HzM-aM-33T" firstAttribute="leading" secondItem="ggN-3L-yQP" secondAttribute="leading" constant="20" id="lG7-ig-QH0"/>
+                                    <constraint firstAttribute="bottom" secondItem="1xo-qW-csR" secondAttribute="bottom" constant="15" id="Cw6-jB-uHw"/>
+                                    <constraint firstItem="1xo-qW-csR" firstAttribute="leading" secondItem="ggN-3L-yQP" secondAttribute="leading" constant="25" id="OSd-s2-CYp"/>
+                                    <constraint firstAttribute="trailing" secondItem="1xo-qW-csR" secondAttribute="trailing" constant="25" id="SgV-PH-nE1"/>
+                                    <constraint firstItem="1xo-qW-csR" firstAttribute="top" secondItem="ggN-3L-yQP" secondAttribute="top" constant="15" id="aE4-8d-ynE"/>
                                 </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                                </userDefinedRuntimeAttributes>
                             </view>
                             <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2Ev-JP-wxf">
-                                <rect key="frame" x="16" y="15" width="80" height="20"/>
+                                <rect key="frame" x="12" y="12" width="80.5" height="31"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Electronics" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MqT-xe-30I">
-                                        <rect key="frame" x="15.5" y="4.5" width="49" height="11"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="9"/>
-                                        <color key="textColor" systemColor="systemOrangeColor"/>
+                                        <rect key="frame" x="7" y="7" width="66.5" height="17"/>
+                                        <fontDescription key="fontDescription" name="Urbanist-Medium" family="Urbanist" pointSize="14"/>
+                                        <color key="textColor" name="mainColor"/>
                                         <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="isHiddenWhenSkeletonIsActive" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
                                     </label>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="labelColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="80" id="Fzn-bj-s5K"/>
+                                    <constraint firstItem="MqT-xe-30I" firstAttribute="top" secondItem="2Ev-JP-wxf" secondAttribute="top" constant="7" id="KM2-80-fAJ"/>
+                                    <constraint firstAttribute="trailing" secondItem="MqT-xe-30I" secondAttribute="trailing" constant="7" id="LEv-a2-Zz2"/>
+                                    <constraint firstItem="MqT-xe-30I" firstAttribute="leading" secondItem="2Ev-JP-wxf" secondAttribute="leading" constant="7" id="Tgm-sP-DdK"/>
                                     <constraint firstItem="MqT-xe-30I" firstAttribute="centerX" secondItem="2Ev-JP-wxf" secondAttribute="centerX" id="XTe-Dp-kGz"/>
                                     <constraint firstItem="MqT-xe-30I" firstAttribute="centerY" secondItem="2Ev-JP-wxf" secondAttribute="centerY" id="amM-PU-4Tf"/>
-                                    <constraint firstAttribute="height" constant="20" id="p7L-NB-8dY"/>
+                                    <constraint firstAttribute="bottom" secondItem="MqT-xe-30I" secondAttribute="bottom" constant="7" id="tdi-MM-SLa"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="cornerRadiusV">
-                                        <real key="value" value="10"/>
+                                        <real key="value" value="15"/>
                                     </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="ggN-3L-yQP" secondAttribute="bottom" id="1Ov-cY-pdq"/>
                             <constraint firstItem="eCR-1X-jBc" firstAttribute="leading" secondItem="VuK-iY-eX2" secondAttribute="leading" id="Ld1-bY-6wE"/>
-                            <constraint firstItem="2Ev-JP-wxf" firstAttribute="leading" secondItem="VuK-iY-eX2" secondAttribute="leading" constant="16" id="Rya-Br-W6E"/>
-                            <constraint firstItem="2Ev-JP-wxf" firstAttribute="top" secondItem="VuK-iY-eX2" secondAttribute="top" constant="15" id="SNT-ej-6jZ"/>
+                            <constraint firstAttribute="bottom" secondItem="ggN-3L-yQP" secondAttribute="bottom" id="QxS-rg-7VQ"/>
+                            <constraint firstItem="2Ev-JP-wxf" firstAttribute="leading" secondItem="VuK-iY-eX2" secondAttribute="leading" constant="12" id="Rya-Br-W6E"/>
+                            <constraint firstItem="2Ev-JP-wxf" firstAttribute="top" secondItem="VuK-iY-eX2" secondAttribute="top" constant="12" id="SNT-ej-6jZ"/>
                             <constraint firstAttribute="trailing" secondItem="eCR-1X-jBc" secondAttribute="trailing" id="Xjs-XD-tGU"/>
                             <constraint firstItem="eCR-1X-jBc" firstAttribute="top" secondItem="VuK-iY-eX2" secondAttribute="top" id="a1D-Q2-SOl"/>
-                            <constraint firstItem="ggN-3L-yQP" firstAttribute="top" secondItem="eCR-1X-jBc" secondAttribute="bottom" constant="-32" id="bxe-Zy-SEG"/>
+                            <constraint firstItem="ggN-3L-yQP" firstAttribute="top" secondItem="eCR-1X-jBc" secondAttribute="bottom" id="bxe-Zy-SEG"/>
                             <constraint firstItem="ggN-3L-yQP" firstAttribute="leading" secondItem="VuK-iY-eX2" secondAttribute="leading" id="jEP-5a-CZ5"/>
                             <constraint firstAttribute="trailing" secondItem="ggN-3L-yQP" secondAttribute="trailing" id="yFg-x0-3eu"/>
                         </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadiusV">
+                                <real key="value" value="12"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
                     </view>
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <constraints>
-                <constraint firstItem="VuK-iY-eX2" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="1jt-4o-MDb"/>
-                <constraint firstItem="VuK-iY-eX2" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="6Sl-7r-V6a"/>
-                <constraint firstAttribute="bottom" secondItem="VuK-iY-eX2" secondAttribute="bottom" id="gSN-RC-XnZ"/>
-                <constraint firstAttribute="trailing" secondItem="VuK-iY-eX2" secondAttribute="trailing" id="xSo-Rc-cfh"/>
+                <constraint firstItem="VuK-iY-eX2" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="15" id="1jt-4o-MDb"/>
+                <constraint firstItem="VuK-iY-eX2" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="2" id="6Sl-7r-V6a"/>
+                <constraint firstAttribute="bottom" secondItem="VuK-iY-eX2" secondAttribute="bottom" constant="2" id="gSN-RC-XnZ"/>
+                <constraint firstAttribute="trailing" secondItem="VuK-iY-eX2" secondAttribute="trailing" constant="15" id="xSo-Rc-cfh"/>
             </constraints>
-            <size key="customSize" width="502" height="393"/>
+            <size key="customSize" width="502" height="559"/>
             <connections>
                 <outlet property="addToCartButton" destination="j7F-Ue-DdR" id="4Jn-Lp-p2h"/>
                 <outlet property="image" destination="eCR-1X-jBc" id="YNb-Oa-kTK"/>
+                <outlet property="mainView" destination="VuK-iY-eX2" id="TEb-PV-brN"/>
                 <outlet property="name" destination="HzM-aM-33T" id="qCp-mb-QDF"/>
                 <outlet property="price" destination="GGQ-ZP-5wB" id="e6z-Ks-LBJ"/>
                 <outlet property="type" destination="MqT-xe-30I" id="O95-oG-eHZ"/>
             </connections>
-            <point key="canvasLocation" x="260.86956521739131" y="142.29910714285714"/>
+            <point key="canvasLocation" x="260.86956521739131" y="197.54464285714286"/>
         </collectionViewCell>
     </objects>
     <resources>
         <image name="Icon-App-83.5x83.5" width="83.5" height="83.5"/>
+        <namedColor name="mainColor">
+            <color red="1" green="0.59607843137254901" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColor">
+            <color red="0.12941176470588237" green="0.12941176470588237" blue="0.12941176470588237" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <systemColor name="labelColor">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

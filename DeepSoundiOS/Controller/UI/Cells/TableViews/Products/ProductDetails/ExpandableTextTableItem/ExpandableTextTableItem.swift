@@ -19,8 +19,8 @@ class ExpandableTextTableItem: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
     }
-    func bind(_ object:String){
-        self.titleLabel.text  = object
+    func bind(_ object:String) {
+        self.titleLabel.text  = object.htmlAttributedString
     }
     
 }

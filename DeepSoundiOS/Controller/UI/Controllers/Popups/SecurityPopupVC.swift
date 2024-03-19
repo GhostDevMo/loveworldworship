@@ -17,20 +17,20 @@ class SecurityPopupVC: BaseVC {
     
     var errorText:String? = ""
     var titleText:String? = ""
-    var status:Bool? = false
+    var status:Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupUI()
-        SwiftEventBus.onMainThread(self, name:   EventBusConstants.EventBusConstantsUtils.EVENT_DISMISS_POPOVER) { result in
+        SwiftEventBus.onMainThread(self, name: EventBusConstants.EventBusConstantsUtils.EVENT_DISMISS_POPOVER) { result in
             log.verbose("To dismiss the popover")
-            AppInstance.instance.player = nil
+            
             self.tabBarController?.dismissPopupBar(animated: true, completion: nil)
         }
-        SwiftEventBus.onMainThread(self, name:   "PlayerReload") { result in
+        SwiftEventBus.onMainThread(self, name: "PlayerReload") { result in
             let stringValue = result?.object as? String
             self.view.makeToast(stringValue)
-            log.verbose(stringValue)
+            log.verbose(stringValue ?? "")
         }
         
     }
@@ -39,8 +39,8 @@ class SecurityPopupVC: BaseVC {
         self.titleLabel.text = titleText ?? (NSLocalizedString("Security", comment: ""))
         self.errorTextLabel.text = errorText ?? "N/A"
     }
-    @IBAction func okPressed(_ sender: Any) {
-        if status!{
+    @IBAction func okPressed(_ sender: UIButton) {
+        if status {
             let vc = R.storyboard.login.loginVC()
             self.appDelegate.window?.rootViewController = vc
         }else{

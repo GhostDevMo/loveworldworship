@@ -205,12 +205,12 @@ class CreateEventTableItem: UITableViewCell,UITextFieldDelegate {
         self.vc?.view.endEditing(true)
      }
     
-    @IBAction func timezonePressed(_ sender: Any) {
+    @IBAction func timezonePressed(_ sender: UIButton) {
         let vc = R.storyboard.popups.selectTimeZoneVC()
         vc?.delegate = self
         self.vc?.present(vc!, animated: true, completion: nil)
     }
-    @IBAction func sellTicketPressed(_ sender: Any) {
+    @IBAction func sellTicketPressed(_ sender: UIButton) {
         let alert = UIAlertController(title: "Sell Tickets", message: "", preferredStyle: .actionSheet)
         let yes = UIAlertAction(title: "Yes", style: .default) { action in
             log.verbose("YEs")
@@ -231,7 +231,7 @@ class CreateEventTableItem: UITableViewCell,UITextFieldDelegate {
         self.vc?.present(alert, animated: true, completion: nil)
         
     }
-    @IBAction func locationPressed(_ sender: Any) {
+    @IBAction func locationPressed(_ sender: UIButton) {
         let alert = UIAlertController(title: "Location", message: "", preferredStyle: .actionSheet)
         let yes = UIAlertAction(title: "Online", style: .default) { action in
             log.verbose("YEs")

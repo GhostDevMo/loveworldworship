@@ -7,7 +7,8 @@
 //
 
 import Foundation
-class UpgradeMemberShipModel:BaseModel{
+
+class UpgradeMemberShipModel: BaseModel {
     struct UpgradeMemberShipSuccessModel: Codable {
         let status: Int?
         let data: String?

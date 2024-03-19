@@ -7,7 +7,7 @@
 //
 
 import Foundation
-class TwoFactorUpdateModel:BaseModel{
+class TwoFactorUpdateModel: BaseModel {
     struct TwoFactorUpdateSuccessModel: Codable {
          var status: Int?
          var data: String?

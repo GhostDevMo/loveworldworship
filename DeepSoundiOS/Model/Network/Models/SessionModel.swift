@@ -7,7 +7,7 @@
 //
 
 import Foundation
-class SessionModel:BaseModel{
+class SessionModel:BaseModel {
     struct SessionSuccessModel: Codable {
         var status: Int?
         var data: [Datum]?
@@ -46,7 +46,7 @@ class SessionModel:BaseModel{
     }
 
 }
-class DeleteSessionModel:BaseModel{
+class DeleteSessionModel: BaseModel {
     struct DeleteSessionSuccessModel: Codable {
         var status: Int?
         var data: String?

@@ -45,6 +45,10 @@
 		39C81A321B642DDD00D3B645 /* LNPopupItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 394A85B71B6304F5004FFC61 /* LNPopupItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		39E7A604200B5157007AF3AD /* _LNPopupBase64Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 39E7A602200B5157007AF3AD /* _LNPopupBase64Utils.h */; };
 		39E7A605200B5157007AF3AD /* _LNPopupBase64Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 39E7A603200B5157007AF3AD /* _LNPopupBase64Utils.m */; };
+		88A4C4CF2A57EEA100E3B84D /* urbanist_bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88A4C4B92A57EEA100E3B84D /* urbanist_bold.ttf */; };
+		88A4C4D22A57EEA100E3B84D /* urbanist_medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88A4C4BC2A57EEA100E3B84D /* urbanist_medium.ttf */; };
+		88A4C4D32A57EEA100E3B84D /* Urbanist_SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88A4C4BD2A57EEA100E3B84D /* Urbanist_SemiBold.ttf */; };
+		88A4C4D82A57EEA100E3B84D /* urbanist_regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88A4C4C22A57EEA100E3B84D /* urbanist_regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -90,6 +94,10 @@
 		39E7A602200B5157007AF3AD /* _LNPopupBase64Utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _LNPopupBase64Utils.h; sourceTree = "<group>"; };
 		39E7A603200B5157007AF3AD /* _LNPopupBase64Utils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _LNPopupBase64Utils.m; sourceTree = "<group>"; };
 		46ECC2AE1BF31025005CE96C /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
+		88A4C4B92A57EEA100E3B84D /* urbanist_bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = urbanist_bold.ttf; sourceTree = "<group>"; };
+		88A4C4BC2A57EEA100E3B84D /* urbanist_medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = urbanist_medium.ttf; sourceTree = "<group>"; };
+		88A4C4BD2A57EEA100E3B84D /* Urbanist_SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Urbanist_SemiBold.ttf; sourceTree = "<group>"; };
+		88A4C4C22A57EEA100E3B84D /* urbanist_regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = urbanist_regular.ttf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -178,10 +186,22 @@
 				39599BA81E02CD65008EE386 /* LNPopupCustomBarViewController.h */,
 				394A85B71B6304F5004FFC61 /* LNPopupItem.h */,
 				3947E19F1B61CD1F0001178B /* UIViewController+LNPopupSupport.h */,
+				88A4C4AD2A57EEA100E3B84D /* Fonts */,
 				390B30481B6AC0D4009ACD03 /* LNPopupControllerAssets.xcassets */,
 				46ECC2AE1BF31025005CE96C /* Info.plist */,
 			);
 			path = LNPopupController;
+			sourceTree = "<group>";
+		};
+		88A4C4AD2A57EEA100E3B84D /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				88A4C4B92A57EEA100E3B84D /* urbanist_bold.ttf */,
+				88A4C4BC2A57EEA100E3B84D /* urbanist_medium.ttf */,
+				88A4C4C22A57EEA100E3B84D /* urbanist_regular.ttf */,
+				88A4C4BD2A57EEA100E3B84D /* Urbanist_SemiBold.ttf */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -274,7 +294,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				88A4C4CF2A57EEA100E3B84D /* urbanist_bold.ttf in Resources */,
+				88A4C4D22A57EEA100E3B84D /* urbanist_medium.ttf in Resources */,
 				390B30491B6AC0D4009ACD03 /* LNPopupControllerAssets.xcassets in Resources */,
+				88A4C4D32A57EEA100E3B84D /* Urbanist_SemiBold.ttf in Resources */,
+				88A4C4D82A57EEA100E3B84D /* urbanist_regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -438,7 +462,6 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.LeoNatan.LNPopupController;
@@ -465,7 +488,6 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.LeoNatan.LNPopupController;
 				PRODUCT_NAME = LNPopupController;

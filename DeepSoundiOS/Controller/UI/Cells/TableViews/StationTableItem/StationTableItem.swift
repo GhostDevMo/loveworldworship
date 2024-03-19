@@ -21,10 +21,10 @@ class StationTableItem: UITableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
-    func bind(_ object:ProfileModel.Latestsong){
+    func bind(_ object: Song){
         let thumbnailURL = URL.init(string:object.thumbnail ?? "")
         self.thumbnailImage.sd_setImage(with: thumbnailURL , placeholderImage:R.image.imagePlacholder())
-        self.categoryLabel.text = object.categoryName ?? ""
+        self.categoryLabel.text = object.category_name ?? ""
         self.titleLabel.text  = object.title ?? ""
     }
     

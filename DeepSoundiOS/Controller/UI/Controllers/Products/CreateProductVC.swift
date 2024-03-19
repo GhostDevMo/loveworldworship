@@ -12,68 +12,186 @@ import DeepSoundSDK
 
 class CreateProductVC: BaseVC {
     
-    @IBOutlet weak var table: UITableView!
-    var productDetails = [String:Any]()
+    @IBOutlet weak var categoryTF: UITextField!
+    @IBOutlet weak var addImagesLabel: UILabel!
+    @IBOutlet weak var relatedToSongTF: UITextField!
+    @IBOutlet weak var collectionview: UICollectionView!
+    @IBOutlet weak var titleTextField: UITextField!
+    @IBOutlet weak var totalItemsUnitTextFiled: UITextField!
+    @IBOutlet weak var priceTextField: UITextField!
+    @IBOutlet weak var tagsTextField: UITextField!
+    @IBOutlet weak var descriptionTextView: UITextView!
+    
+    var productDetails: Product?
+    private let imagePickerController = UIImagePickerController()
+    var category:Int?
+    var related:Int?
+    var images = [UIImage]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.initializeConfigure()
+        self.bind(self.productDetails)
+    }
     
-        table.delegate = self
-        table.dataSource = self
-        table.register(UINib(nibName: "CreateProductTableItem", bundle: nil), forCellReuseIdentifier: "CreateProductTableItem")
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.tabBarController?.tabBar.isHidden = false
+    }
+    
+    @IBAction func relatedToSongPressed(_ sender: UIButton) {
+        let alert = UIAlertController(title: "Related to song", message: "", preferredStyle: .actionSheet)
+        for item in AppInstance.instance.userProfile?.data?.latestsongs?.first ?? []{
+            print("value = \(item.title ?? "")")
+            let button = UIAlertAction(title: item.title ?? "", style: .default) { action in
+                print("value = \(item.title ?? "")")
+                self.relatedToSongTF.text = item.title
+                self.related = item.id ?? 0
+            }
+            alert.addAction(button)
+        }
+        let close = UIAlertAction(title: "Close", style: .destructive, handler: nil)
+        alert.addAction(close)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    @IBAction func categoryPressed(_ sender: UIButton) {
+        let category = AppInstance.instance.optionsData?.products_categories
+        let alert = UIAlertController(title: "Category", message: "", preferredStyle: .actionSheet)
+        for (key,value) in category?.dictionaryValue ?? [:] {
+            let button = UIAlertAction(title: value, style: .default) { action in
+                print("value = \(value)")
+                print("key = \(key )")
+                self.categoryTF.text = value
+                self.category = Int(key)
+            }
+            alert.addAction(button)
+            
+        }
+        let close = UIAlertAction(title: "Close", style: .destructive, handler: nil)
+        alert.addAction(close)
+        self.present(alert, animated: true, completion: nil)
         
     }
     
-    @IBAction func savePressed(_ sender: Any) {
-        if productDetails.isEmpty{
-            let cell = self.table.cellForRow(at: IndexPath(row: 0, section: 0)) as? CreateProductTableItem
-            if cell?.titleTextField.text?.isEmpty ?? false{
+    @IBAction func savePressed(_ sender: UIButton) {
+        if productDetails != nil {
+            if self.titleTextField.text?.isEmpty ?? false{
                 self.view.makeToast("Please enter title")
-            }else if cell?.descriptionTextView.text?.isEmpty ?? false{
+            }else if self.descriptionTextView.text?.isEmpty ?? false{
                 self.view.makeToast("Please enter Description")
-            }else if cell?.tagsTextField.text?.isEmpty ?? false{
+            }else if self.tagsTextField.text?.isEmpty ?? false{
                 self.view.makeToast("Please enter Tags")
-            }else if cell?.priceTextField.text?.isEmpty ?? false{
+            }else if self.priceTextField.text?.isEmpty ?? false{
                 self.view.makeToast("Please enter price")
-            }else if cell?.totalItemsUnitTextFiled.text?.isEmpty ?? false{
+            }else if self.totalItemsUnitTextFiled.text?.isEmpty ?? false{
                 self.view.makeToast("Please enter total no of units")
-            }else if cell?.totalItemsUnitTextFiled.text?.isEmpty ?? false{
+            }else if self.totalItemsUnitTextFiled.text?.isEmpty ?? false{
                 self.view.makeToast("Please enter total no of units")
-            }else if cell?.related == nil{
+            }else if self.related == nil{
                 self.view.makeToast("Please select related songs")
-            }else if cell?.category == nil{
+            }else if self.category == nil{
                 self.view.makeToast("Please select category")
-            }else if cell?.images.count == 0 {
+            }else if self.images.count == 0 {
                 self.view.makeToast("Please select alteast one image")
             }else{
-                self.createProduct(title: cell?.titleTextField.text ?? "", description: cell?.descriptionTextView.text ?? "", tags: cell?.tagsTextField.text ?? "", price: cell?.priceTextField.text ?? "", unit: cell?.totalItemsUnitTextFiled.text ?? "", related: cell?.related ?? 0, category: cell?.category ?? 0, Media: cell?.images ?? [])
+                self.createProduct(title: self.titleTextField.text ?? "", description: self.descriptionTextView.text ?? "", tags: self.tagsTextField.text ?? "", price: self.priceTextField.text ?? "", unit: self.totalItemsUnitTextFiled.text ?? "", related: self.related ?? 0, category: self.category ?? 0, Media: self.images)
                 
             }
         }else{
-            let cell = self.table.cellForRow(at: IndexPath(row: 0, section: 0)) as? CreateProductTableItem
-            if cell?.titleTextField.text?.isEmpty ?? false{
+            if self.titleTextField.text?.isEmpty ?? false{
                 self.view.makeToast("Please enter title")
-            }else if cell?.descriptionTextView.text?.isEmpty ?? false{
+            }else if self.descriptionTextView.text?.isEmpty ?? false{
                 self.view.makeToast("Please enter Description")
-            }else if cell?.tagsTextField.text?.isEmpty ?? false{
+            }else if self.tagsTextField.text?.isEmpty ?? false{
                 self.view.makeToast("Please enter Tags")
-            }else if cell?.priceTextField.text?.isEmpty ?? false{
+            }else if self.priceTextField.text?.isEmpty ?? false{
                 self.view.makeToast("Please enter price")
-            }else if cell?.totalItemsUnitTextFiled.text?.isEmpty ?? false{
+            }else if self.totalItemsUnitTextFiled.text?.isEmpty ?? false{
                 self.view.makeToast("Please enter total no of units")
-            }else if cell?.totalItemsUnitTextFiled.text?.isEmpty ?? false{
+            }else if self.totalItemsUnitTextFiled.text?.isEmpty ?? false{
                 self.view.makeToast("Please enter total no of units")
-            }else if cell?.related == nil{
+            }else if self.related == nil{
                 self.view.makeToast("Please select related songs")
-            }else if cell?.category == nil{
+            }else if self.category == nil{
                 self.view.makeToast("Please select category")
             }else{
-                let id = productDetails["id"] as? Int
-                self.updateProduct(id:id ?? 0,title: cell?.titleTextField.text ?? "", description: cell?.descriptionTextView.text ?? "", tags: cell?.tagsTextField.text ?? "", price: cell?.priceTextField.text ?? "", unit: cell?.totalItemsUnitTextFiled.text ?? "", related: cell?.related ?? 0, category: cell?.category ?? 0)
-                
+                let id = productDetails?.id
+                self.updateProduct(id:id ?? 0,title: self.titleTextField.text ?? "", description: self.descriptionTextView.text ?? "", tags: self.tagsTextField.text ?? "", price: self.priceTextField.text ?? "", unit: self.totalItemsUnitTextFiled.text ?? "", related: self.related ?? 0, category: self.category ?? 0)
             }
         }
-        
     }
+    
+    func bind(_ object: Product?) {
+        if object == nil {
+            self.collectionview.isHidden = false
+            self.addImagesLabel.isHidden = false
+        }else{
+            related = object?.related_song?.dataValue?.id ?? 0
+            category = object?.cat_id ?? 0
+            self.titleTextField.text = object?.title
+            self.descriptionTextView.text = object?.desc
+            self.tagsTextField.text = object?.tags
+            self.priceTextField.text = object?.formatted_price
+            self.totalItemsUnitTextFiled.text = "\(object?.units ?? 0) "
+            for item in AppInstance.instance.userProfile?.data?.latestsongs?.first ?? [] {
+                if object?.related_song?.dataValue?.id ?? 0 == item.id ?? 0{
+                    self.relatedToSongTF.text = item.title
+                    break
+                }
+            }
+            let category = AppInstance.instance.optionsData?.products_categories
+            let catName = category?.dictionaryValue?["\(object?.cat_id ?? 0)"] as? String
+            self.categoryTF.text = catName
+            self.collectionview.isHidden = true
+            self.addImagesLabel.isHidden = true
+            //            let images = productDetails["images"] as? [[String:Any]]
+            //            for item in images ?? []{
+            //                let image = item["image"] as? String
+            //                let url = URL(string: image ?? "")
+            //                DispatchQueue.global().async {
+            //                    let data = try? Data(contentsOf: url!) //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
+            //                    DispatchQueue.main.async {
+            //                        cell?.images.append(UIImage(data: data ?? Data()) ?? UIImage())
+            //                    }
+            //                }
+            //
+            //            }
+        }
+    }
+    
+    func initializeConfigure() {
+        self.collectionview.register(UINib(resource: R.nib.createProductCollectionItem), forCellWithReuseIdentifier: R.reuseIdentifier.createProductCollectionItem.identifier)
+        self.collectionview.delegate = self
+        self.collectionview.dataSource = self
+    }
+    
+    private func SelectImage(){
+        let alert = UIAlertController(title: "", message: (NSLocalizedString("Select Source", comment: "")), preferredStyle: .alert)
+        let camera = UIAlertAction(title: (NSLocalizedString("Camera", comment: "")), style: .default) { (action) in
+            self.imagePickerController.delegate = self
+            self.imagePickerController.allowsEditing = true
+            self.imagePickerController.sourceType = .camera
+            self.present(self.imagePickerController, animated: true, completion: nil)
+        }
+        let gallery = UIAlertAction(title: (NSLocalizedString("Gallery", comment: "")), style: .default) { (action) in
+            self.imagePickerController.delegate = self
+            self.imagePickerController.allowsEditing = true
+            self.imagePickerController.sourceType = .photoLibrary
+            self.present(self.imagePickerController, animated: true, completion: nil)
+        }
+        let cancel = UIAlertAction(title: (NSLocalizedString("Cancel", comment: "")), style: .destructive, handler: nil)
+        alert.addAction(camera)
+        alert.addAction(gallery)
+        alert.addAction(cancel)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
     func createProduct(title:String,description:String,tags:String,price:String,unit:String,related:Int,category:Int,Media:[UIImage]){
         let accessToken = AppInstance.instance.accessToken ?? ""
         var dataArr = [Data]()
@@ -147,20 +265,70 @@ class CreateProductVC: BaseVC {
         })
     }
 }
-extension CreateProductVC: UITableViewDelegate, UITableViewDataSource{
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
-    }
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = table.dequeueReusableCell(withIdentifier: "CreateProductTableItem") as! CreateProductTableItem
-        cell.vc = self
-        cell.bind(self.productDetails)
-        return cell
-    }
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
+
+
+extension CreateProductVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return  2
     }
     
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        switch section {
+        case 0:
+            return 1
+        case 1:
+            return self.images.count
+        default:
+            return 1
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        switch indexPath.section {
+        case 0:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: R.reuseIdentifier.createProductCollectionItem.identifier, for: indexPath) as! CreateProductCollectionItem
+            cell.imageShow.image = R.image.addImagepLace()
+            cell.cancelBtn.isHidden = true
+            cell.selectedIndexPath = indexPath
+            return cell
+        case 1:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: R.reuseIdentifier.createProductCollectionItem.identifier, for: indexPath) as! CreateProductCollectionItem
+            cell.imageShow.image = self.images[indexPath.row]
+            cell.cancelBtn.isHidden = false
+            cell.selectedIndexPath = indexPath
+            cell.delegate = self
+            return cell
+        default:
+            return UICollectionViewCell()
+        }
+    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        switch indexPath.section {
+        case 0:
+            self.SelectImage()
+        default:
+            log.verbose("Nothing Pressed")
+        }
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 125, height: 125)
+        
+    }
 }
 
+extension CreateProductVC: ImageRemoveButtonDelegate {
+    func removeButton(_ indexPath: IndexPath, _ sender: UIButton) {
+        self.images.remove(at: indexPath.row)
+        self.collectionview.reloadData()
+    }
+}
+
+extension CreateProductVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            self.images.append(image)
+            self.collectionview.reloadData()
+            picker.dismiss(animated: true, completion: nil)
+        }
+    }
+}

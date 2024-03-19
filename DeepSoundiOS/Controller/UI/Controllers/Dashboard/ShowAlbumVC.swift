@@ -11,948 +11,714 @@ import Async
 import SwiftEventBus
 import DeepSoundSDK
 import GoogleMobileAds
-import PanModal
 import EzPopup
+import Braintree
+import PassKit
+import Toast_Swift
 
 class ShowAlbumVC: BaseVC {
-    @IBOutlet weak var scrollView: UIScrollView!
     
-    @IBOutlet weak var scrolHeight: NSLayoutConstraint!
+    // MARK: - IBOutlets
+    
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var btnStackView: UIStackView!
+    @IBOutlet weak var tableViewHeight: NSLayoutConstraint!
     @IBOutlet weak var playBtn: UIButton!
+    @IBOutlet weak var buyBtn: UIButton!
     @IBOutlet weak var moreBtn: UIButton!
     @IBOutlet weak var shuffleBtn:UIButton!
     @IBOutlet weak var thumbnailImage: UIImageView!
-   
     @IBOutlet weak var songsCountLabel: UILabel!
     @IBOutlet weak var albumNameLabel: UILabel!
-  
     @IBOutlet weak var tableView: UITableView!
     
-   
-    var albumObject:TrendingModel.TopAlbum?
-    var searchAlbumObject:SearchModel.Album?
-    var profileAlbumObject:ProfileModel.AlbumElement?
-    private var albumSongsArray = [GetAlbumSongsModel.Song]()
-    private let popupContentController = R.storyboard.player.musicPlayerVC()
-    private var albumSongMusicArray = [MusicPlayerModel]()
-    var isPurchase:Bool? = false
-    var userID:Int? = 0
-    var albumID:Int? = 0
-    var AlbumURL:String? = ""
-        var bannerView: GADBannerView!
+    // MARK: - Properties
+    
+    var albumObject: Album?
+    private var albumSongsArray = [Song]()
+    // private let popupContentController = R.storyboard.player.musicPlayerVC()
+    var isPurchase:Bool = false
+    var userID:Int = 0
+    var albumID:Int = 0
+    var AlbumURL:String = ""
+    var bannerView: GADBannerView!
     var interstitial: GADInterstitialAd!
-    var price : Double? = 0.0
-    var albumIDSting:String? = ""
+    var price: MultipleValues?
+    var albumIDSting:String = ""
     var shuffled:Bool = false
+    var isLoading = true
+    var braintree: BTAPIClient?
+    var braintreeClient: BTAPIClient?
+    var paymentRequest = PKPaymentRequest()
+    
+    // MARK: - View Life Cycles
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupUI()
-        //self.profileImage.borderColorV = .mainColor
-        
-       // albumTitleLabel.text = (NSLocalizedString("Album", comment: ""))
-        log.verbose("Search Price = \(self.searchAlbumObject?.albumID ?? "")")
+        self.tableView.addObserver(self, forKeyPath: "contentSize", options: .new, context: nil)
+        log.verbose("Search Price = \(self.albumObject?.album_id ?? "")")
         self.fetchAlbumtSongs()
-        SwiftEventBus.onMainThread(self, name:   EventBusConstants.EventBusConstantsUtils.EVENT_DISMISS_POPOVER) { result in
-            log.verbose("To dismiss the popover")
-            AppInstance.instance.player = nil
-            self.tabBarController?.dismissPopupBar(animated: true, completion: nil)
-        }
-        SwiftEventBus.onMainThread(self, name:   "PlayerReload") { result in
-            let stringValue = result?.object as? String
-            self.view.makeToast(stringValue)
-            log.verbose(stringValue)
-        }
-        if ControlSettings.shouldShowAddMobBanner{
-
+        self.setupMusicPlayerNotification()
+        if ControlSettings.shouldShowAddMobBanner {
             let request = GADRequest()
-            GADInterstitialAd.load(withAdUnitID:ControlSettings.interestialAddUnitId,
-                                   request: request,
-                                   completionHandler: { (ad, error) in
-                                    if let error = error {
-                                        print("Failed to load interstitial ad with error: \(error.localizedDescription)")
-                                        return
-                                    }
-                                    self.interstitial = ad
-                                   }
-            )
-        
+            GADInterstitialAd.load(withAdUnitID: ControlSettings.interestialAddUnitId,
+                                   request: request) { (ad, error) in
+                if let error = error {
+                    print("Failed to load interstitial ad with error: \(error.localizedDescription)")
+                    return
+                }
+                self.interstitial = ad
+            }
         }
-        
-        let button = UIButton()
-        button.setImage(UIImage(named: "ic-round-dotedmore"), for:.normal)
-        button.addTarget(self, action: #selector(showMore(_:)), for: .touchUpInside)
-        button.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
-        let barButton = UIBarButtonItem(customView: button)
-       self.navigationItem.rightBarButtonItem = barButton
-        
     }
-    @objc func showMore(_ sender:UIButton){
-    if AppInstance.instance.getUserSession(){
-        if AppInstance.instance.userId == self.userID ?? 0 {
-            self.showMoreAlert()
-        }else{
-            self.showMoreAlertforNonSameUser()
-        }
-    }else{
-        notLoggedInAlert()
-    }
-}
+    
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
-        navigationController?.setNavigationBarHidden(false, animated: false)
-    }
-    override func viewWillDisappear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(true, animated: false)
     }
-    func CreateAd() -> GADInterstitialAd {
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
         
-        GADInterstitialAd.load(withAdUnitID:ControlSettings.interestialAddUnitId,
-                               request: GADRequest(),
-                               completionHandler: { (ad, error) in
-                                if let error = error {
-                                    print("Failed to load interstitial ad with error: \(error.localizedDescription)")
-                                    return
-                                }
-                                self.interstitial = ad
-                               }
-        )
-        return  self.interstitial
-        
+        navigationController?.setNavigationBarHidden(true, animated: false)
     }
-        func addBannerViewToView(_ bannerView: GADBannerView) {
-            bannerView.translatesAutoresizingMaskIntoConstraints = false
-            view.addSubview(bannerView)
-            view.addConstraints(
-                [NSLayoutConstraint(item: bannerView,
-                                    attribute: .bottom,
-                                    relatedBy: .equal,
-                                    toItem: bottomLayoutGuide,
-                                    attribute: .top,
-                                    multiplier: 1,
-                                    constant: 0),
-                 NSLayoutConstraint(item: bannerView,
-                                    attribute: .centerX,
-                                    relatedBy: .equal,
-                                    toItem: view,
-                                    attribute: .centerX,
-                                    multiplier: 1,
-                                    constant: 0)
-            ])
-        }
     
-@objc func playSong(sender:UIButton, shuffled:Bool){
-    AppInstance.instance.player = nil
-    AppInstance.instance.AlreadyPlayed = false
-    
-    albumSongsArray.forEach({ (object) in
-        var audioString:String? = ""
-        var isDemo:Bool? = false
-        if object.demoTrack == ""{
-            audioString = object.audioLocation ?? ""
-            isDemo = false
-        }else if object.demoTrack != "" && object.audioLocation != ""{
-            audioString = object.audioLocation ?? ""
-            isDemo = false
-        }else{
-            audioString = object.demoTrack ?? ""
-            isDemo = true
-        }
-        let musicObject = MusicPlayerModel(name: object.publisher?.name ?? "", time: object.duration ?? "", title:  object.songArray?.sName ?? "", musicType: object.songArray?.sCategory ?? "", ThumbnailImageString:  object.songArray?.sThumbnail ?? "", likeCount:  object.countLikes?.intValue ?? 0, favoriteCount: object.countFavorite?.intValue ?? 0, recentlyPlayedCount: object.countViews?.intValue ?? 0, sharedCount: object.countShares?.intValue ?? 0, commentCount: object.countComment?.intValue ?? 0, likeCountString: object.countLikes?.stringValue ?? "", favoriteCountString: object.countFavorite?.stringValue ?? "", recentlyPlayedCountString: object.countViews?.stringValue ?? "", sharedCountString: object.countShares?.stringValue ?? "", commentCountString: object.countComment?.stringValue ?? "", audioString: audioString, audioID: object.audioID ?? "", isLiked: object.isLiked, isFavorite: object.isFavoriated ?? false, trackId: object.id ?? 0,isDemoTrack:isDemo!,isPurchased:false,isOwner: object.isOwner ?? false)
-        self.albumSongMusicArray.append(musicObject)
-    })
-    
-    var object = albumSongsArray[sender.tag]
-    var randomInt = 0
-    var indexPath = IndexPath(row: sender.tag, section: 0)
-    
-    if shuffled{
-        albumSongMusicArray.shuffle()
-        randomInt = Int.random(in: 0..<albumSongsArray.count)
-        object = albumSongsArray[randomInt]
-        indexPath = IndexPath(row: randomInt, section: 0)
-    }
-    else{
-        object = albumSongsArray[sender.tag]
-        indexPath = IndexPath(row: sender.tag, section: 0)
-        for i in 0...albumSongsArray.count{
-            
-            if i == sender.tag{
-                if AppInstance.instance.player?.timeControlStatus == .playing {
-                    let cell = tableView.cellForRow(at: IndexPath(item: sender.tag, section: 0)) as? SongsTableCells
-                  //  changeButtonImage(cell?.btnPlayPause ?? UIButton(), play: true)
-                    SwiftEventBus.postToMainThread(EventBusConstants.EventBusConstantsUtils.EVENT_PLAY_PAUSE_BTN, sender: false)
-                }else{
-                    let cell = tableView.cellForRow(at: IndexPath(item: sender.tag, section: 0)) as! SongsTableCells
-                   // changeButtonImage(cell.btnPlayPause, play: false)
-                }
-            }
-            else{
-                let cell = tableView.cellForRow(at: IndexPath(item: i, section: 0)) as? SongsTableCells
-               // changeButtonImage(cell?.btnPlayPause ?? UIButton(), play: true)
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if(keyPath == "contentSize") {
+            if let newvalue = change?[.newKey] {
+                let newsize = newvalue as! CGSize
+                tableViewHeight.constant = newsize.height
             }
         }
     }
-    var audioString:String? = ""
-    var isDemo:Bool? = false
-    if object.demoTrack == ""{
-        audioString = object.audioLocation ?? ""
-        isDemo = false
-    }else if object.demoTrack != "" && object.audioLocation != ""{
-        audioString = object.audioLocation ?? ""
-        isDemo = false
-    }else{
-        audioString = object.demoTrack ?? ""
-        isDemo = true
-    }
-    let duration = object.duration ?? "0:0"
-    let musicObject = MusicPlayerModel(name: object.publisher?.name ?? "", time: object.duration ?? "", title:  object.songArray?.sName ?? "", musicType: object.songArray?.sCategory ?? "", ThumbnailImageString:  object.songArray?.sThumbnail ?? "", likeCount:  object.countLikes?.intValue ?? 0, favoriteCount: object.countFavorite?.intValue ?? 0, recentlyPlayedCount: object.countViews?.intValue ?? 0, sharedCount: object.countShares?.intValue ?? 0, commentCount: object.countComment?.intValue ?? 0, likeCountString: object.countLikes?.stringValue ?? "", favoriteCountString: object.countFavorite?.stringValue ?? "", recentlyPlayedCountString: object.countViews?.stringValue ?? "", sharedCountString: object.countShares?.stringValue ?? "", commentCountString: object.countComment?.stringValue ?? "", audioString: audioString, audioID: object.audioID ?? "", isLiked: object.isLiked, isFavorite: object.isFavoriated ?? false, trackId: object.id ?? 0,isDemoTrack:isDemo!,isPurchased:false,isOwner: object.isOwner ?? false, duration: duration)
     
-    popupContentController!.popupItem.title = object.publisher?.name ?? ""
-    popupContentController!.popupItem.subtitle = object.title?.htmlAttributedString ?? ""
-    
-    let cell  = tableView.cellForRow(at: indexPath) as? SongsTableCells
-    popupContentController!.popupItem.image = cell?.imgSong.image
-    AppInstance.instance.popupPlayPauseSong = false
-    SwiftEventBus.postToMainThread(EventBusConstants.EventBusConstantsUtils.EVENT_PLAY_PAUSE_BTN, sender: true)
-    
-    self.addToRecentlyWatched(trackId: object.id ?? 0)
-    self.tabBarController?.presentPopupBar(withContentViewController: self.popupContentController!, animated: true, completion: {
-        self.popupContentController?.musicObject = musicObject
-        self.popupContentController!.musicArray = self.albumSongMusicArray
-        self.popupContentController!.currentAudioIndex = sender.tag
-        self.popupContentController?.setup()
-    
-})
-    }
-    
-    @objc func didTapSongsMore(sender:UIButton){
-            
-            let object = albumSongsArray[sender.tag]
-            var audioString:String? = ""
-            var isDemo:Bool? = false
-        if object.demoTrack == ""{
-                audioString = object.audioLocation ?? ""
-                isDemo = false
-            }else if object.demoTrack != "" && object.audioLocation != ""{
-                audioString = object.audioLocation ?? ""
-                isDemo = false
-            }else{
-                audioString = object.demoTrack ?? ""
-                isDemo = true
-            }
-        let musicObject = MusicPlayerModel(name: object.publisher?.name ?? "", time: object.duration ?? "", title:  object.songArray?.sName ?? "", musicType: object.songArray?.sCategory ?? "", ThumbnailImageString:  object.songArray?.sThumbnail ?? "", likeCount:  object.countLikes?.intValue ?? 0, favoriteCount: object.countFavorite?.intValue ?? 0, recentlyPlayedCount: object.countViews?.intValue ?? 0, sharedCount: object.countShares?.intValue ?? 0, commentCount: object.countComment?.intValue ?? 0, likeCountString: object.countLikes?.stringValue ?? "", favoriteCountString: object.countFavorite?.stringValue ?? "", recentlyPlayedCountString: object.countViews?.stringValue ?? "", sharedCountString: object.countShares?.stringValue ?? "", commentCountString: object.countComment?.stringValue ?? "", audioString: audioString, audioID: object.audioID ?? "", isLiked: object.isLiked, isFavorite: object.isFavoriated ?? false, trackId: object.id ?? 0,isDemoTrack:isDemo!,isPurchased:false,isOwner: object.isOwner ?? false)
-        
-            let panVC: PanModalPresentable.LayoutType = TopSongBottomSheetController(song: musicObject, delegate: self)
-            presentPanModal(panVC)
-        }
+    // MARK: - Selectors
     
     @IBAction func shuffleSongList(_ sender: UIButton) {
-        
-        playSong(sender: sender,shuffled:true)
-        
+        self.shuffled = true
+        self.playSong(sender)
     }
+    
     @IBAction func playPressed(_ sender: UIButton) {
-        playSong(sender: sender,shuffled:false)
+        self.shuffled = false
+        self.playSong(sender)
     }
-    @IBAction func morePressed(_ sender: Any) {
-//
-//            if AppInstance.instance.getUserSession(){
-//                if AppInstance.instance.userId == self.userID ?? 0 {
-//                    self.showMoreAlert()
-//                }else{
-//                    self.showMoreAlertforNonSameUser()
-//                }
-//            }else{
-//                notLoggedInAlert()
-//            }
-        
+    
+    @IBAction func backBtnPressed(_ sender: UIButton) {
+        self.view.endEditing(true)
+        self.navigationController?.popViewController(animated: true)
     }
-    private func setupUI(){
-        moreBtn.isHidden = true
-        if albumObject != nil{
-           
-          //  self.nameLabel.text = albumObject?.publisher?.name  ?? albumObject?.publisher?.username ?? ""
-            self.albumNameLabel.text = albumObject?.title ?? ""
-            let profileURL = URL.init(string:albumObject?.publisher?.avatar ?? "")
-            let coverURL = URL.init(string:albumObject?.thumbnail ?? "")
-            if albumObject?.price == 0.0{
-                self.playBtn.isHidden = false
-                self.shuffleBtn.isHidden = false
-                self.isPurchase = false
-                
-            }else{
-                self.playBtn.isHidden = true
-                self.shuffleBtn.isHidden = true
-                self.isPurchase = true
-            }
-            
-           // profileImage.sd_setImage(with: profileURL , placeholderImage:R.image.imagePlacholder())
-           // coverImage.sd_setImage(with: coverURL , placeholderImage:R.image.imagePlacholder())
-            thumbnailImage.sd_setImage(with: coverURL , placeholderImage:R.image.imagePlacholder())
-            self.userID = albumObject?.publisher?.id ?? 0
-            self.albumID = albumObject?.id ?? 0
-            self.AlbumURL = albumObject?.url ?? ""
-            self.price = self.albumObject?.price ?? 0.0
-            self.albumIDSting = self.albumObject?.albumID ?? ""
-            
-            
-        }else if searchAlbumObject != nil{
-            
-            self.title = searchAlbumObject?.title ?? ""
-            //self.nameLabel.text = searchAlbumObject?.publisher?.name ?? searchAlbumObject?.publisher?.username ?? ""
-            self.albumNameLabel.text = searchAlbumObject?.title ?? ""
-            let profileURL = URL.init(string:searchAlbumObject?.publisher?.avatar ?? "")
-            let coverURL = URL.init(string:searchAlbumObject?.thumbnail ?? "")
-           // profileImage.sd_setImage(with: profileURL , placeholderImage:R.image.imagePlacholder())
-           // coverImage.sd_setImage(with: coverURL , placeholderImage:R.image.imagePlacholder())
-            thumbnailImage.sd_setImage(with: coverURL , placeholderImage:R.image.imagePlacholder())
-            
-            self.userID = searchAlbumObject?.publisher?.id ?? 0
-            self.albumID = searchAlbumObject?.id ?? 0
-            self.AlbumURL = searchAlbumObject?.url ?? ""
-            self.price = self.searchAlbumObject?.price ?? 0.0
-            self.albumIDSting = self.searchAlbumObject?.albumID ?? ""
-            if searchAlbumObject?.price == 0.0{
-                self.playBtn.isHidden = false
-                self.shuffleBtn.isHidden = false
-                self.isPurchase = false
-                
-            }else{
-                self.playBtn.isHidden = true
-                self.shuffleBtn.isHidden = true
-                self.isPurchase = true
-                
-                
-            }
-            
-            
-            
-        }else if profileAlbumObject != nil{
-            self.title = profileAlbumObject?.title ?? ""
-            self.albumNameLabel.text =  profileAlbumObject?.title ?? ""
-            
-            let profileURL = URL.init(string:profileAlbumObject?.publisher?.avatar ?? searchAlbumObject?.publisher?.avatar ?? "")
-            let coverURL = URL.init(string: profileAlbumObject?.thumbnail ?? "")
-            
-           // profileImage.sd_setImage(with: profileURL , placeholderImage:R.image.imagePlacholder())
-          //  coverImage.sd_setImage(with: coverURL , placeholderImage:R.image.imagePlacholder())
-            thumbnailImage.sd_setImage(with: coverURL , placeholderImage:R.image.imagePlacholder())
-            
-            self.userID = profileAlbumObject?.publisher?.id ?? 0
-            self.albumID = profileAlbumObject?.id ?? 0
-            self.AlbumURL = profileAlbumObject?.url ?? ""
-            self.price = self.profileAlbumObject?.price ?? 0.0
-            self.albumIDSting = self.profileAlbumObject?.albumID ?? ""
-            if profileAlbumObject?.price == 0.0{
-                self.playBtn.isHidden = false
-                self.shuffleBtn.isHidden = false
-                self.isPurchase = false
-                
-            }else{
-                self.playBtn.isHidden = true
-                self.shuffleBtn.isHidden = true
-                self.isPurchase = true
-                
-                
-            }
-            
+    
+    @IBAction func buyBtnPressed(_ sender: UIButton) {
+        self.view.endEditing(true)
+        if AppInstance.instance.getUserSession() {
+            let vc = R.storyboard.popups.purchaseRequiredPopupVC()
+            vc?.modalPresentationStyle = .custom
+            vc?.delegate = self
+            self.present(vc!, animated: true, completion: nil)
+        }else{
+            self.showLoginAlert(delegate: self)
         }
-        
-        self.tableView.separatorStyle = .none
-        tableView.register(BrowseAlbums_TableCell.nib, forCellReuseIdentifier: BrowseAlbums_TableCell.identifier)
-        tableView.register(NoDataTableItem.nib, forCellReuseIdentifier: NoDataTableItem.identifier)
-        tableView.register(NoDataTableItem.nib, forCellReuseIdentifier: NoDataTableItem.identifier)
-        tableView.register(PurchaseButtonTableItem.nib, forCellReuseIdentifier:PurchaseButtonTableItem.identifier)
-        self.tableView.register(SongsTableCells.nib, forCellReuseIdentifier: SongsTableCells.identifier)
-        
     }
-    private func fetchAlbumtSongs(){
-        if Connectivity.isConnectedToNetwork(){
+    
+    @IBAction func morePressed(_ sender: UIButton) {
+        self.view.endEditing(true)
+        if let albumObject = self.albumObject {
+            let panVC: PanModalPresentable.LayoutType = ShareBottomSheetController(album: albumObject)
+            presentPanModal(panVC)
+        }
+    }
+    
+    @objc func playSong(_ sender: UIButton) {
+        self.view.endEditing(true)
+        var indexPath = IndexPath(row: sender.tag, section: 0)
+        var randomInt = 0
+        if self.albumSongsArray[indexPath.row].audio_id != popupContentController?.musicObject?.audio_id {
+            AppInstance.instance.AlreadyPlayed = false
+            SwiftEventBus.postToMainThread(EventBusConstants.EventBusConstantsUtils.EVENT_PLAY_PAUSE_BTN, sender: true)
+        } else {
+            if AppInstance.instance.AlreadyPlayed {
+                SwiftEventBus.postToMainThread(EventBusConstants.EventBusConstantsUtils.EVENT_PLAY_PAUSE_BTN, sender: true)
+            } else {
+                SwiftEventBus.postToMainThread(EventBusConstants.EventBusConstantsUtils.EVENT_PLAY_PAUSE_BTN, sender: false)
+            }
+            return
+        }
+        let songsArray: [Song] = self.albumSongsArray
+        var object = songsArray[indexPath.row]
+        if shuffled {
+            albumSongsArray.shuffle()
+            randomInt = Int.random(in: 0..<albumSongsArray.count)
+            object = albumSongsArray[randomInt]
+            indexPath = IndexPath(row: randomInt, section: 0)
+        }
+        if let canListen = object.can_listen, canListen {
+            for (i, _) in songsArray.enumerated() {
+                if i == indexPath.row {
+                    if AppInstance.instance.AlreadyPlayed {
+                        if let cell = tableView.cellForRow(at: indexPath) as? SongsTableCells {
+                            changeButtonImage(cell.btnPlayPause, play: true)
+                            SwiftEventBus.postToMainThread(EventBusConstants.EventBusConstantsUtils.EVENT_PLAY_PAUSE_BTN, sender: false)
+                            return
+                        }
+                    } else {
+                        if let cell = tableView.cellForRow(at: indexPath) as? SongsTableCells {
+                            changeButtonImage(cell.btnPlayPause, play: false)
+                        }
+                    }
+                } else {
+                    if let cell = tableView.cellForRow(at: IndexPath(item: i, section: 0)) as? SongsTableCells {
+                        changeButtonImage(cell.btnPlayPause, play: true)
+                    }
+                }
+            }
+        }
+        AppInstance.instance.popupPlayPauseSong = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            SwiftEventBus.postToMainThread(EventBusConstants.EventBusConstantsUtils.EVENT_PLAY_PAUSE_BTN, sender: false)
+        }
+        self.addToRecentlyWatched(trackId: object.id ?? 0)
+        self.tabBarController?.presentPopupBar(withContentViewController: popupContentController!, animated: true) {
+            popupContentController?.musicObject = object
+            popupContentController?.musicArray = songsArray
+            popupContentController?.currentAudioIndex = indexPath.row
+            popupContentController?.delegate = self
+            popupContentController?.setup()
+        }
+    }
+    
+    // MARK: - Helper functions
+    
+    func CreateAd() -> GADInterstitialAd {
+        GADInterstitialAd.load(withAdUnitID: ControlSettings.interestialAddUnitId, request: GADRequest(), completionHandler: { (ad, error) in
+            if let error = error {
+                print("Failed to load interstitial ad with error: \(error.localizedDescription)")
+                return
+            }
+            self.interstitial = ad
+        })
+        return  self.interstitial
+    }
+    
+    func addBannerViewToView(_ bannerView: GADBannerView) {
+        bannerView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(bannerView)
+        view.addConstraints(
+            [NSLayoutConstraint(item: bannerView, attribute: .bottom, relatedBy: .equal, toItem: bottomLayoutGuide, attribute: .top, multiplier: 1, constant: 0),
+             NSLayoutConstraint(item: bannerView, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1, constant: 0)
+            ])
+    }
+    
+    private func setupUI() {
+        let object = albumObject
+        self.albumNameLabel.text = object?.title ?? ""
+        let coverURL = URL.init(string: object?.thumbnail ?? "")
+        if object?.is_purchased == 1 {
+            self.btnStackView.isHidden = false
+            self.buyBtn.isHidden = true
+            self.isPurchase = false
+        } else {
+            if (object?.price?.intValue == 0 || object?.price?.doubleValue == 0) {
+                self.btnStackView.isHidden = false
+                self.buyBtn.isHidden = true
+                self.isPurchase = false
+            } else {
+                self.btnStackView.isHidden = true
+                self.buyBtn.isHidden = false
+                self.isPurchase = true
+            }
+        }
+        thumbnailImage.sd_setImage(with: coverURL , placeholderImage:R.image.imagePlacholder())
+        self.userID = object?.publisher?.id ?? 0
+        self.albumID = object?.id ?? 0
+        self.AlbumURL = object?.url ?? ""
+        self.price = object?.price
+        self.songsCountLabel.text = "\(object?.count_songs ?? 0) Songs - \(object?.purchases ?? 0) Purchases"
+        self.albumIDSting = object?.album_id ?? ""
+        self.tableView.separatorStyle = .none
+        tableView.register(UINib(resource: R.nib.noDataTableItem), forCellReuseIdentifier: R.reuseIdentifier.noDataTableItem.identifier)
+        tableView.register(UINib(resource: R.nib.purchaseButtonTableItem), forCellReuseIdentifier: R.reuseIdentifier.purchaseButtonTableItem.identifier)
+        self.tableView.register(UINib(resource: R.nib.songsTableCells), forCellReuseIdentifier: R.reuseIdentifier.songsTableCells.identifier)
+    }
+    
+    private func fetchAlbumtSongs() {
+        if Connectivity.isConnectedToNetwork() {
             self.albumSongsArray.removeAll()
-            self.showProgressDialog(text: NSLocalizedString("Loading...", comment: ""))
+            // self.showProgressDialog(text: NSLocalizedString("Loading...", comment: ""))
             let accessToken = AppInstance.instance.accessToken ?? ""
-            let albumId = self.albumID ?? 0
-            Async.background({
-                AlbumManager.instance.getAlbumSongs(albumId: albumId, AccessToken: accessToken, completionBlock: { (success, sessionError, error) in
-                    if success != nil{
-                        Async.main({
+            let albumId = self.albumID
+            Async.background {
+                AlbumManager.instance.getAlbumSongs(albumId: albumId, AccessToken: accessToken) { (success, sessionError, error) in
+                    if success != nil {
+                        Async.main {
                             self.dismissProgressDialog { [self] in
-                                
                                 log.debug("userList = \(success?.songs ?? [])")
                                 self.albumSongsArray = success?.songs ?? []
-                                if self.albumSongsArray.count == 0{
+                                if self.albumSongsArray.count == 0 {
                                     self.playBtn.isHidden = true
                                     self.shuffleBtn.isHidden = true
-                                }else{
-                                    if self.isPurchase ?? false{
+                                    self.buyBtn.isHidden = true
+                                } else {
+                                    if self.isPurchase {
                                         self.playBtn.isHidden = true
                                         self.shuffleBtn.isHidden = true
-                                    }else{
+                                        self.buyBtn.isHidden = false
+                                    } else {
                                         self.playBtn.isHidden = false
                                         self.shuffleBtn.isHidden = false
+                                        self.buyBtn.isHidden = true
                                     }
                                 }
-                                
+                                self.isLoading = false
                                 self.tableView.reloadData()
-                                self.scrolHeight.constant = self.scrolHeight.constant + self.tableView.contentSize.height - 20.0
-                                self.songsCountLabel.text = "\(self.albumSongsArray.count) Songs - \(self.albumSongsArray[0].shares ?? 0) Purchases"
                             }
-                        })
-                    }else if sessionError != nil{
-                        Async.main({
+                        }
+                    } else if sessionError != nil {
+                        Async.main {
                             self.dismissProgressDialog {
-                                
                                 self.view.makeToast(NSLocalizedString(sessionError?.error ?? "", comment: ""))
                                 log.error("sessionError = \(sessionError?.error ?? "")")
                             }
-                        })
-                    }else {
-                        Async.main({
+                        }
+                    } else {
+                        Async.main {
                             self.dismissProgressDialog {
-                                self.view.makeToast(NSLocalizedString(error?.localizedDescription ?? "", comment: ""))
+                                // self.view.makeToast(NSLocalizedString(error?.localizedDescription ?? "", comment: ""))
                                 log.error("error = \(error?.localizedDescription ?? "")")
                             }
-                        })
+                        }
                     }
-                })
-            })
-            
-        }else{
+                }
+            }
+        } else {
             log.error("internetError = \(InterNetError)")
             self.view.makeToast(NSLocalizedString(InterNetError, comment: ""))
         }
     }
-    func showMoreAlert(){
-        let alert = UIAlertController(title: (NSLocalizedString("Album", comment: "")), message: "", preferredStyle: .actionSheet)
-        let deleteAlbum = UIAlertAction(title: (NSLocalizedString("Delete Album", comment: "")), style: .default) { (action) in
-            if self.albumObject != nil{
-                self.deleteTrack(albumID: self.albumObject?.id ?? 0)
-            } else if   self.searchAlbumObject != nil{
-                self.deleteTrack(albumID: self.searchAlbumObject?.id ?? 0)
-            }else if self.profileAlbumObject != nil{
-                self.deleteTrack(albumID: self.profileAlbumObject?.id ?? 0)
-            }
-            
-            log.verbose("Delete Song")
-        }
-        let EditAlbum = UIAlertAction(title: (NSLocalizedString("Edit Album", comment: "")), style: .default) { (action) in
-            log.verbose("Edit Song")
-            let vc = R.storyboard.album.uploadAlbumVC()
-            if self.albumObject != nil{
-                
-                let object = UpdateAlbumModel(AlbumID: self.albumObject?.albumID ?? "", userID: self.albumObject?.publisher?.id ?? 0, title: self.albumObject?.title ?? "", description: self.albumObject?.topAlbumDescription ?? "", imageString: self.albumObject?.thumbnail ?? "", genre: self.albumObject?.categoryName ?? "", price: self.albumObject?.price ?? 0.0)
-                vc?.albumObject = object
-                
-            }else if   self.searchAlbumObject != nil{
-                let object = UpdateAlbumModel(AlbumID: self.searchAlbumObject?.albumID ?? "", userID: self.searchAlbumObject?.publisher?.id ?? 0, title: self.searchAlbumObject?.title ?? "", description: self.searchAlbumObject?.albumDescription ?? "", imageString: self.searchAlbumObject?.thumbnail ?? "", genre: self.searchAlbumObject?.categoryName ?? "", price: 0.0)
-                vc?.albumObject = object
-            }else if self.profileAlbumObject != nil{
-                let object = UpdateAlbumModel(AlbumID: self.profileAlbumObject?.albumID ?? "", userID: self.profileAlbumObject?.publisher?.id ?? 0, title: self.profileAlbumObject?.title ?? "", description: self.profileAlbumObject?.albumDescription ?? "", imageString: self.profileAlbumObject?.thumbnail ?? "", genre: self.profileAlbumObject?.categoryName ?? "", price: 0.0)
-                vc?.albumObject = object
-                
-            }
-            self.navigationController?.pushViewController(vc!, animated: true)
-            
-        }
-        
-        let ShareAlbum = UIAlertAction(title: (NSLocalizedString("Share", comment: "")), style: .default) { (action) in
-            log.verbose("Share")
-            self.share(shareString: self.AlbumURL ?? "")
-        }
-        let CopyAlbum = UIAlertAction(title: (NSLocalizedString("Copy", comment: "")), style: .default) { (action) in
-            UIPasteboard.general.string = self.AlbumURL ?? ""
-            self.view.makeToast(NSLocalizedString(("Text copy to clipboad"), comment: ""))
-            
-        }
-        let cancel = UIAlertAction(title: (NSLocalizedString(
-        "Cancel", comment: "")), style: .destructive, handler: nil)
-        
-        alert.addAction(deleteAlbum)
-        alert.addAction(EditAlbum)
-        alert.addAction(ShareAlbum)
-        alert.addAction(CopyAlbum)
-        alert.addAction(cancel)
-        alert.popoverPresentationController?.sourceView = self.view
-        self.present(alert, animated: true, completion: nil)
-        
-        
-    }
-    func showMoreAlertforNonSameUser(){
-        let alert = UIAlertController(title: (NSLocalizedString(
-        "Album", comment: "")), message: "", preferredStyle: .actionSheet)
-        
-        let share = UIAlertAction(title: (NSLocalizedString(
-        "Share", comment: "")), style: .default) { (action) in
-            self.share(shareString: self.AlbumURL ?? "")
-            
-        }
-        let CopyAlbum = UIAlertAction(title: "Copy", style: .default) { (action) in
-            UIPasteboard.general.string = self.AlbumURL ?? ""
-            self.view.makeToast(NSLocalizedString(("Text copy to clipboad"), comment: ""))
-        }
-        let cancel = UIAlertAction(title: (NSLocalizedString("Cancel", comment: "")), style: .destructive, handler: nil)
-        
-        alert.addAction(share)
-        alert.addAction(CopyAlbum)
-        alert.addAction(cancel)
-         alert.popoverPresentationController?.sourceView = self.view
-        self.present(alert, animated: true, completion: nil)
-    }
-    func notLoggedInAlert(){
-        let alert = UIAlertController(title: (NSLocalizedString(
-        "Album", comment: "")), message: "", preferredStyle: .actionSheet)
-        
-        let CopyAlbum = UIAlertAction(title: (NSLocalizedString(
-        "Copy", comment: "")), style: .default) { (action) in
-            UIPasteboard.general.string = self.AlbumURL ?? ""
-            self.view.makeToast(NSLocalizedString(("Text copy to clipboad"), comment: ""))
-            
-        }
-        let cancel = UIAlertAction(title: (NSLocalizedString("Cancel", comment: "")), style: .destructive, handler: nil)
-        
-        alert.addAction(CopyAlbum)
-        alert.addAction(cancel)
-         alert.popoverPresentationController?.sourceView = self.view
-        self.present(alert, animated: true, completion: nil)
-        
-    }
-    private func deleteTrack(albumID:Int){
-        if Connectivity.isConnectedToNetwork(){
+    
+    private func deleteTrack(albumID: Int) {
+        if Connectivity.isConnectedToNetwork() {
             let accessToken = AppInstance.instance.accessToken ?? ""
-            Async.background({
+            Async.background {
                 AlbumManager.instance.deleteAlbum(albumId: albumID, AccessToken: accessToken, type: "single") { (success, sessionError, error) in
-                    if success != nil{
-                        Async.main({
-                            
+                    if success != nil {
+                        Async.main {
                             self.dismissProgressDialog {
                                 log.debug("success = \(success?.status ?? 0)")
                                 self.navigationController?.popViewController(animated: true)
                             }
-                            
-                            
-                        })
-                        
-                    }else if sessionError != nil{
-                        
-                        Async.main({
-                            
+                        }
+                    } else if sessionError != nil {
+                        Async.main {
                             self.dismissProgressDialog {
                                 log.error("sessionError = \(sessionError?.error ?? "")")
                                 self.view.makeToast(NSLocalizedString(sessionError?.error ?? "", comment: ""))
                             }
-                            
-                            
-                        })
-                    }else {
-                        Async.main({
-                            
+                        }
+                    } else {
+                        Async.main {
                             self.dismissProgressDialog {
                                 log.error("error = \(error?.localizedDescription ?? "")")
-                                self.view.makeToast(NSLocalizedString(error?.localizedDescription ?? "", comment: ""))
+                                // self.view.makeToast(NSLocalizedString(error?.localizedDescription ?? "", comment: ""))
                             }
-                            
-                        })
+                        }
                     }
                 }
-            })
-        }else{
-            
+            }
+        } else {
             self.dismissProgressDialog {
                 log.error("internetErrro = \(InterNetError)")
                 self.view.makeToast(NSLocalizedString(InterNetError, comment: ""))
             }
-            
         }
     }
-    private func share(shareString:String?){
+    
+    private func share(shareString: String?) {
         // text to share
         let text = shareString ?? ""
-        
         // set up activity view controller
         let textToShare = [ text ]
         let activityViewController = UIActivityViewController(activityItems: textToShare, applicationActivities: nil)
         activityViewController.popoverPresentationController?.sourceView = self.view // so that iPads won't crash
-        
         // exclude some activity types from the list (optional)
         activityViewController.excludedActivityTypes = [ UIActivity.ActivityType.airDrop, UIActivity.ActivityType.postToFacebook ]
-        
         // present the view controller
         self.present(activityViewController, animated: true, completion: nil)
     }
+    
 }
 
+// MARK: - Extensions
 
-extension ShowAlbumVC:UITableViewDelegate,UITableViewDataSource{
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if self.userID == AppInstance.instance.userId ?? 0 {
-            if self.albumSongsArray.count == 0{
-                return 1
-            }else{
-                return self.albumSongsArray.count
+// MARK: WarningPopupVCDelegate
+extension ShowAlbumVC: WarningPopupVCDelegate {
+    
+    func warningPopupOKButtonPressed(_ sender: UIButton, _ songObject: Song?) {
+        self.view.endEditing(true)
+        if sender.tag == 1001 {
+            let newVC = R.storyboard.login.loginNav()
+            self.appDelegate.window?.rootViewController = newVC
+        }
+    }
+    
+}
+
+// MARK: Api Call
+extension ShowAlbumVC {
+    /*private func purchaseAlbumWallet() {
+     if Connectivity.isConnectedToNetwork() {
+     let accessToken = AppInstance.instance.accessToken ?? ""
+     let userid = AppInstance.instance.userId ?? 0
+     Async.background {
+     UpgradeMemberShipManager.instance.purchaseAlbum(AccessToken: accessToken, type: "buy_album", AlbumID: "\(self.albumID)") { success, sessionError, error in
+     if success != nil{
+     Async.main {
+     self.dismissProgressDialog {
+     
+     }
+     }
+     }else if sessionError != nil{
+     Async.main {
+     self.dismissProgressDialog {
+     self.view.makeToast(sessionError ?? "")
+     log.error("sessionError = \(sessionError ?? "")")
+     }
+     }
+     }else {
+     Async.main {
+     self.dismissProgressDialog {
+     self.view.makeToast(error?.localizedDescription ?? "")
+     log.error("error = \(error?.localizedDescription ?? "")")
+     }
+     }
+     }
+     }
+     }
+     
+     }else{
+     log.error("internetError = \(InterNetError)")
+     self.view.makeToast(InterNetError)
+     }
+     }*/
+    
+    private func purchaseAlbum(albumID: String) {
+        if Connectivity.isConnectedToNetwork() {
+            let accessToken = AppInstance.instance.accessToken ?? ""
+            let userId = AppInstance.instance.userId ?? 0
+            Async.background {
+                AlbumManager.instance.PurchaseAlbum(AccessToken: accessToken, albumId: albumID, userID: userId, via: "PayPal") { (success, sessionError, error) in
+                    if success != nil {
+                        Async.main {
+                            self.dismissProgressDialog {
+                                log.debug("success = \(success?.status ?? 0)")
+                                self.view.makeToast(NSLocalizedString("Your Puchased Album", comment: "Your Puchased Album"))
+                            }
+                        }
+                    } else if sessionError != nil {
+                        Async.main {
+                            self.dismissProgressDialog {
+                                log.error("sessionError = \(sessionError?.error ?? "")")
+                                self.view.makeToast(sessionError?.error ?? "")
+                            }
+                        }
+                    } else {
+                        Async.main {
+                            self.dismissProgressDialog {
+                                log.error("error = \(error?.localizedDescription ?? "")")
+                                self.view.makeToast(error?.localizedDescription ?? "")
+                            }
+                        }
+                    }
+                }
             }
-        }else{
-            if self.price == 0.0 {
-                if self.albumSongsArray.count == 0{
+        } else {
+            self.dismissProgressDialog {
+                log.error("internetErrro = \(InterNetError)")
+                self.view.makeToast(InterNetError)
+            }
+        }
+    }
+    
+}
+
+// MARK: TableView Setup
+extension ShowAlbumVC: UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if isLoading {
+            return 10
+        } else {
+            if self.albumObject?.is_purchased == 1 {
+                if self.albumSongsArray.count == 0 {
                     return 1
                 }else{
                     return self.albumSongsArray.count
                 }
-            }else{
-                return 1
+            } else {
+                if self.price?.intValue == 0 || self.price?.doubleValue == 0 {
+                    if self.albumSongsArray.count == 0 {
+                        return 1
+                    }else{
+                        return self.albumSongsArray.count
+                    }
+                } else {
+                    return 1
+                }
             }
         }
-        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if self.userID == AppInstance.instance.userId ?? 0{
-            if self.albumSongsArray.isEmpty{
-                let cell = tableView.dequeueReusableCell(withIdentifier: NoDataTableItem.identifier) as? NoDataTableItem
-                return cell!
-                
-            }else{
-                let cell = tableView.dequeueReusableCell(withIdentifier:SongsTableCells.identifier) as? SongsTableCells
-//                cell?.loggedInVC = self
-                cell?.selectionStyle = .none
-                cell?.bindAlbumSong( self.albumSongsArray[indexPath.row])
-                cell?.btnPlayPause.tag = indexPath.row
-
-                cell?.btnMore.tag = indexPath.row
-                cell?.btnMore.addTarget(self, action: #selector(didTapSongsMore(sender:)), for: .touchUpInside)
-                
-                return cell!
-            }
-            
-        }else{
-            if self.price == 0.0{
-                
-                if self.albumSongsArray.isEmpty{
-                    let cell = tableView.dequeueReusableCell(withIdentifier: NoDataTableItem.identifier) as? NoDataTableItem
-                    return cell!
-                    
-                }else{
-                    let cell = tableView.dequeueReusableCell(withIdentifier:SongsTableCells.identifier) as? SongsTableCells
-    //                cell?.loggedInVC = self
-                    cell?.selectionStyle = .none
-                    cell?.bindAlbumSong( self.albumSongsArray[indexPath.row])
-                    cell?.btnPlayPause.tag = indexPath.row
-    
-                    cell?.btnMore.tag = indexPath.row
-                    cell?.btnMore.addTarget(self, action: #selector(didTapSongsMore(sender:)), for: .touchUpInside)
-                    return cell!
+        if isLoading {
+            let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.songsTableCells.identifier, for: indexPath) as! SongsTableCells
+            cell.startSkelting()
+            return cell
+        } else {
+            if self.albumSongsArray.isEmpty {
+                let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.noDataTableItem.identifier, for: indexPath) as! NoDataTableItem
+                cell.selectedBackgroundView()
+                return cell
+            } else {
+                if self.albumObject?.is_purchased == 1 {
+                    let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.songsTableCells.identifier, for: indexPath) as! SongsTableCells
+                    cell.selectedBackgroundView()
+                    cell.stopSkelting()
+                    cell.selectionStyle = .none
+                    cell.bind( self.albumSongsArray[indexPath.row])
+                    cell.indexPath = indexPath
+                    cell.delegate = self
+                    return cell
+                } else {
+                    if self.price?.intValue == 0 || self.price?.doubleValue == 0 {
+                        let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.songsTableCells.identifier, for: indexPath) as! SongsTableCells
+                        cell.selectedBackgroundView()
+                        cell.stopSkelting()
+                        cell.selectionStyle = .none
+                        cell.bind( self.albumSongsArray[indexPath.row])
+                        cell.indexPath = indexPath
+                        cell.delegate = self
+                        return cell
+                    } else {
+                        let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.purchaseButtonTableItem.identifier) as! PurchaseButtonTableItem
+                        cell.selectedBackgroundView()
+                        return cell
+                    }
                 }
-            }else{
-                let cell = tableView.dequeueReusableCell(withIdentifier: PurchaseButtonTableItem.identifier) as? PurchaseButtonTableItem
-                cell!.vc = self
-                cell?.price = self.price
-                cell?.albumID = self.albumIDSting ?? ""
-                return cell!
-                
             }
         }
-        
-    }
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-                if AppInstance.instance.addCount == ControlSettings.interestialCount {
-                    interstitial.present(fromRootViewController: self)
-                        interstitial = CreateAd()
-                        AppInstance.instance.addCount = 0
-                }
-        AppInstance.instance.addCount =  AppInstance.instance.addCount! + 1
-        AppInstance.instance.player = nil
-             AppInstance.instance.AlreadyPlayed = false
-        
-        if self.userID == AppInstance.instance.userId ?? 0{
-                   if self.albumSongsArray.isEmpty{
-                    log.verbose("nothing")
-                   }else{
-                    
-                           let object = self.albumSongsArray[indexPath.row]
-
-                           self.albumSongsArray.forEach({ (it) in
-                               var audioString:String? = ""
-                               var isDemo:Bool? = false
-                               let name = it.publisher?.name ?? ""
-                               let time = it.timeFormatted ?? ""
-                               let title = it.title ?? ""
-                               let musicType = it.categoryName ?? ""
-                               let thumbnailImageString = it.thumbnail ?? ""
-                               if it.demoTrack == ""{
-                                   audioString = it.audioLocation ?? ""
-                                   isDemo = false
-                               }else if it.demoTrack != "" && it.audioLocation != ""{
-                                   audioString = it.audioLocation ?? ""
-                                   isDemo = false
-                               }else{
-                                   audioString = it.demoTrack ?? ""
-                                   isDemo = true
-                               }
-                               let isOwner = it.isOwner ?? false
-                               let audioId = it.audioID ?? ""
-                               let likeCount = it.countLikes?.intValue ?? 0
-                               let favoriteCount = it.countFavorite?.intValue ?? 0
-                               let recentlyPlayedCount = it.countViews?.intValue ?? 0
-                               let sharedCount = it.countShares?.intValue ?? 0
-                               let commentCount = it.countComment?.intValue ?? 0
-                               let trackId = it.id ?? 0
-                               let isLiked = it.isLiked ?? false
-                               let isFavorited = it.isFavoriated ?? false
-                               let likecountString = it.countLikes?.stringValue ?? ""
-                               let favoriteCountString = it.countFavorite?.stringValue ?? ""
-                               let recentlyPlayedCountString = it.countViews?.stringValue ?? ""
-                               let sharedCountString = it.countShares?.stringValue ?? ""
-                               let commentCountString = it.countComment?.stringValue ?? ""
-                               
-                               let musicObject = MusicPlayerModel(name: name, time: time, title: title, musicType: musicType, ThumbnailImageString: thumbnailImageString, likeCount: likeCount, favoriteCount: favoriteCount, recentlyPlayedCount: recentlyPlayedCount, sharedCount: sharedCount, commentCount: commentCount, likeCountString: likecountString, favoriteCountString: favoriteCountString, recentlyPlayedCountString: recentlyPlayedCountString, sharedCountString: sharedCountString, commentCountString: commentCountString, audioString: audioString, audioID: audioId, isLiked: isLiked, isFavorite: isFavorited, trackId: trackId,isDemoTrack:isDemo!,isPurchased:false,isOwner: isOwner)
-                               self.albumSongMusicArray.append(musicObject)
-                           })
-                           var audioString:String? = ""
-                           var isDemo:Bool? = false
-                           let name = object.publisher?.name ?? ""
-                           let time = object.timeFormatted ?? ""
-                           let title = object.title ?? ""
-                           let musicType = object.categoryName ?? ""
-                           let thumbnailImageString = object.thumbnail ?? ""
-                           if object.demoTrack == ""{
-                               audioString = object.audioLocation ?? ""
-                               isDemo = false
-                           }else if object.demoTrack != "" && object.audioLocation != ""{
-                               audioString = object.audioLocation ?? ""
-                               isDemo = false
-                           }else{
-                               audioString = object.demoTrack ?? ""
-                               isDemo = true
-                           }
-                           let isOwner = object.isOwner ?? false
-                           let audioId = object.audioID ?? ""
-                           let likeCount = object.countLikes?.intValue ?? 0
-                           let favoriteCount = object.countFavorite?.intValue ?? 0
-                           let recentlyPlayedCount = object.countViews?.intValue ?? 0
-                           let sharedCount = object.countShares?.intValue ?? 0
-                           let commentCount = object.countComment?.intValue ?? 0
-                           let trackId = object.id ?? 0
-                           let isLiked = object.isLiked ?? false
-                           let isFavorited = object.isFavoriated ?? false
-                           
-                           let likecountString = object.countLikes?.stringValue ?? ""
-                           let favoriteCountString = object.countFavorite?.stringValue ?? ""
-                           let recentlyPlayedCountString = object.countViews?.stringValue ?? ""
-                           let sharedCountString = object.countShares?.stringValue ?? ""
-                           let commentCountString = object.countComment?.stringValue ?? ""
-                       let duration = object.duration ?? "0:0"
-                           let musicObject = MusicPlayerModel(name: name, time: time, title: title, musicType: musicType, ThumbnailImageString: thumbnailImageString, likeCount: likeCount, favoriteCount: favoriteCount, recentlyPlayedCount: recentlyPlayedCount, sharedCount: sharedCount, commentCount: commentCount, likeCountString: likecountString, favoriteCountString: favoriteCountString, recentlyPlayedCountString: recentlyPlayedCountString, sharedCountString: sharedCountString, commentCountString: commentCountString, audioString: audioString, audioID: audioId, isLiked: isLiked, isFavorite: isFavorited, trackId: trackId,isDemoTrack:isDemo!,isPurchased:false,isOwner: isOwner, duration: duration)
-                           popupContentController!.popupItem.title = object.publisher?.name ?? ""
-                           popupContentController!.popupItem.subtitle = object.title?.htmlAttributedString ?? ""
-                           let cell  = tableView.cellForRow(at: indexPath) as? SongsTableCells
-                           popupContentController!.popupItem.image = cell?.imgSong.image
-                           AppInstance.instance.popupPlayPauseSong = false
-                           SwiftEventBus.postToMainThread(EventBusConstants.EventBusConstantsUtils.EVENT_PLAY_PAUSE_BTN, sender: true)
-                           self.addToRecentlyWatched(trackId: object.id ?? 0)
-                           
-                           
-                           tabBarController?.presentPopupBar(withContentViewController: popupContentController!, animated: true, completion: {
-                               
-                               self.popupContentController?.musicObject = musicObject
-                               self.popupContentController!.musicArray = self.albumSongMusicArray
-                               self.popupContentController!.currentAudioIndex = indexPath.row
-                               self.popupContentController?.setup()
-                               
-                           })
-                   }
-                   
-               }else{
-                   if self.price == 0.0{
-                       
-                       if self.albumSongsArray.isEmpty{
-                        log.verbose("Nothing")
-                           
-                       }else{
-                                  let object = self.albumSongsArray[indexPath.row]
-                                  
-                                  self.albumSongsArray.forEach({ (it) in
-                                      var audioString:String? = ""
-                                      var isDemo:Bool? = false
-                                      let name = it.publisher?.name ?? ""
-                                      let time = it.timeFormatted ?? ""
-                                      let title = it.title ?? ""
-                                      let musicType = it.categoryName ?? ""
-                                      let thumbnailImageString = it.thumbnail ?? ""
-                                      
-                                      if it.demoTrack == ""{
-                                          audioString = it.audioLocation ?? ""
-                                          isDemo = false
-                                      }else if it.demoTrack != "" && it.audioLocation != ""{
-                                          audioString = it.audioLocation ?? ""
-                                          isDemo = false
-                                      }else{
-                                          audioString = it.demoTrack ?? ""
-                                          isDemo = true
-                                      }
-                                      let isOwner = it.isOwner ?? false
-                                      let audioId = it.audioID ?? ""
-                                      let likeCount = it.countLikes?.intValue ?? 0
-                                      let favoriteCount = it.countFavorite?.intValue ?? 0
-                                      let recentlyPlayedCount = it.countViews?.intValue ?? 0
-                                      let sharedCount = it.countShares?.intValue ?? 0
-                                      let commentCount = it.countComment?.intValue ?? 0
-                                      let trackId = it.id ?? 0
-                                      let isLiked = it.isLiked ?? false
-                                      let isFavorited = it.isFavoriated ?? false
-                                      let likecountString = it.countLikes?.stringValue ?? ""
-                                      let favoriteCountString = it.countFavorite?.stringValue ?? ""
-                                      let recentlyPlayedCountString = it.countViews?.stringValue ?? ""
-                                      let sharedCountString = it.countShares?.stringValue ?? ""
-                                      let commentCountString = it.countComment?.stringValue ?? ""
-                                      
-                                      let musicObject = MusicPlayerModel(name: name, time: time, title: title, musicType: musicType, ThumbnailImageString: thumbnailImageString, likeCount: likeCount, favoriteCount: favoriteCount, recentlyPlayedCount: recentlyPlayedCount, sharedCount: sharedCount, commentCount: commentCount, likeCountString: likecountString, favoriteCountString: favoriteCountString, recentlyPlayedCountString: recentlyPlayedCountString, sharedCountString: sharedCountString, commentCountString: commentCountString, audioString: audioString, audioID: audioId, isLiked: isLiked, isFavorite: isFavorited, trackId: trackId,isDemoTrack:isDemo!,isPurchased:false,isOwner: isOwner)
-                                      self.albumSongMusicArray.append(musicObject)
-                                  })
-                                  var audioString:String? = ""
-                                  var isDemo:Bool? = false
-                                  let name = object.publisher?.name ?? ""
-                                  let time = object.timeFormatted ?? ""
-                                  let title = object.title ?? ""
-                                  let musicType = object.categoryName ?? ""
-                                  let thumbnailImageString = object.thumbnail ?? ""
-                                  if object.demoTrack == ""{
-                                      audioString = object.audioLocation ?? ""
-                                      isDemo = false
-                                  }else if object.demoTrack != "" && object.audioLocation != ""{
-                                      audioString = object.audioLocation ?? ""
-                                      isDemo = false
-                                  }else{
-                                      audioString = object.demoTrack ?? ""
-                                      isDemo = true
-                                  }
-                                  let isOwner = object.isOwner ?? false
-                                  let audioId = object.audioID ?? ""
-                                  let likeCount = object.countLikes?.intValue ?? 0
-                                  let favoriteCount = object.countFavorite?.intValue ?? 0
-                                  let recentlyPlayedCount = object.countViews?.intValue ?? 0
-                                  let sharedCount = object.countShares?.intValue ?? 0
-                                  let commentCount = object.countComment?.intValue ?? 0
-                                  let trackId = object.id ?? 0
-                                  let isLiked = object.isLiked ?? false
-                                  let isFavorited = object.isFavoriated ?? false
-                                  
-                                  let likecountString = object.countLikes?.stringValue ?? ""
-                                  let favoriteCountString = object.countFavorite?.stringValue ?? ""
-                                  let recentlyPlayedCountString = object.countViews?.stringValue ?? ""
-                                  let sharedCountString = object.countShares?.stringValue ?? ""
-                                  let commentCountString = object.countComment?.stringValue ?? ""
-                           let duration = object.duration ?? "0:0"
-                                  let musicObject = MusicPlayerModel(name: name, time: time, title: title, musicType: musicType, ThumbnailImageString: thumbnailImageString, likeCount: likeCount, favoriteCount: favoriteCount, recentlyPlayedCount: recentlyPlayedCount, sharedCount: sharedCount, commentCount: commentCount, likeCountString: likecountString, favoriteCountString: favoriteCountString, recentlyPlayedCountString: recentlyPlayedCountString, sharedCountString: sharedCountString, commentCountString: commentCountString, audioString: audioString, audioID: audioId, isLiked: isLiked, isFavorite: isFavorited, trackId: trackId,isDemoTrack:isDemo!,isPurchased:false,isOwner: isOwner, duration: duration)
-                                  popupContentController!.popupItem.title = object.publisher?.name ?? ""
-                                  popupContentController!.popupItem.subtitle = object.title?.htmlAttributedString ?? ""
-                                  let cell  = tableView.cellForRow(at: indexPath) as? BrowseAlbums_TableCell
-                                  popupContentController!.popupItem.image = cell?.thumbnailImage.image
-                                  AppInstance.instance.popupPlayPauseSong = false
-                                  SwiftEventBus.postToMainThread(EventBusConstants.EventBusConstantsUtils.EVENT_PLAY_PAUSE_BTN, sender: true)
-                                  self.addToRecentlyWatched(trackId: object.id ?? 0)
-                                  
-                                  
-                                  tabBarController?.presentPopupBar(withContentViewController: popupContentController!, animated: true, completion: {
-                                      
-                                      self.popupContentController?.musicObject = musicObject
-                                      self.popupContentController!.musicArray = self.albumSongMusicArray
-                                      self.popupContentController!.currentAudioIndex = indexPath.row
-                                      self.popupContentController?.setup()
-                                      
-                                  })
-                       }
-                   }else{
-                    log.verbose("Nothing")
-                       
-                   }
-               }
-       
-        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if self.price == 0.0{
-            if albumSongsArray.isEmpty{
+        if isLoading {
+            return UITableView.automaticDimension
+        } else {
+            if albumSongsArray.isEmpty {
                 return 300.0
-            }else{
-                return 90.0
+            } else {
+                if self.albumObject?.is_purchased == 1 {
+                    return UITableView.automaticDimension
+                } else {
+                    if self.price?.intValue == 0 || self.price?.doubleValue == 0 {
+                        return UITableView.automaticDimension
+                    } else {
+                        return 400.0
+                    }
+                }
             }
-        }else{
-            return 400.0
         }
     }
+    
 }
 
-
-extension ShowAlbumVC:likeDislikeSongDelegate{
+// MARK: SongsTableCellsDelegate
+extension ShowAlbumVC: SongsTableCellsDelegate {
     
-    func likeDisLikeSong(status: Bool, button: UIButton,audioId:String) {
-        
-        if status{
-            button.setImage(R.image.ic_outlineHeart(), for: .normal)
-            self.likeDislike(audioId: audioId, button: button)
-        }else{
-            button.setImage(R.image.ic_redHeart(), for: .normal)
-            self.likeDislike(audioId: audioId, button: button)
+    func playButtonPressed(_ sender: UIButton, indexPath: IndexPath, cell: SongsTableCells) {
+        self.view.endEditing(true)
+        if self.albumSongsArray[indexPath.row].audio_id != popupContentController?.musicObject?.audio_id {
+            AppInstance.instance.AlreadyPlayed = false
+            SwiftEventBus.postToMainThread(EventBusConstants.EventBusConstantsUtils.EVENT_PLAY_PAUSE_BTN, sender: true)
+        } else {
+            if AppInstance.instance.AlreadyPlayed {
+                SwiftEventBus.postToMainThread(EventBusConstants.EventBusConstantsUtils.EVENT_PLAY_PAUSE_BTN, sender: true)
+            }else {
+                SwiftEventBus.postToMainThread(EventBusConstants.EventBusConstantsUtils.EVENT_PLAY_PAUSE_BTN, sender: false)
+            }
+            return
+        }
+        let songsArray: [Song] = self.albumSongsArray
+        let object = songsArray[indexPath.row]
+        if let canListen = object.can_listen, canListen {
+            for (i, _) in songsArray.enumerated() {
+                if i == indexPath.row {
+                    if AppInstance.instance.AlreadyPlayed {
+                        changeButtonImage(sender, play: true)
+                        SwiftEventBus.postToMainThread(EventBusConstants.EventBusConstantsUtils.EVENT_PLAY_PAUSE_BTN, sender: false)
+                        return
+                    } else {
+                        changeButtonImage(sender, play: false)
+                    }
+                } else {
+                    if let cell = tableView.cellForRow(at: IndexPath(item: i, section: 0)) as? SongsTableCells {
+                        changeButtonImage(cell.btnPlayPause, play: true)
+                    }
+                }
+            }
+        }
+        AppInstance.instance.popupPlayPauseSong = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            SwiftEventBus.postToMainThread(EventBusConstants.EventBusConstantsUtils.EVENT_PLAY_PAUSE_BTN, sender: false)
+        }
+        self.addToRecentlyWatched(trackId: object.id ?? 0)
+        self.tabBarController?.presentPopupBar(withContentViewController: popupContentController!, animated: true) {
+            popupContentController?.musicObject = object
+            popupContentController?.musicArray = songsArray
+            popupContentController?.currentAudioIndex = indexPath.row
+            popupContentController?.delegate = self
+            popupContentController?.setup()
         }
     }
     
-    private func likeDislike(audioId:String,button:UIButton){
-        if Connectivity.isConnectedToNetwork(){
-            let accessToken = AppInstance.instance.accessToken ?? ""
-            let audioId = audioId ?? ""
-            Async.background({
-                likeManager.instance.likeDisLikeSong(audiotId: audioId, AccessToken: accessToken, completionBlock: { (success, sessionError, error) in
-                    if success != nil{
-                        Async.main({
-                            self.dismissProgressDialog {
-                                log.debug("success = \(success?.mode ?? "")")
-                                if success?.mode == "disliked"{
-                                    button.setImage(R.image.ic_outlineHeart(), for: .normal)
-                                }else{
-                                    button.setImage(R.image.ic_redHeart(), for: .normal)
+    func moreButtonPressed(_ sender: UIButton, indexPath: IndexPath, cell: SongsTableCells) {
+        self.view.endEditing(true)
+        let panVC: PanModalPresentable.LayoutType = TopSongBottomSheetController(song: self.albumSongsArray[indexPath.row], delegate: self)
+        presentPanModal(panVC)
+    }
+    
+}
+
+// MARK: Music Player Notification Handling Functions
+extension ShowAlbumVC {
+    
+    func setupMusicPlayerNotification() {
+        SwiftEventBus.onMainThread(self, name: "PlayerReload") { result in
+            let stringValue = result?.object as? String
+            self.view.makeToast(stringValue)
+            log.verbose(stringValue ?? "")
+        }
+        
+        SwiftEventBus.onMainThread(self, name: EventBusConstants.EventBusConstantsUtils.EVENT_PLAY_PAUSE_BTN) { [self] (notification) in
+            log.verbose("Notification = \(notification?.object as! Bool)")
+            if let statusBool = notification?.object as? Bool {
+                let songsArray: [Song] = self.albumSongsArray
+                if songsArray.count != 0 {
+                    if let currentIndex = songsArray.firstIndex(where: { $0.audio_id == popupContentController?.musicObject?.audio_id }) {
+                        for (i, song) in songsArray.enumerated() {
+                            if i == currentIndex && (song.can_listen ?? false) {
+                                if popupContentController?.musicObject?.audio_id == song.audio_id {
+                                    if let cell = tableView.cellForRow(at: IndexPath(item: currentIndex, section: 0)) as? SongsTableCells {
+                                        if !statusBool {
+                                            cell.btnPlayPause.setImage(R.image.icPauseBtn(), for: .normal)
+                                        } else {
+                                            cell.btnPlayPause.setImage(R.image.ic_playPlayer(), for: .normal)
+                                        }
+                                    }
+                                } else {
+                                    if let cell = tableView.cellForRow(at: IndexPath(item: i, section: 0)) as? SongsTableCells {
+                                        changeButtonImage(cell.btnPlayPause, play: true)
+                                    }
+                                }
+                            } else {
+                                if let cell = tableView.cellForRow(at: IndexPath(item: i, section: 0)) as? SongsTableCells {
+                                    changeButtonImage(cell.btnPlayPause, play: true)
                                 }
                             }
-                        })
-                        
-                    }else if sessionError != nil{
-                        Async.main({
-                            self.dismissProgressDialog {
-                                log.error("sessionError = \(sessionError?.error ?? "")")
-                                self.view.makeToast(NSLocalizedString((sessionError?.error ?? ""), comment: ""))
-                            }
-                        })
-                    }else {
-                        Async.main({
-                            self.dismissProgressDialog {
-                                log.error("error = \(error?.localizedDescription ?? "")")
-                                self.view.makeToast(NSLocalizedString((error?.localizedDescription ?? ""), comment: ""))
-                            }
-                        })
+                        }
                     }
-                })
-            })
-        }else{
-            log.error("internetErrro = \(InterNetError)")
-            self.view.makeToast(NSLocalizedString(InterNetError, comment: ""))
+                }
+            }
+        }
+        
+        SwiftEventBus.onMainThread(self, name: EventBusConstants.EventBusConstantsUtils.EVENT_DISMISS_POPOVER) { [self] result in
+            self.tabBarController?.dismissPopupBar(animated: true, completion: nil)
+            let songsArray: [Song] = self.albumSongsArray
+            for (i, _) in songsArray.enumerated() {
+                if let cell = tableView.cellForRow(at: IndexPath(item: i, section: 0)) as? SongsTableCells {
+                    changeButtonImage(cell.btnPlayPause, play: true)
+                }
+            }
+        }
+        
+        SwiftEventBus.onMainThread(self, name: "EVENT_NEXT_TRACK_BTN") { [self] (notification) in
+            log.verbose("Notification = \(notification?.object as? Bool ?? false)")
+            let statusBool = notification?.object as? Bool
+            if statusBool! {
+                let songsArray: [Song] = self.albumSongsArray
+                if songsArray.count != 0 {
+                    if let currentIndex = songsArray.firstIndex(where: { $0.audio_id == popupContentController?.musicObject?.audio_id }) {
+                        let indexPath = IndexPath(item: currentIndex, section: 0)
+                        let songObj = songsArray[indexPath.row]
+                        if let canListen = songObj.can_listen, canListen {
+                            for (i, song) in songsArray.enumerated() {
+                                if i == currentIndex && (song.can_listen ?? false) {
+                                    if popupContentController?.musicObject?.audio_id == song.audio_id {
+                                        if AppInstance.instance.AlreadyPlayed {
+                                            if let cell = tableView.cellForRow(at: indexPath) as? SongsTableCells {
+                                                changeButtonImage(cell.btnPlayPause, play: false)
+                                            }
+                                        } else {
+                                            if let cell = tableView.cellForRow(at: indexPath) as? SongsTableCells {
+                                                changeButtonImage(cell.btnPlayPause, play: true)
+                                            }
+                                        }
+                                    }else {
+                                        if let cell = tableView.cellForRow(at: IndexPath(item: i, section: 0)) as? SongsTableCells {
+                                            changeButtonImage(cell.btnPlayPause, play: true)
+                                        }
+                                    }
+                                } else {
+                                    if let cell = tableView.cellForRow(at: IndexPath(item: i, section: 0)) as? SongsTableCells {
+                                        changeButtonImage(cell.btnPlayPause, play: true)
+                                    }
+                                }
+                            }
+                        } else {
+                            // let warningPopupVC = R.storyboard.popups.purchaseRequiredPopupVC()
+                            // warningPopupVC?.delegate = self
+                            // warningPopupVC?.object = songObj
+                            // self.appDelegate.window?.rootViewController?.present(warningPopupVC!, animated: true, completion: nil)
+                        }
+                    }
+                }
+            }
         }
     }
 }
-extension ShowAlbumVC:BottomSheetDelegate{
-    func goToArtist() {
-        let vc = R.storyboard.discover.artistVC()
-        
-        self.navigationController?.pushViewController(vc!, animated: true)
-      
-        
+
+// MARK: BottomSheetDelegate
+extension ShowAlbumVC: BottomSheetDelegate {
+    
+    func goToArtist(artist: Publisher) {
+        self.view.endEditing(true)
+        if let newVC = R.storyboard.discover.artistDetailsVC() {
+            newVC.artistObject = artist
+            self.navigationController?.pushViewController(newVC, animated: true)
+        }
     }
     
     func goToAlbum() {
         let vc = R.storyboard.dashboard.albumsVC()
         self.navigationController?.pushViewController(vc!, animated: true)
-        
-        
     }
     
+}
+
+// MARK: PurchaseRequiredPopupDelegate
+extension ShowAlbumVC: PurchaseRequiredPopupDelegate {
+    
+    func purchaseButtonPressed(_ sender: UIButton, _ songObject: Song?) {
+        print("pressssss")
+    }
+    
+}
+
+// MARK: UIViewControllerTransitioningDelegate Methods
+extension ShowAlbumVC: UIViewControllerTransitioningDelegate {
+    
+    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        BottomSheetPresentationController(presentedViewController: presented, presenting: presenting)
+    }
     
 }

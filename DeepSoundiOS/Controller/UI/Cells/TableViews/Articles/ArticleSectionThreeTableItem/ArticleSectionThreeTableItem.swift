@@ -21,8 +21,10 @@ class ArticleSectionThreeTableItem: UITableViewCell {
 
         // Configure the view for the selected state
     }
-    func bind(_ object:String){
-        self.descriptionLabel.text = "Banner HayCode.Net"// object.withoutHtmlTags().html2Attributed
-      }
     
+    func bind(_ object: Blog) {
+        var str = object.content?.replacingOccurrences(of: "&lt;", with: "<")
+        str = str?.replacingOccurrences(of: "&gt;", with: ">")
+        self.descriptionLabel.attributedText = str?.convertHtmlToAttributedStringWithCSS(font: R.font.urbanistRegular.callAsFunction(size: 18), font3: R.font.urbanistBold.callAsFunction(size: 18)!, csscolor: "#212121")
+    }
 }

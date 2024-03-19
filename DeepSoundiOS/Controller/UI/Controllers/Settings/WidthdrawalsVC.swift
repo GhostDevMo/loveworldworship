@@ -8,113 +8,140 @@
 
 import UIKit
 import DeepSoundSDK
-import  Async
+import Async
+import Toast_Swift
+
 class WidthdrawalsVC: BaseVC {
     
-    @IBOutlet weak var amountShowLabel: UILabel!
-    @IBOutlet weak var emailTextField: UITextField!
-    @IBOutlet weak var amountTextField: UITextField!
+    // MARK: - IBOutlets
     
-    @IBOutlet weak var sendBtn: UIBarButtonItem!
-    @IBOutlet weak var balanceLabel: UILabel!
+    @IBOutlet weak var myBalanceLabel: UILabel!
+    @IBOutlet weak var balanceAmountLabel: UILabel!
+    @IBOutlet weak var amountTextField: UITextField!
+    @IBOutlet weak var amountTextFieldView: UIView!
+    @IBOutlet weak var payPalEmailTextField: UITextField!
+    @IBOutlet weak var payPalEmailTextFieldView: UIView!
+    @IBOutlet weak var sendButton: UIButton!
+    
+    // MARK: - View Life Cycles
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.setupUI()
+        
+        self.initialConfig()
     }
     
-    @IBAction func sendPressed(_ sender: Any) {
-        self.sendCheck()
+    // MARK: - Selectors
+    
+    // Back Button Action
+    @IBAction override func backButtonAction(_ sender: UIButton) {
+        self.view.endEditing(true)
+        self.navigationController?.popViewController(animated: true)
     }
-    private func setupUI(){
-        
-        self.title = NSLocalizedString("Widthdrawals", comment: "Widthdrawals")
-        
-        self.balanceLabel.text = NSLocalizedString("MY BALANCE", comment: "MY BALANCE")
-        self.amountTextField.placeholder = NSLocalizedString("Amount", comment: "Amount")
-        self.emailTextField.placeholder = NSLocalizedString("PayPal E=mail", comment: "PayPal E=mail")
-        self.amountShowLabel.text = AppInstance.instance.userProfile?.data?.balance ?? "0 $"
-    }
-    private func sendCheck(){
-        if appDelegate.isInternetConnected{
-            if (self.amountTextField.text?.isEmpty)!{
-                
-                let securityAlertVC = R.storyboard.popups.securityPopupVC()
-                securityAlertVC?.titleText  = "Security"
-                securityAlertVC?.errorText = "Please enter amount."
-                self.present(securityAlertVC!, animated: true, completion: nil)
-                
-            }else if (self.emailTextField.text?.isEmpty)!{
-                
-                let securityAlertVC = R.storyboard.popups.securityPopupVC()
-                securityAlertVC?.titleText  = "Security"
-                securityAlertVC?.errorText = "Please enter email."
-                self.present(securityAlertVC!, animated: true, completion: nil)
-                
-            }else if (self.emailTextField.text?.isEmpty)!{
-                
-                let securityAlertVC = R.storyboard.popups.securityPopupVC()
-                securityAlertVC?.titleText  = "Security"
-                securityAlertVC?.errorText = "Please enter username."
-                self.present(securityAlertVC!, animated: true, completion: nil)
-                
-            }else if !((emailTextField.text?.isEmail)!){
-                
-                let securityAlertVC = R.storyboard.popups.securityPopupVC()
-                securityAlertVC?.titleText  = "Security"
-                securityAlertVC?.errorText = "Email is badly formatted."
-                self.present(securityAlertVC!, animated: true, completion: nil)
-                
-            }else{
-                self.widthdraw()
-            }
-            
-        }else{
-            self.dismissProgressDialog {
-                let securityAlertVC = R.storyboard.popups.securityPopupVC()
-                securityAlertVC?.titleText  = "Internet Error "
-                securityAlertVC?.errorText = InterNetError
-                self.present(securityAlertVC!, animated: true, completion: nil)
-                log.error("internetError - \(InterNetError)")
-            }
+    
+    // Send Button Action
+    @IBAction func sendButtonAction(_ sender: UIButton) {
+        self.view.endEditing(true)
+        if self.amountTextField.text?.trimmingCharacters(in: .whitespaces).count == 0 {
+            self.view.makeToast("Please enter amount")
+            return
         }
+        if self.payPalEmailTextField.text?.trimmingCharacters(in: .whitespaces).count == 0 {
+            self.view.makeToast("Please enter email")
+            return
+        }
+        if !(payPalEmailTextField.text?.isEmail ?? false) {
+            self.view.makeToast("Email is badly formatted")
+            return
+        }
+        let email = self.payPalEmailTextField.text ?? ""
+        let amount = Int(self.amountTextField.text ?? "") ?? 0
+        self.widthdraw(amount: amount, email: email)
     }
-    private func widthdraw(){
-        if Connectivity.isConnectedToNetwork(){
-            let accessToken = AppInstance.instance.accessToken ?? ""
-            let email = self.emailTextField.text ?? ""
-            let amount = Int(self.amountTextField.text ?? "") ?? 0
-            Async.background({
-                WidthdrawalManager.instance.Widthdraw(AccessToken: accessToken, amount: amount, email: email, completionBlock: { (success, sessionError, error) in
-                    if success != nil{
-                        Async.main({
+    
+    // MARK: - Helper Functions
+    
+    // Initial Config
+    func initialConfig() {
+        self.textFieldSetUp()
+        self.setUpUI()
+    }
+    
+    func textFieldSetUp() {
+        self.amountTextField.attributedPlaceholder = NSAttributedString(
+            string: "Amount",
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.hexStringToUIColor(hex: "9E9E9E") as Any]
+        )
+        self.amountTextField.delegate = self
+        self.payPalEmailTextField.attributedPlaceholder = NSAttributedString(
+            string: "PayPal E-mail",
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.hexStringToUIColor(hex: "9E9E9E") as Any]
+        )
+        self.payPalEmailTextField.delegate = self
+    }
+    
+    private func setUpUI() {
+        self.balanceAmountLabel.text = AppInstance.instance.userProfile?.data?.balance ?? "0 $"
+    }
+    
+    private func widthdraw(amount: Int, email: String) {
+        if Connectivity.isConnectedToNetwork() {
+            let access_token = AppInstance.instance.accessToken ?? ""
+            Async.background {
+                WidthdrawalManager.instance.Widthdraw(AccessToken: access_token, amount: amount, email: email, completionBlock: { (success, sessionError, error) in
+                    if success != nil {
+                        Async.main {
                             self.dismissProgressDialog {
-                                
                                 log.debug("userList = \(success?.data ?? "")")
-                               
                             }
-                        })
-                    }else if sessionError != nil{
-                        Async.main({
+                        }
+                    } else if sessionError != nil {
+                        Async.main {
                             self.dismissProgressDialog {
-                                
                                 self.view.makeToast(sessionError?.error ?? "")
                                 log.error("sessionError = \(sessionError?.error ?? "")")
                             }
-                        })
-                    }else {
-                        Async.main({
+                        }
+                    } else {
+                        Async.main {
                             self.dismissProgressDialog {
                                 self.view.makeToast(error?.localizedDescription ?? "")
                                 log.error("error = \(error?.localizedDescription ?? "")")
                             }
-                        })
+                        }
                     }
                 })
-            })
-            
-        }else{
+            }
+        } else {
             log.error("internetError = \(InterNetError)")
             self.view.makeToast(InterNetError)
+        }
+    }
+    
+}
+
+// MARK: UITextFieldDelegate Methods
+extension WidthdrawalsVC: UITextFieldDelegate {
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        switch textField {
+        case amountTextField:
+            self.amountTextFieldView.borderColorV = .mainColor
+        case payPalEmailTextField:
+            self.payPalEmailTextFieldView.borderColorV = .mainColor
+        default:
+            break
+        }
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        switch textField {
+        case amountTextField:
+            self.amountTextFieldView.borderColorV = .clear
+        case payPalEmailTextField:
+            self.payPalEmailTextFieldView.borderColorV = .clear
+        default:
+            break
         }
     }
     

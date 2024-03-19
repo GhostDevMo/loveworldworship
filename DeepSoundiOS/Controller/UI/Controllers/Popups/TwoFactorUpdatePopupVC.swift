@@ -8,36 +8,43 @@
 
 import UIKit
 
-
 class TwoFactorUpdatePopupVC: UIViewController {
     
-    @IBOutlet weak var cancelLabel: UIButton!
-    @IBOutlet weak var disableLabel: UIButton!
-    @IBOutlet weak var enableLabel: UIButton!
-    @IBOutlet weak var selectLabel: UILabel!
-    var delegate:TwoFactorAuthDelegate?
+    // MARK: - IBOutlet
+    
+    @IBOutlet weak var enableLabel: UILabel!
+    @IBOutlet weak var disableLabel: UILabel!
+    
+    // MARK: - Properties
+
+    var delegate: TwoFactorAuthDelegate?
+    
+    // MARK: - View Life Cycles
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.cancelLabel.setTitle((NSLocalizedString("CANCEL", comment: "")), for: .normal)
-        self.disableLabel.setTitle((NSLocalizedString("Disable", comment: "")), for: .normal)
-        self.enableLabel.setTitle((NSLocalizedString("Enable", comment: "")), for: .normal)
-        self.selectLabel.text = (NSLocalizedString("Select", comment: ""))
+        
     }
     
-    @IBAction func cancelPressed(_ sender: Any) {
+    // MARK: - Selectors
+    
+    // Close Button Action
+    @IBAction func closeButtonAction(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
     }
     
-    
-    @IBAction func disablePressed(_ sender: Any) {
+    // Disable Button Action
+    @IBAction func disableButtonAction(_ sender: UIButton) {
         self.dismiss(animated: true) {
             self.delegate?.getTwoFactorUpdateString(type: "disable")
         }
     }
-    @IBAction func enablePressed(_ sender: Any) {
+    
+    // Enable Button Action
+    @IBAction func enableButtonAction(_ sender: UIButton) {
         self.dismiss(animated: true) {
             self.delegate?.getTwoFactorUpdateString(type: "enable")
         }
     }
+    
 }

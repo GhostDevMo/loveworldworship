@@ -13,9 +13,9 @@ class SelectPlaylist_TableCell: UITableViewCell {
     @IBOutlet weak var playlistNameLabel: UILabel!
     @IBOutlet weak var checkImage: UIImageView!
     
-    private var status:Bool? = false
-    var playListIdArray = [PlaylistModel.Playlist]()
-    var indexPath:Int? = 0
+    private var status:Bool = false
+    var playListIdArray = [Playlist]()
+    var indexPath:Int = 0
     var delegate: didSetPlaylistDelegate?
     
     override func awakeFromNib() {
@@ -29,13 +29,12 @@ class SelectPlaylist_TableCell: UITableViewCell {
        
     }
     
-    @IBAction func selectPressed(_ sender: Any) {
-        self.status = !status!
-        
-        if status!{
-            self.delegate?.didPlaylist(Image: self.checkImage, status: status ?? false, idsArray: playListIdArray, Index: indexPath!)
+    @IBAction func selectPressed(_ sender: UIButton) {
+        self.status = !status
+        if status {
+            self.delegate?.didPlaylist(Image: self.checkImage, status: status , idsArray: playListIdArray, Index: indexPath)
         }else{
-              self.delegate?.didPlaylist(Image: self.checkImage, status: status ?? false, idsArray: playListIdArray, Index: indexPath!)
+            self.delegate?.didPlaylist(Image: self.checkImage, status: status , idsArray: playListIdArray, Index: indexPath)
         }
     }
 }

@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Icon-App-40x40@1x.png",
+      "filename" : "Music.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Icon-App-40x40@2x.png",
+      "filename" : "Music@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Icon-App-40x40@3x.png",
+      "filename" : "Music@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

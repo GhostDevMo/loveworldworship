@@ -22,12 +22,12 @@ class LoginPopupVC: BaseVC {
         self.descLabel.text = (NSLocalizedString("Sorry you can not continue, you must login and enjoy access to everything you want", comment: ""))
         self.Login.text = (NSLocalizedString("Login", comment: ""))
     }
-    @IBAction func yesPRessed(_ sender: Any) {
+    @IBAction func yesPRessed(_ sender: UIButton) {
         self.dismiss(animated: true) {
             self.appDelegate.window?.rootViewController = R.storyboard.login.main()
         }
     }
-    @IBAction func noPressed(_ sender: Any) {
+    @IBAction func noPressed(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
     }
 }

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-class BankTransferModel:BaseModel{
+class BankTransferModel: BaseModel {
     struct BankTransferSuccessModel: Codable {
         var status: Int?
         var data: String?

@@ -33,45 +33,41 @@ class SelectPriceVC: BaseVC {
         self.ChoosePrice.text = (NSLocalizedString("Choose Price", comment: ""))
         self.setupUI()
         self.fetchPrices()
-        SwiftEventBus.onMainThread(self, name:   EventBusConstants.EventBusConstantsUtils.EVENT_DISMISS_POPOVER) { result in
+        SwiftEventBus.onMainThread(self, name: EventBusConstants.EventBusConstantsUtils.EVENT_DISMISS_POPOVER) { result in
             log.verbose("To dismiss the popover")
-            AppInstance.instance.player = nil
+            
             self.tabBarController?.dismissPopupBar(animated: true, completion: nil)
         }
-        SwiftEventBus.onMainThread(self, name:   "PlayerReload") { result in
+        SwiftEventBus.onMainThread(self, name: "PlayerReload") { result in
             let stringValue = result?.object as? String
             self.view.makeToast(stringValue)
-            log.verbose(stringValue)
+            log.verbose(stringValue ?? "")
         }
     }
     
-    private func setupUI(){
-        
+    private func setupUI() {
         self.tableView.separatorStyle = .none
-        tableView.register(SelectPrice_TableCell.nib, forCellReuseIdentifier: SelectPrice_TableCell.identifier)
+        tableView.register(UINib(resource: R.nib.selectPrice_TableCell), forCellReuseIdentifier: R.reuseIdentifier.selectPrice_TableCell.identifier)
     }
     
-    @IBAction func donePressed(_ sender: Any) {
-        var stringArray = self.idsArray.map { String($0) }
+    @IBAction func donePressed(_ sender: UIButton) {
+        let stringArray = self.idsArray.map { String($0) }
         self.priceIdString = stringArray.joined(separator: ",")
-        log.verbose("priceIdString = \(priceIdString)")
+        log.verbose("priceIdString = \(priceIdString ?? "")")
         
-        var nameStringArray = self.nameArray.map { String($0) }
+        let nameStringArray = self.nameArray.map { String($0) }
         self.priceNameString = nameStringArray.joined(separator: ",")
-        log.verbose("priceNameString = \(priceNameString)")
+        log.verbose("priceNameString = \(priceNameString ?? "")")
         self.dismiss(animated: true) {
             self.delegate.getPriceString(String: self.priceIdString ?? "",nameString:self.priceNameString ?? "")
         }
-        
     }
-    
-    
-    @IBAction func closePressed(_ sender: Any) {
+        
+    @IBAction func closePressed(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
     }
     
-    private func fetchPrices(){
-        
+    private func fetchPrices() {
         self.showProgressDialog(text: "Loading...")
         if Connectivity.isConnectedToNetwork(){
             let accessToken = AppInstance.instance.accessToken ?? ""
@@ -84,7 +80,6 @@ class SelectPriceVC: BaseVC {
                                 self.priceArray = success?.data ?? []
                                 self.tableView.reloadData()
                             }
-                        
                         })
                     }else if sessionError != nil{
                         Async.main({
@@ -117,15 +112,15 @@ extension SelectPriceVC:UITableViewDelegate,UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: SelectPrice_TableCell.identifier) as? SelectPrice_TableCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.selectPrice_TableCell.identifier, for: indexPath) as? SelectPrice_TableCell
         cell?.priceNameLabel.text = "$\(self.priceArray[indexPath.row].price ?? "")"
         cell?.delegate = self
         cell?.priceIdArray = self.priceArray
         cell?.indexPath = indexPath.row
-        return cell!
+        return cell ?? UITableViewCell()
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 44.0
+        return 50.0
     }  
 }
 
@@ -133,15 +128,12 @@ extension SelectPriceVC:didSetPriceDelegate{
     
     func didSetPrice(Image: UIImageView, status: Bool, idsArray: [PriceModel.Datum], Index: Int) {
         if status{
-            
-            Image.image = R.image.ic_checked()
+            Image.image = R.image.icCheckbox()
             self.idsArray.append(idsArray[Index].id ?? 0)
             self.nameArray.append(idsArray[Index].price ?? "")
             log.verbose("priceIdArray = \(self.idsArray)")
             log.verbose("nameArray = \(self.nameArray)")
-            
         }else{
-            
             Image.image = R.image.ic_uncheck()
             for (index,values) in self.idsArray.enumerated(){
                 if values == idsArray[Index].id{
@@ -155,7 +147,6 @@ extension SelectPriceVC:didSetPriceDelegate{
                     break
                 }
             }
-
             log.verbose("genresString = \(priceIdString)")
             log.verbose("priceIdArray = \(self.idsArray)")
             log.verbose("nameArray = \(self.nameArray)")

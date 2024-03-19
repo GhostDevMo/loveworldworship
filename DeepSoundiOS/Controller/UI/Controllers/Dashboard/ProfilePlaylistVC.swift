@@ -7,144 +7,175 @@
 //
 
 import UIKit
-import XLPagerTabStrip
-import EmptyDataSet_Swift
+import Async
 import EzPopup
-class ProfilePlaylistVC: UIViewController{
+import Toast_Swift
+
+class ProfilePlaylistVC: BaseVC {
     
+    // MARK: - IBOutlets
     
-    @IBOutlet weak var showLabel: UILabel!
-    @IBOutlet weak var showImage: UIImageView!
     @IBOutlet weak var tableView: UITableView!
-    var playlistArray = [ProfileModel.Playlist]()
-    var status:Bool? = false
+    
+    // MARK: - Properties
+    
+    var parentVC: BaseVC?
+    var isOtherUser = false
+    var userID: Int?
+    var playlistArray: [Playlist] = []
+    
+    // MARK: - View Life Cycles
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.setupUI()
-        //showLabel.text = (NSLocalizedString("There are no activity by this user ", comment: ""))
+        self.fetchUserProfile()
+        self.tableView.addPullToRefresh {
+            self.playlistArray.removeAll()
+            self.tableView.reloadData()
+            self.fetchUserProfile()
+        }
     }
-    func setupUI(){
-     
-        tableView.register(SongsTableCells.nib, forCellReuseIdentifier: SongsTableCells.identifier)
-        tableView.register(AssigingOrderHeaderTableCell.nib, forCellReuseIdentifier: AssigingOrderHeaderTableCell.identifier)
+    
+    // MARK: - Helper Functions
+    
+    func setupUI() {
+        tableView.register(UINib(resource: R.nib.assigingOrderHeaderTableCell), forCellReuseIdentifier: R.reuseIdentifier.assigingOrderHeaderTableCell.identifier)
+        tableView.register(UINib(resource: R.nib.songsTableCells), forCellReuseIdentifier: R.reuseIdentifier.songsTableCells.identifier)
+        tableView.register(UINib(resource: R.nib.noDataTableItem), forCellReuseIdentifier: R.reuseIdentifier.noDataTableItem.identifier)
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.emptyDataSetSource = self
-        tableView.emptyDataSetDelegate = self
-        
     }
-    @objc func didTapSongsMore(sender:UIButton){
-      
-            
-     
-     //       let panVC: PanModalPresentable.LayoutType = TopSongBottomSheetController(song: musicObject, delegate: self)
-    //     presentPanModal(panVC)
-       
+    
+    private func fetchUserProfile() {
+        var userId = 0
+        if isOtherUser {
+            userId = self.userID ?? 0
+        } else {
+            userId = AppInstance.instance.userId ?? 0
+        }
+        let accessToken = AppInstance.instance.accessToken ?? ""
+        Async.background {
+            ProfileManger.instance.getProfile(UserId: userId, fetch: "playlists", AccessToken: accessToken, completionBlock: { (success, sessionError, error) in
+                self.tableView.stopPullToRefresh()
+                if success != nil {
+                    Async.main {
+                        self.dismissProgressDialog {
+                            self.playlistArray = success?.data?.playlists?.first ?? []
+                            self.tableView.reloadData()
+                        }
+                    }
+                } else if sessionError != nil {
+                    Async.main {
+                        self.dismissProgressDialog {
+                            log.error("sessionError = \(sessionError?.error ?? "")")
+                            self.view.makeToast(NSLocalizedString(sessionError?.error ?? "", comment: ""))
+                        }
+                    }
+                } else {
+                    Async.main {
+                        self.dismissProgressDialog {
+                            log.error("error = \(error?.localizedDescription ?? "")")
+                            // self.view.makeToast(NSLocalizedString(error?.localizedDescription ?? "", comment: ""))
+                        }
+                    }
+                }
+            })
+        }
     }
-    @objc func didTapFilterData(sender:UIButton){
+    
+    @objc func didTapFilterData(sender: UIButton) {
         let filterVC = FilterPopUPController(dele: self)
-        
-        let popupVC = PopupViewController(contentController: filterVC, position: .topLeft(CGPoint(x: self.tableView.frame.width - 230, y: 350)), popupWidth: 200, popupHeight: 200)
+        let popupVC = PopupViewController(contentController: filterVC, position: .topLeft(CGPoint(x: self.view.frame.width - 190, y: 190)), popupWidth: 190, popupHeight: 150)
         popupVC.canTapOutsideToDismiss = true
         popupVC.cornerRadius = 10
         popupVC.shadowEnabled = true
         popupVC.delegate = self
         present(popupVC, animated: true, completion: nil)
-        
     }
+    
 }
-extension ProfilePlaylistVC:UITableViewDelegate,UITableViewDataSource{
+
+// MARK: TableView Setup
+extension ProfilePlaylistVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if status!{
-            return playlistArray.count
-        }else{
-            if playlistArray.isEmpty{
-                return AppInstance.instance.playlistArray?.count ?? 0
-                
-            }else{
-                return playlistArray.count
-            }
+        if playlistArray.count == 0 {
+            return 1
         }
+        return playlistArray.count + 1
     }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: SongsTableCells.identifier) as? SongsTableCells
-        cell?.selectionStyle = .none
-        
-        let object = AppInstance.instance.playlistArray?[indexPath.row]
-        cell?.btnPlayPause.tag = indexPath.row
-        cell?.btnPlayPause.isHidden = true
-        cell?.btnMore.tag = indexPath.row
-        cell?.btnMore.addTarget(self, action: #selector(didTapSongsMore(sender:)), for: .touchUpInside)
-        cell?.bindProfilePlayList(object!, index: indexPath.row)
-        return cell!
-        
-        
+        if playlistArray.count == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.noDataTableItem.identifier, for: indexPath) as! NoDataTableItem
+            cell.titleLabel.text = "No Playlist"
+            cell.noDataLabel.text = "You have not any playlist yet! "
+            return cell
+        }
+        if indexPath.row == 0 {
+            let headerView = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.assigingOrderHeaderTableCell.identifier) as! AssigingOrderHeaderTableCell
+            headerView.lblTotalSongs.text = "\(playlistArray.count) PlayList"
+            headerView.btnArrangOrder.addTarget(self, action: #selector(didTapFilterData(sender:)), for: .touchUpInside)
+            return headerView
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.songsTableCells.identifier, for: indexPath) as! SongsTableCells
+            cell.selectionStyle = .none
+            let object = playlistArray[indexPath.row-1]
+            cell.btnPlayPause.tag = indexPath.row-1
+            cell.btnPlayPause.isHidden = true
+            cell.btnMore.tag = indexPath.row-1
+            cell.indexPath = indexPath
+            cell.delegate = self
+            cell.bindProfilePlayList(object, index: indexPath.row-1)
+            return cell
+        }
     }
-    
-  
+        
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    
+        if playlistArray.count != 0 {
             let vc = R.storyboard.playlist.showPlaylistDetailsVC()
-            vc?.ProfilePlaylistObject = AppInstance.instance.playlistArray?[indexPath.row]
-                  self.navigationController?.pushViewController(vc!, animated:true)
+            vc?.playlistObject = playlistArray[indexPath.row-1]
+            self.parentVC?.navigationController?.pushViewController(vc!, animated:true)
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return UITableView.automaticDimension
+    }
     
 }
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-       
-        let headerView = tableView.dequeueReusableCell(withIdentifier: AssigingOrderHeaderTableCell.identifier) as!  AssigingOrderHeaderTableCell
-        headerView.lblTotalSongs.text = "\(AppInstance.instance.likedArray.count ) Songs"
-        headerView.btnArrangOrder.addTarget(self, action: #selector(didTapFilterData(sender:)), for: .touchUpInside)
-        return headerView
-    }
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-      
-        return 43
+
+// MARK: SongsTableCellsDelegate
+extension ProfilePlaylistVC: SongsTableCellsDelegate {
+    
+    func playButtonPressed(_ sender: UIButton, indexPath: IndexPath, cell: SongsTableCells) {
         
+    }
+    
+    func moreButtonPressed(_ sender: UIButton, indexPath: IndexPath, cell: SongsTableCells) {
+        let panVC: PanModalPresentable.LayoutType = PlayListBottomSheetController(playlist: self.playlistArray[indexPath.row-1], delegate: self)
+        presentPanModal(panVC)
     }
 }
-    extension ProfilePlaylistVC: EmptyDataSetSource, EmptyDataSetDelegate {
-        
-        func title(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
-            return NSAttributedString(string: "No Liked songs", attributes: [NSAttributedString.Key.font : R.font.poppinsBold(size: 30) ?? UIFont.boldSystemFont(ofSize: 24)])
-        }
-        func description(forEmptyDataSet scrollView: UIScrollView) -> NSAttributedString? {
-            return NSAttributedString(string: "You have not liked any song yet! ", attributes: [NSAttributedString.Key.font : R.font.poppinsMedium(size: 14) ?? UIFont.systemFont(ofSize: 14)])
-        }
-        func image(forEmptyDataSet scrollView: UIScrollView) -> UIImage? {
-            
-            return resizeImage(image:  R.image.emptyData()!, targetSize:  CGSize(width: 200.0, height: 200.0))
-        }
-        
-        func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage? {
-            let size = image.size
-            
-            let widthRatio  = targetSize.width  / size.width
-            let heightRatio = targetSize.height / size.height
-            
-            // Figure out what our orientation is, and use that to form the rectangle
-            var newSize: CGSize
-            if(widthRatio > heightRatio) {
-                newSize = CGSize(width: size.width * heightRatio, height: size.height * heightRatio)
-            } else {
-                newSize = CGSize(width: size.width * widthRatio, height: size.height * widthRatio)
-            }
-            
-            // This is the rect that we've calculated out and this is what is actually used below
-            let rect = CGRect(origin: .zero, size: newSize)
-            
-            // Actually do the resizing to the rect using the ImageContext stuff
-            UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
-            image.draw(in: rect)
-            let newImage = UIGraphicsGetImageFromCurrentImageContext()
-            UIGraphicsEndImageContext()
-            
-            return newImage
-        }
+
+// MARK: PlayListBottomSheetDelegate
+extension ProfilePlaylistVC: PlayListBottomSheetDelegate {
+    
+    func editButton(_ sender: UIButton, object: Playlist) {
+        self.view.endEditing(true)
+        guard let vc = R.storyboard.playlist.createPlaylistVC() else { return }
+        vc.selectedPlayList = object
+        let panVC: PanModalPresentable.LayoutType = vc
+        presentPanModal(panVC)
     }
-extension ProfilePlaylistVC:FilterTable {
+    
+}
+
+// MARK: FilterTable
+extension ProfilePlaylistVC: FilterTable {
+    
     func filterData(order: Int) {
         let order = FilterData(rawValue: order)
         switch order {
@@ -163,16 +194,15 @@ extension ProfilePlaylistVC:FilterTable {
         case .none:
             break
         }
-        
     }
+    
 }
-extension ProfilePlaylistVC:PopupViewControllerDelegate {
+
+// MARK: PopupViewControllerDelegate
+extension ProfilePlaylistVC: PopupViewControllerDelegate {
+    
     func popupViewControllerDidDismissByTapGesture(_ sender: PopupViewController) {
         
     }
+    
 }
-    extension ProfilePlaylistVC:IndicatorInfoProvider{
-        func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
-            return IndicatorInfo(title: (NSLocalizedString("Playlist", comment: "Playlist")))
-        }
-    }

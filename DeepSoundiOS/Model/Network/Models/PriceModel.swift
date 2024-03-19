@@ -7,7 +7,7 @@
 //
 
 import Foundation
-class PriceModel:BaseModel{
+class PriceModel: BaseModel {
     // MARK: - Welcome
     struct PriceSuccessModel: Codable {
         let status: Int?

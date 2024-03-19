@@ -44,11 +44,8 @@ class BankTransferVC: BaseVC {
         self.tabBarController?.tabBar.isHidden = false
         
     }
-    @IBAction func backPressed(_ sender: Any) {
-        self.navigationController?.popViewController(animated: true)
-    }
     
-    @IBAction func cancelPressed(_ sender: Any) {
+    @IBAction func cancelPressed(_ sender: UIButton) {
         self.receiptImage.image = nil
         self.mediaData = nil
         isMediaStatus = false
@@ -56,7 +53,7 @@ class BankTransferVC: BaseVC {
         
     }
     
-    @IBAction func sendPressed(_ sender: Any) {
+    @IBAction func sendPressed(_ sender: UIButton) {
         if !self.isMediaStatus!{
             self.view.makeToast("Please add receipt")
         }else{
@@ -64,7 +61,7 @@ class BankTransferVC: BaseVC {
         }
     }
     
-    @IBAction func selectPictureBtn(_ sender: Any) {
+    @IBAction func selectPictureBtn(_ sender: UIButton) {
         log.verbose("Tapped ")
         
         let alert = UIAlertController(title: "", message:NSLocalizedString("Select Source", comment: "Select Source") , preferredStyle: .alert)
@@ -138,6 +135,5 @@ extension  BankTransferVC:UIImagePickerControllerDelegate, UINavigationControlle
         self.isMediaStatus = true
         self.cancelBtn.isHidden = false
         self.dismiss(animated: true, completion: nil)
-        
     }
 }

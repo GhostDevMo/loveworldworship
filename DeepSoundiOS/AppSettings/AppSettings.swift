@@ -11,25 +11,29 @@ import UIKit
 import DeepSoundSDK
 
 struct AppConstant {
-//
-//deepsound key
-    static let key = "Vm0xd1MwNUdXWGxUV0docFVtMVNWbFl3WkZOVU1WVjNXa2M1VjAxWGVGWlZWbEpIVjBaS2RWRnNiRlZXYkhCUVZrUkdTMk15VGtkaVJsWnBVakZHTTFac1VrZFhiVkY1Vkd0a2FsSnRVbFJhVjNSSFRrWmFkR05GZEZSTlZYQjZWa2MxUzFWR1duTmpTRUpYVFVaV05GUlVSbUZXYkdSeVYyeENWMkV3Y0ZSV1ZWcFNaREpTYzFGc1VtdFNiWGhVVlRCYVMxUXhVbGxqUnpWUVZsaFJNVlF4V210VWJGcDFVV3hzV0ZZelFraFdiVEZTWkRBeFYxZHRhRk5pUm5CMlZrWmpNV0l4V1hoWGJsSnJVakJhY2xSV1drdGxiR3QzVjIxMFYySlZjSGxVYkdoUFYyMUZlVlZVUW1GV1ZuQm9WVEJWZUZac2NFaGhSbVJvVFc1amQxWnNZM2hrTVZsNFYyeGFUbFp0YUc5Vk1HaERXVlphZEdWSVpGUk5XRUpYVmpKek5WZEdXWGRPVldoYVRVZFNkbGxWWkZkak1XUnlUbFprVG1KdGFIaFhiRlpoVTIxV1IxVnVTbWhTYkVwdlZGYzFiMkl4V2xobFJrNVRUV3MxU0ZZeU5VOVdiVXBIWTBoT1YySlVSbFJXTVZwM1ZteGFWVkpzVms1V2JrSlhWbFprZDFZeFduSk5WbWhvVWtVMVdGbFVTbE5VUm5CSFYydGthMUpVYkZoV01qRnZZVVV4Y1dGRVRsZGhNWEIyV1Zkek5WWXhSbk5UYkVaWFVrVktOVlpGYUhabFJsWjBWVzVHYVZKVWJGWldha3ByWlZaU1NXSXphRmhTTUhCSlZsY3hSMWxXV1hwaFJFNVhZa1p3TTFSdGVGTmphemxZWlVkc1dGSnJWalJXYlhSclRVWlZlRlZ1VWxkaE1YQlFWbXhrYjFac2JITlZhMlJhVm0xNGVsWnROVXRpUmxwelUyeHdXazFHY0hKWlZXUkxVMVpHY2xkc1pHbFdSVm8yVm10a05GZHRWa2RYYmtaVllrWmFXRmxyVm5kVVJtUnpWbTFHYW1KV1dsaFdWelZUWWtaS1ZXSklRbGRpUmtwSFdsZDRXbVZHYTNwaFJsSk9ZVE5DV0ZaR1dtRlRNVlpYVjJ0V1VsWkhlRTFhVmxKdVRsWndSVk5zVGxOaGVsSTBWVmMxZDFSSFZsVmFlbFpYWWxSQ05GcEVSa3BsVmtwWllrWmFXRkl6YUZaV2FrSnJUa1phUjJKSVVtcGxhMXB4Vm0xNFlVMUdVbGRaZWxaWVVtdHdlbGxyVWs5WFIwVjVWRlJHVjAxdWFHaFpla3BQVTFkS1IxcEZOV2hpUm5CU1ZtMTBhMDVHVFhsVVdHaFZZbXhhY0ZWdE1WTlhSbEpWVW10MGFVMVhVbGxhUldSSFYyeGFjMk5HYUZkTmFsWlFWbXBLUzFJeFpITmhSbVJwVjBaSmVsWlhlR0ZaVjA1WFZHNUdWbUpJUWxoWlZFb3pUVlphV0dWSE9XdE5hMXA2VlRJMVQxZEhTa2RUYlVaYVZrVmFhRlJVUmxOak1XUjBVbXhPVGxZeFNYZFdWekI0VFVaU2RGSnFXbGRpUjNoWVdXeFNSazFHYkRaU2JVWnJVbXMxZVZZeWVGTmhWa2w1WVVab1dGWnRValpVVm1SVFl6Sk9SbUZIZUZOTlJuQlZWa1phYjFFeFRuTmFTRXBZWVROU2IxWnRlSGRsYkd0M1ZtMDVWMDFWYkRaWlZXUnZWakpHY2xkdGFGZE5SbkJRV1hwS1IxTkhSa2RVYldoT1UwVktNbFp0TUhkTlYxRjRVMjVLVGxaWFVuQlZNRnBoV1Zad1dFMVVVbFppUm5CWVZsWm9hMVZHVmxWTlJHczk=/LHBhc3M9/ZFV4YU0wNHRhajlIWVNRcVJHVmxjRk52ZFc1a0tpUkdNMU00ZVV4ZVJTWnljakk1V1MwNGNFRis="
+    
+    //deepsound key
+    /*
+    static let key = "3GdpANVLcyeACVbPI/H9qlxUjBZSjTf8IN5oJ+3BZL64W4u/JLJb3DVEgPym2CZ0GN+vzDWwvNzLkyxcPznqDZe2xDs1gkDXZ9h8MEiQz+I5ssM7y36vOrjCPQkTqfHQTsrVQ/tq0whzb/sTNOVzSJ92QHh1n8airiaVDygTLpfcOtHhjfYEg2aEVbo07jy1SWomMEpgoqzUBh1LVucChVBtEopudbNlmUmmzlibDWNgj+aQKta6MGbxYev667MEC7Yjf4URiAXRSAUwBMtT/xvwPd21hiG+3UbP4Zzy1zx+FlXNJ3pr+QfSkKdLz9SPAfPjQxeryyt76upVy9iIGN7cyfpJVvjqStyBA9U1E1dh4dVDUPguiBvPOk0Ylh35YT2Wq4NWxE1YerR+VkUjKEDW0h6ThP4cy0Frrw6lcTYe6HJ/LhY+nbSOiCx70I266vOPvRcXPqqfhku1QuN0xSBpmcvi0tBlFP6jy7E3uv0Bv88ECDb/etqkag7JFwJt+hnmU5ORd7Am+6p9q8TOy4/oWApraKCDjm6fo5hYKhBik7PdNUe4ZkPigGWQ/zO7BCigRPqiQwwMe9tVFeKDvtAmM41wUis0/dgVObgc6/P2bmaCz0e1mmy9EO05c04y9mDshpeLjEKY8n1WQfVl7F5u1U8ksAk/iLpuH+I5hOwq626UYFZH2n7549xrJjOnQWATo8jXKcNKIviq9IdgT28w2Cu5qCL2+7mOl9Xx5PEg7lPElPq2QkABdC6wmvUGECVFnEwCokvlJccWXOBNycN1SdoyiDkfS6gqqkgRnO9SHCWgA8sZnovJpLdNxvtEwWpy4qQawgRpOeFaDcz1GlJJWk8RVwdYZ/a16yLYSzAQlcu74cDuCsMUj486Xjk0I3wY0kLg50CZyWyJMO0jBfarjh3Y7/7sWq+OPV1qOek/F+tc1gmbLJeMJKjGfO9eJFPMXzBw6Ts2wOjnqRoCaA=="
+    */
+    //Customer key
+    static let key = "3GdpANVLcyeACVbPI/H9qlxUjBZSjTf8IN5oJ+3BZL7biNK29DeqBPUbBV34TuXQD1hU3oqekuBOrL1QHY/0E4cU5vtevgeIpK4eF/AQauJSeVEvOwTonUqrQ0zD0y6butoTKU81JRKWfFc9Lj34w7W7ItnLfgUx3zcp2YnlOSmE2/DDJOmRkgB0MGeckYRXli58TSKbfi/YxJkDZM9gaxOLksRDVQKDTfxDHu/G9//HGZrt8Itph8WJmRIf/fCS9pYVLdKM0AJQlOe6T4OKWRwTirwqKdEg4GoTZsNHFobrF79mDkKy0QYFQ0hkLlUQoSZRFE8D7ablfT1on8Q7y2rageDEE4k3mFZvdzUD38B3W/j67naYxSC74yR2Kd8/+7rcaKLkBvDhQcMtYay7AUPX8PRamAePqL2xRAIbl20TSO/EzW5JZQujuKoLOoBEXZ4ytq+doTYtouow2yNRCRmvey5yOaYY7LWhZnk8rTVksgzCiMhxKBHeUuNT5HLm1QGyQyn9NgP9cOdxgZPbm4X/dP5s4RG6HXU2GtTYed+00Jr3aeJR8CUpU/XO6XLn2ifBqGQMulx2ROPNNuqIgi+MJeJe2MYZ9SKCuPBjnEy/ENycFaQiE96Xne6MkWHiq3dXxoOuIw5hCpT7GMcJ03d1FIh5qkEOGnSLM1/ZL52Yqx8T0aQAfhvqXI1j4eZW/TWP0Umy8oQbPlwC+oaYaoFpQuA4rUx/WM+hydklu4eSfFCvklgFoiy+gYmVLGYsEaToJAZOEVFzZ7q5u6jDNXGLc9qwvKYb2ov4LkO1HltD1Eyb7VpXwwNVJ8MQy1u1FzqhWK80pho+pjSMlXPGgFJJWk8RVwdYZ/a16yLYSzAQlcu74cDuCsMUj486Xjk0XPs+sgCdUQTJRw0nWVs0TKghXMcOwO8U3wJLV1eJSaJ8F7WhsOXOSppNm/uGmv5tr0OsfuNvqL4VIB1VufpksA=="
     
 }
 
 struct ControlSettings {
     
     static let showSocicalLogin = false
-    static let hideFacebookLogin = true
-    static let hideGoogleLogin = true
-    static let hideWoWonderLogin = true
+    static let hideFacebookLogin = false
+    static let hideGoogleLogin = false
+    static let hideWoWonderLogin = false
     static let showHideDownloadBtn = false
-    static let  appName = "LoveworldWorship"
+    static let  appName = "DeepSound"
     static let googleClientKey = "497109148599-u0g40f3e5uh53286hdrpsj10v505tral.apps.googleusercontent.com"
-    static let wowonder_ServerKey = "131c471c8b4edf662dd0ebf7adf3c3d7365838b9"
+    static let wowonder_ServerKey = "35bf23159ca898e246e5e84069f4deba1b81ee97-60b93b3942f269c7a29a1760199642ec-46595136"
     static let wowonder_URL = "https://demo.wowonder.com/"
     static let oneSignalAppId = "69bc0a81-71c3-409f-921d-01c01a44c278"
-    static let isPurchase = false
+    static let isPurchase = true
     static let addUnitId = "ca-app-pub-3940256099942544/2934735716"
     static let  interestialAddUnitId = "ca-app-pub-3940256099942544/4411468910"
     static let paypalAuthorizationToken = "sandbox_zjzj7brd_fzpwr2q9pk2m568s"
@@ -39,49 +43,62 @@ struct ControlSettings {
     static let  reportlink = "\(API.baseURL)/contact"
     static let  termsOfUse = "\(API.baseURL)/terms/terms"
     static let  privacyPolicy = "\(API.baseURL)/terms/privacy"
-    static let  aboutUs = "\(API.baseURL)/terms/about"
-    static let  rateApp = "https://apps.apple.com/us/app/loveworld-worship/id1579365318/"
     static let  inviteFriendText = "Please vist our website \(API.baseURL)"
     //Only for extended customer you can't easily open it
     static let  applyPayMerchchat = "merchant.com.DeepSound.ScripSun.App"
-  //Payments
-    static let  razorPayInitialkey = "rzp_test_dJRabCgVoFHAFh"
+    //Payments
+    static let  razorPayInitialkey = "rzp_test_ruzI7R7AkonOIi"
     static let  securionPayPublicKey = "pk_test_WoOlrf6NeiNsQkq9UBDz9Fsn"
     static let  securionBundleID = "com.securionpay.sdk.SecurionPay.Examples"
     
-    static var shouldShowAddMobBanner:Bool = false
+    static var shouldShowAddMobBanner:Bool = true
     static var interestialCount:Int? = 3
-    static var isApplePay:Bool? = false
-    static var upgradePaymentAmount:Double? = 9.0
-    static var isGoProEnabled:Bool = false
-    static var IsPaypalEnabled:Bool = false
-    static var isBankTransferEnabled:Bool = false
-    static var IsCreditEnabled:Bool = false
-    static var IsRazorPayEnabled:Bool = false
-    static var IsPayStackEnabled:Bool = false
-    static var IsCashFreeEnabled:Bool = false
-    static var IsSecurionPayEnabled:Bool = false
-    static var IsAuthorizeEnabled:Bool = false
-    static var upgradeProAmount:Double = 9.0
-    
-   
+    static var isApplePay: Bool = true
+    static var isGoProEnabled:Bool = true
+    static var IsPaypalEnabled:Bool = true
+    static var isBankTransferEnabled:Bool = true
+    static var IsCreditEnabled:Bool = true
+    static var IsRazorPayEnabled:Bool = true
+    static var IsPayStackEnabled:Bool = true
+    static var IsCashFreeEnabled:Bool = true
+    static var IsSecurionPayEnabled:Bool = true
+    static var IsAuthorizeEnabled:Bool = true
+    static var upgradeProAmount: Double = 12
     
 }
 extension UIColor {
     @nonobjc class var mainColor: UIColor {
-//        return UIColor.hexStringToUIColor(hex: "#FF8216")
-        return UIColor.hexStringToUIColor(hex: "#FF0000")
+        return UIColor.hexStringToUIColor(hex: "#FF9800")
+        //        return UIColor.hexStringToUIColor(hex: "#FF0000")
     }
     @nonobjc class var ButtonColor: UIColor {
-       // return UIColor.hexStringToUIColor(hex: "#FF8216")
-        return UIColor.hexStringToUIColor(hex: "#FF0000")    
+        return UIColor.hexStringToUIColor(hex: "#FF981F")
+        //        return UIColor.hexStringToUIColor(hex: "#FF0000")
     }
+    
+    @nonobjc class var unselectedTextFieldTintColor: UIColor {
+        return UIColor.hexStringToUIColor(hex: "#9E9E9E")
+    }
+    
+    @nonobjc class var textColor: UIColor {
+        return UIColor.hexStringToUIColor(hex: "#212121")
+    }
+    
+    @nonobjc class var unselectedTextFieldBackGroundColor: UIColor {
+        return UIColor.hexStringToUIColor(hex: "#FAFAFA")
+    }
+    
+    @nonobjc class var selectedTextFieldBackGroundColor: UIColor {
+        return UIColor.hexStringToUIColor(hex: "#FFF8ED")
+    }
+    
+    
     @nonobjc class var lightButtonColor: UIColor {
-       // return UIColor.hexStringToUIColor(hex: "#FF8216")
+        // return UIColor.hexStringToUIColor(hex: "#FF8216")
         return UIColor.ButtonColor.withAlphaComponent(0.25)
     }
     @nonobjc class var lightMainColor: UIColor {
-//        return UIColor.hexStringToUIColor(hex: "#FF8216")
+        //        return UIColor.hexStringToUIColor(hex: "#FF8216")
         return UIColor.mainColor.withAlphaComponent(0.25)
     }
 }

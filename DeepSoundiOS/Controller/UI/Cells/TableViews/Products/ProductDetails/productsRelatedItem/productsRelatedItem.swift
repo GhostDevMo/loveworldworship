@@ -1,5 +1,5 @@
 //
-//  productsRelatedItem.swift
+//  ProductsRelatedItem.swift
 //  DeepSoundiOS
 //
 //  Created by Muhammad Haris But on 17/12/2021.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class productsRelatedItem: UITableViewCell {
+class ProductsRelatedItem: UITableViewCell {
 
     @IBOutlet weak var backView: UIView!
     @IBOutlet weak var songNameLabel: UILabel!
@@ -21,11 +21,9 @@ class productsRelatedItem: UITableViewCell {
         super.setSelected(selected, animated: animated)
         backView.backgroundColor = .lightMainColor
         songNameLabel.textColor = .mainColor
-
     }
-    func bind(_ object:String){
+    
+    func bind(_ object:String) {
         self.songNameLabel.text = object
     }
-   
-    
 }

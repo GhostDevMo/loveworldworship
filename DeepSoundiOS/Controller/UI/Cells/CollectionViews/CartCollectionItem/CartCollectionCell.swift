@@ -25,7 +25,7 @@ class CartCollectionCell: UICollectionViewCell {
         let product = object["product"] as? [String:Any]
         let title = product?["title"] as? String
         let images = object["images"] as? [[String:Any]]
-        let imageobject = images?[0] as? [String:Any]
+        let imageobject = images?.first as? [String:Any]
         let image = imageobject?["image"] as? String
         self.titleLabel.text = title ?? ""
         let url = URL.init(string:image ?? "")
@@ -34,7 +34,7 @@ class CartCollectionCell: UICollectionViewCell {
         self.indexPath = index
     }
 
-    @IBAction func removeFromCart(_ sender: Any) {
+    @IBAction func removeFromCart(_ sender: UIButton) {
         self.vc?.removeFromCart(productId: self.id ?? 0, index: self.indexPath ?? 0)
 
     }

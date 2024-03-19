@@ -7,10 +7,11 @@
 //
 
 import Foundation
-class BaseModel{
+
+class BaseModel {
     struct sessionErrorModel: Codable {
         let status: Int?
         let error: String?
+        let errors: Errors?
     }
-    
 }

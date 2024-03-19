@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="urbanist_medium.ttf">
+            <string>Urbanist-Medium</string>
+        </array>
+    </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="54" id="KGk-i7-Jjw" customClass="productsSectionItem" customModule="DeepSoundiOS" customModuleProvider="target">
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ProductsSectionItem" rowHeight="54" id="KGk-i7-Jjw" customClass="ProductsSectionItem" customModule="DeepSoundiOS" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="427" height="54"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
@@ -18,20 +24,36 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hGd-HV-K3r">
-                        <rect key="frame" x="58" y="15" width="101" height="24"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                        <rect key="frame" x="48" y="15" width="89" height="24"/>
+                        <fontDescription key="fontDescription" name="Urbanist-Medium" family="Urbanist" pointSize="18"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                        </userDefinedRuntimeAttributes>
                     </label>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="info" translatesAutoresizingMaskIntoConstraints="NO" id="7nU-hD-UAx">
-                        <rect key="frame" x="16" y="17" width="30" height="20"/>
+                        <rect key="frame" x="16" y="17" width="20" height="20"/>
                         <constraints>
+                            <constraint firstAttribute="width" secondItem="7nU-hD-UAx" secondAttribute="height" id="9MA-xX-3lT"/>
                             <constraint firstAttribute="height" constant="20" id="PkE-gq-IxP"/>
-                            <constraint firstAttribute="width" constant="30" id="yJu-MH-6sz"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                        </userDefinedRuntimeAttributes>
+                    </imageView>
+                    <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="aex-7P-HXi">
+                        <rect key="frame" x="395" y="19" width="16" height="16"/>
+                        <color key="tintColor" name="textColor"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="aex-7P-HXi" secondAttribute="height" id="SEW-Ze-i4c"/>
+                            <constraint firstAttribute="height" constant="16" id="usi-e2-2Hi"/>
                         </constraints>
                     </imageView>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="aex-7P-HXi" firstAttribute="centerY" secondItem="hGd-HV-K3r" secondAttribute="centerY" id="8Aa-ca-nXy"/>
+                    <constraint firstAttribute="trailing" secondItem="aex-7P-HXi" secondAttribute="trailing" constant="16" id="IcC-l9-IMY"/>
                     <constraint firstItem="hGd-HV-K3r" firstAttribute="leading" secondItem="7nU-hD-UAx" secondAttribute="trailing" constant="12" id="Lmi-x1-Ti1"/>
                     <constraint firstAttribute="bottom" secondItem="hGd-HV-K3r" secondAttribute="bottom" constant="15" id="P43-vP-LQz"/>
                     <constraint firstItem="7nU-hD-UAx" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="aZu-z7-KnD"/>
@@ -50,5 +72,8 @@
     </objects>
     <resources>
         <image name="info" width="32" height="32"/>
+        <namedColor name="textColor">
+            <color red="0.12941176470588237" green="0.12941176470588237" blue="0.12941176470588237" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>

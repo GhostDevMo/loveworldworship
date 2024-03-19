@@ -13,79 +13,44 @@ class ProductsCollectionItem: UICollectionViewCell {
     @IBOutlet weak var type: UILabel!
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var image: UIImageView!
+    @IBOutlet weak var mainView: UIView!
     @IBOutlet weak var price: UILabel!
     @IBOutlet weak var addToCartButton: UIButton!
     
     var id:Int? = 0
     var cartStatus:Int? = 0
-    var cell:ProductsCollectionTableCell?
-    var vc:DiscoverProductsVC?
+    var buttonHandle: ((_ sender: UIButton) -> Void)?
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        self.mainView.cornerRadiusV = 15.0
+        topCorners(bgView: self.image, cornerRadius: 15.0, maskToBounds: true)
+        self.mainView.addShadow()
         addToCartButton.backgroundColor = .ButtonColor
         price.textColor = .ButtonColor
     }
-    func bind(_ object:[String:Any]){
-        let id = object["id"] as? Int
-        let name = object["title"] as? String
-        let price = object["formatted_price"] as? String
-        let images = object["images"] as? [[String:Any]]
-        let imageObject = images?[0] as? [String:Any]
-        let catID = object["cat_id"] as? Int
-        let image = imageObject?["image"] as? String
-        let addToCartStatus = object["added_to_cart"] as? Int
-        self.name.text = name ?? ""
-        self.price.text = "$\(price ?? "")"
-        self.id = id ?? 0
-        self.cartStatus = addToCartStatus ?? 0
-        
-        
-        let url = URL.init(string:image ?? "")
+    
+    func bind(_ object: Product){
+        self.name.text = object.title
+        self.price.text = "$\(object.formatted_price ?? "")"
+        self.id = object.id
+        self.cartStatus = object.added_to_cart
+        let url = URL.init(string: object.images?.first?.image ?? "")
         self.image.sd_setImage(with: url , placeholderImage:R.image.imagePlacholder())
         
-        let categories = AppInstance.instance.options["products_categories"] as? [String:Any]
-        let categoryName = categories?["\(catID ?? 0)"] as? String
-        self.type.text = categoryName ?? ""
-        
-        if self.cartStatus == 0{
+        let categories = AppInstance.instance.optionsData?.products_categories
+        let categoryName = categories?.dictionaryValue?["\(object.cat_id ?? 0)"] as? String
+        self.type.text = categoryName ?? ""        
+        if self.cartStatus == 0 {
             self.addToCartButton.setTitle("Add to Cart", for: .normal)
             self.cartStatus = 0
-        }else{
+        } else {
             self.addToCartButton.setTitle("Remove from Cart", for: .normal)
             self.cartStatus = 1
         }
     }
     
-    @IBAction func addToCartPressed(_ sender: Any) {
-        if  vc != nil{
-            if self.cartStatus  == 0{
-                self.addToCartButton.setTitle("Remove from Cart", for: .normal)
-                self.vc?.addToCart(productId: self.id ?? 0)
-                self.cartStatus  = 1
-    //            self.cell?.colllection.reloadData()
-            }else{
-                self.addToCartButton.setTitle("Add to Cart", for: .normal)
-                self.vc?.removeFromCart(productId: self.id ?? 0)
-                self.cartStatus  = 0
-    //            self.cell?.colllection.reloadData()
-            }
-        }else{
-            if self.cartStatus  == 0{
-                self.addToCartButton.setTitle("Remove from Cart", for: .normal)
-                self.cell?.addToCart(productId: self.id ?? 0)
-                self.cartStatus  = 1
-    //            self.cell?.colllection.reloadData()
-            }else{
-                self.addToCartButton.setTitle("Add to Cart", for: .normal)
-                self.cell?.removeFromCart(productId: self.id ?? 0)
-                self.cartStatus  = 0
-    //            self.cell?.colllection.reloadData()
-            }
-        }
-        
-       
-        
-        
+    @IBAction func addToCartPressed(_ sender: UIButton) {
+        self.buttonHandle?(sender)
     }
 }

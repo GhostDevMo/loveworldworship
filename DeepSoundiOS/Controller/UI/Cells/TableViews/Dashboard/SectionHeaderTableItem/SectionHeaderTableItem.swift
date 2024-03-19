@@ -20,13 +20,7 @@ class SectionHeaderTableItem: UITableViewCell {
         btnSeeAll.setTitleColor(.ButtonColor, for: .normal) 
     }
 
-   
-    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
     }
-    
-    
-    
 }

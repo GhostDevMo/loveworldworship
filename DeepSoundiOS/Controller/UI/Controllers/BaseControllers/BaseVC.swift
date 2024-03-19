@@ -20,13 +20,15 @@ import AVKit
 import UserNotifications
 import MediaPlayer
 
-class BaseVC: UIViewController {
+var popupContentController = R.storyboard.player.musicPlayerVC()
+
+class BaseVC: UIViewController {   
     
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
     var hud : JGProgressHUD?
     
-//    private var noInternetVC: NoInternetDialogVC!
+    
     var userId:String? = nil
     var sessionId:String? = nil
     var contactNameArray = [String]()
@@ -38,7 +40,7 @@ class BaseVC: UIViewController {
         super.viewDidLoad()
         self.dismissKeyboard()
         self.deviceID = UserDefaults.standard.getDeviceId(Key: Local.DEVICE_ID.DeviceId)
-        //        noInternetVC = R.storyboard.main.noInternetDialogVC()
+//                noInternetVC = R.storyboard.main.noInternetDialogVC()
         //
         //        //Internet connectivity event subscription
         SwiftEventBus.onMainThread(self, name: EventBusConstants.EventBusConstantsUtils.EVENT_INTERNET_CONNECTED) { result in
@@ -62,6 +64,7 @@ class BaseVC: UIViewController {
     //    deinit {
     //        SwiftEventBus.unregister(self)
     //    }
+    
     override func viewWillAppear(_ animated: Bool) {
         //        if !Connectivity.isConnectedToNetwork() {
         //            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
@@ -69,6 +72,17 @@ class BaseVC: UIViewController {
         //            })
         //        }
     }
+    
+    @IBAction func backButtonAction(_ sender: UIButton) {
+        self.view.endEditing(true)
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    @IBAction func dismissButtonAction(_ sender: UIButton) {
+        self.view.endEditing(true)
+        self.dismiss(animated: true)
+    }
+    
     func getUserSession(){
         log.verbose("getUserSession = \(UserDefaults.standard.getUserSessions(Key: Local.USER_SESSION.User_Session))")
         let localUserSessionData = UserDefaults.standard.getUserSessions(Key: Local.USER_SESSION.User_Session)
@@ -86,11 +100,11 @@ class BaseVC: UIViewController {
     
     func dismissProgressDialog(completionBlock: @escaping () ->()) {
         hud?.dismiss()
-        completionBlock()
-        
+        completionBlock()        
     }
-     func addToRecentlyWatched(trackId:Int?){
-        if Connectivity.isConnectedToNetwork(){
+    
+    func addToRecentlyWatched(trackId:Int?){
+       /* if Connectivity.isConnectedToNetwork(){
             
             let accessToken = AppInstance.instance.accessToken ?? ""
             let track_id = trackId ?? 0
@@ -124,24 +138,24 @@ class BaseVC: UIViewController {
         }else{
             log.error("internetError = \(InterNetError)")
             self.view.makeToast(InterNetError)
-        }
+        }*/
     }
     
-    
-  
-    
+    func showLoginAlert(delegate: WarningPopupVCDelegate?) {
+        self.view.endEditing(true)
+        let warningPopupVC = R.storyboard.popups.warningPopupVC()
+        warningPopupVC?.delegate = delegate
+        warningPopupVC?.titleText = "Login"
+        warningPopupVC?.messageText = "Sorry you can not continue, you must log in and enjoy access to everything you want?"
+        warningPopupVC?.okText = "YES"
+        warningPopupVC?.cancelText = "NO"
+        self.present(warningPopupVC!, animated: true, completion: nil)
+        warningPopupVC?.okButton.tag = 1001
+    }
 }
 
-extension BaseVC{
-    func play(url:URL) {
-        Async.background({
-            let item = AVPlayerItem(url: url)
-            AppInstance.instance.player = AVPlayer(playerItem:item )
-            AppInstance.instance.player!.volume = 1.0
-            AppInstance.instance.player!.play()
-//            self.setupAudioSession()
-        })
-    }
+/*extension BaseVC {
+  
     
     @available(iOS 13.0, *)
     func setupNowPlaying(title:String) {
@@ -170,14 +184,14 @@ extension BaseVC{
             return .success
         }
     }
-//    func setupAudioSession() {
-//        do {
-//            try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback, mode: AVAudioSession.Mode.default, options: [.mixWithOthers, .allowAirPlay])
-//            print("Playback OK")
-//            try AVAudioSession.sharedInstance().setActive(true)
-//            print("Session is Active")
-//        } catch {
-//            print(error)
-//        }
-//    }
-}
+    //    func setupAudioSession() {
+    //        do {
+    //            try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback, mode: AVAudioSession.Mode.default, options: [.mixWithOthers, .allowAirPlay])
+    //            print("Playback OK")
+    //            try AVAudioSession.sharedInstance().setActive(true)
+    //            print("Session is Active")
+    //        } catch {
+    //            print(error)
+    //        }
+    //    }
+} */

@@ -13,183 +13,239 @@ import DeepSoundSDK
 
 class GenresVC: BaseVC {
     
-    @IBOutlet weak var collectionView: UICollectionView!
+    // MARK: - IBOutlets
     
+    @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var saveBtn: UIButton!
     @IBOutlet weak var bottomLabel: UILabel!
     @IBOutlet weak var topLabel: UILabel!
-    @IBOutlet weak var savePressed: UIButton!
-    var status:Bool? = false
+    
+    // MARK: - Properties
+    
+    var status : Bool = false
     private var genresArray = [GenresModel.Datum]()
     private var delegate : didSetInterestGenres?
-    private var idsArray = [Int]()
-    private var genresString:String? = ""
+    private var idsArray: [Int] = []
+    private var genresString: String? = ""
     
+    // MARK: - View Life Cycles
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.savePressed.backgroundColor = .ButtonColor
         self.setupUI()
         self.fetchData()
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tabBarController?.tabBar.isHidden = true
-
     }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.tabBarController?.tabBar.isHidden = false
-
     }
-    @IBAction func savePressed(_ sender: Any) {
-        var stringArray = self.idsArray.map { String($0) }
+    
+    // MARK: - Selectors
+    
+    @IBAction func backButtonPressed(_ sender: UIButton) {
+        self.view.endEditing(true)
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    @IBAction func savePressed(_ sender: UIButton) {
+        self.view.endEditing(true)
+        UserDefaults.standard.setGenreIDs(value: self.idsArray, key: "GenreIDs")
+//        self.navigationController?.popViewController(animated: true)
+        let stringArray = self.idsArray.map { String($0) }
         self.genresString = stringArray.joined(separator: ",")
-        log.verbose("genresString = \(genresString)")
+        log.verbose("genresString = \(String(describing: genresString))")
         self.save()
     }
-    private func setupUI(){
-        self.saveBtn.setTitle(NSLocalizedString("SAVE", comment: "SAVE"), for: .normal)
-        self.topLabel.text = NSLocalizedString("Select your most favorite genres", comment: "Select your most favorite genres")
-        self.bottomLabel.text = NSLocalizedString("You can change these later", comment: "You can change these later")
-        self.title  = NSLocalizedString("Select Genre", comment: "Select Genre")
-        collectionView.register(Genres_CollectionCell.nib, forCellWithReuseIdentifier: Genres_CollectionCell.identifier)
+    
+    // MARK: - Helper Functions
+    
+    private func setupUI() {
+        self.saveBtn.addShadow(offset: CGSize(width: 0, height: 1))
+        let XIB = UINib(resource: R.nib.genresCollectionCell)
+        self.collectionView.register(XIB, forCellWithReuseIdentifier: R.reuseIdentifier.genres_CollectionCell.identifier)
+        self.saveBtn.backgroundColor = .ButtonColor
     }
-    private func save(){
+    
+    // Set User Genres Data
+    func setUserGenresData() {
         
+    }
+    
+}
+
+// MARK: - Extensions
+
+// MARK: API Services
+extension GenresVC {
+    
+    private func save() {
         self.showProgressDialog(text: "Loading...")
         let accessToken = AppInstance.instance.accessToken ?? ""
         let userId = AppInstance.instance.userId ?? 0
         let genresString = self.genresString ?? ""
-        
-        Async.background({
+        Async.background {
             GenresManager.instance.updateGenres(AccessToken: accessToken, Id: userId, Genres: genresString, completionBlock: { (success, sessionError, error) in
-                if success != nil{
-                    Async.main({
+                if success != nil {
+                    Async.main {
                         self.dismissProgressDialog {
-                            
                             log.debug("userList = \(success?.message ?? "")")
                             self.view.makeToast(success?.message ?? "")
-                            let vc = R.storyboard.dashboard.dashBoardTabbar()
-                            if self.status!{
-                                self.present(vc!, animated: true, completion: nil)
-                            }else{
-                                log.verbose("simple Navigation ")
+                            if self.status {
+                                let newVC =  R.storyboard.dashboard.tabBarNav()
+                                self.appDelegate.window?.rootViewController = newVC
+                            } else {
+                                self.navigationController?.popViewController(animated: true)
                             }
                         }
-                    })
-                }else if sessionError != nil{
-                    Async.main({
+                    }
+                } else if sessionError != nil {
+                    Async.main {
                         self.dismissProgressDialog {
-                            
                             self.view.makeToast(sessionError?.error ?? "")
                             log.error("sessionError = \(sessionError?.error ?? "")")
                         }
-                    })
-                }else {
-                    Async.main({
+                    }
+                } else {
+                    Async.main {
                         self.dismissProgressDialog {
-                            
                             self.view.makeToast(error?.localizedDescription ?? "")
                             log.error("error = \(error?.localizedDescription ?? "")")
                         }
-                    })
+                    }
                 }
             })
-            
-        })
+        }
     }
     
-    private func fetchData(){
+    private func fetchData() {
         self.genresArray.removeAll()
         self.showProgressDialog(text: "Loading...")
         let accessToken = AppInstance.instance.accessToken ?? ""
-        Async.background({
+        Async.background {
             GenresManager.instance.getGenres(AccessToken: accessToken, completionBlock: { (success, sessionError, error) in
-                if success != nil{
-                    Async.main({
+                if success != nil {
+                    Async.main {
                         self.dismissProgressDialog {
-                            
                             log.debug("userList = \(success?.data ?? [])")
                             self.genresArray = success?.data ?? []
+                            if let ids = UserDefaults.standard.getGenreIDs(key: "GenreIDs") {
+                                self.idsArray = ids
+                            }
                             self.collectionView.reloadData()
                         }
-                    })
-                }else if sessionError != nil{
-                    Async.main({
+                    }
+                } else if sessionError != nil {
+                    Async.main {
                         self.dismissProgressDialog {
-                            
                             self.view.makeToast(sessionError?.error ?? "")
                             log.error("sessionError = \(sessionError?.error ?? "")")
                         }
-                    })
-                }else {
-                    Async.main({
+                    }
+                } else {
+                    Async.main {
                         self.dismissProgressDialog {
-                            
                             self.view.makeToast(error?.localizedDescription ?? "")
                             log.error("error = \(error?.localizedDescription ?? "")")
                         }
-                    })
+                    }
                 }
             })
-        })
-    }
-}
-extension GenresVC:UICollectionViewDelegate,UICollectionViewDataSource{
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.genresArray.count 
+        }
     }
     
+}
+
+//MARK: CollectionView Setup
+extension GenresVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return self.genresArray.count
+    }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Genres_CollectionCell.identifier, for: indexPath) as? Genres_CollectionCell
-        cell?.delegate = self
-        
+        let cell = self.collectionView.dequeueReusableCell(withReuseIdentifier: R.reuseIdentifier.genres_CollectionCell.identifier, for: indexPath) as! Genres_CollectionCell
+        cell.delegate = self
+        cell.indexPath = indexPath
         let object = genresArray[indexPath.row]
-        cell?.genresIdArray = genresArray
-        cell?.indexPath = indexPath.row
-        cell?.nameLabel.text = object.cateogryName ?? ""
-        let url = URL.init(string:object.backgroundThumb ?? "")
-        cell?.backgroundImage.sd_setImage(with: url , placeholderImage:R.image.imagePlacholder())
-        return cell!
+        cell.bgView.backgroundColor = UIColor.hexStringToUIColor(hex: object.color ?? "")
+        cell.nameLabel.text = object.cateogryName ?? ""
+        let url = URL.init(string: object.backgroundThumb ?? "")
+        cell.backgroundImage.transform = .init(rotationAngle: .pi/3.25)
+        cell.backgroundImage.sd_setImage(with: url, placeholderImage: R.image.imagePlacholder(), completed: { image, error, type, url in
+            let finalImage = image?.rotate(radians: -(.pi)/2)
+            cell.backgroundImage.image = finalImage
+        })
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            let size = cell.backgroundImage.frame.size
+            cell.backgroundImageBottomConst.constant = -(size.width*0.175)
+            cell.backgroundImageTrailingConst.constant = -(size.width*0.15)
+        }
+        if self.idsArray.contains(object.id ?? 0) {
+            cell.tickImage.isHidden = false
+        } else {
+            cell.tickImage.isHidden = true
+        }
+        return cell
     }
     
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize
-    {
-        return CGSize(width: 160.0, height: 80.0)
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let size = collectionView.frame.size
+        return CGSize(width: (size.width/2.0) - 25.0, height: size.width/3)
     }
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        log.verbose("genresArray[indexPath.row] \(genresArray[indexPath.row].id ?? 0)")
-        self.idsArray.append(genresArray[indexPath.row].id ?? 0)
-        log.verbose("genresArray[indexPath.row].id \(idsArray)")
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 15.0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: 15.0, bottom: 0, right: 15.0)
     }
     
 }
-//
-extension GenresVC:didSetInterestGenres{
-    func didSetInterest(Label: UILabel, Image: UIImageView, status: Bool,idsArray:[GenresModel.Datum],Index:Int) {
-        if status{
-            Image.isHidden = false
-            Label.isHidden = true
-            self.idsArray.append(idsArray[Index].id ?? 0)
-            log.verbose("genresIdArray = \(self.idsArray)")
-            
-        }else{
-            
-            Image.isHidden = true
-            Label.isHidden = false
-            
-            for (index,values) in self.idsArray.enumerated(){
-                if values == idsArray[Index].id{
+
+//MARK: Genre Configure Cell Delegate Methods
+extension GenresVC: GenresCellDelegate {
+    
+    func handleGenresTap(indexPath: IndexPath) {
+        let id = self.genresArray[indexPath.row].id ?? 0
+        if self.idsArray.contains(id) {
+            for (index, value) in self.idsArray.enumerated() {
+                if value == id {
                     self.idsArray.remove(at: index)
                     break
                 }
             }
-            
-            log.verbose("genresString = \(genresString)")
-            log.verbose("genresIdArray = \(self.idsArray)")
+        } else {
+            self.idsArray.append(id)
         }
+        log.verbose("genresIdArray = \(self.idsArray)")
+        self.collectionView.reloadItems(at: [indexPath])
     }
+}
+
+extension UIImage {
+    func rotate(radians: Float) -> UIImage? {
+        var newSize = CGRect(origin: CGPoint.zero, size: self.size).applying(CGAffineTransform(rotationAngle: CGFloat(radians))).size
+        // Trim off the extremely small float value to prevent core graphics from rounding it up
+        newSize.width = floor(newSize.width)
+        newSize.height = floor(newSize.height)
+        UIGraphicsBeginImageContextWithOptions(newSize, false, self.scale)
+        let context = UIGraphicsGetCurrentContext()!
+        // Move origin to middle
+        context.translateBy(x: newSize.width/2, y: newSize.height/2)
+        // Rotate around middle
+        context.rotate(by: CGFloat(radians))
+        // Draw the image at its center
+        self.draw(in: CGRect(x: -self.size.width/2, y: -self.size.height/2, width: self.size.width, height: self.size.height))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage
+    }
+    
 }

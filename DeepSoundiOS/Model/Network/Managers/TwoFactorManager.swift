@@ -9,78 +9,111 @@
 import UIKit
 import Alamofire
 import DeepSoundSDK
-class TwoFactorManager{
-static let instance = TwoFactorManager()
 
-    func updateTwoFactor(AccessToken:String,userId:Int,twoFactor:String,completionBlock: @escaping (_ Success:TwoFactorUpdateModel.TwoFactorUpdateSuccessModel?,_ SessionError:TwoFactorUpdateModel.sessionErrorModel?, Error?) ->()){
-    let params = [
-        
-        API.Params.AccessToken: AccessToken,
-        API.Params.user_id: userId,
-        API.Params.two_factor: twoFactor,
-        API.Params.ServerKey: API.SERVER_KEY.Server_Key
-        
-        ] as [String : Any]
+class TwoFactorManager {
     
-    let jsonData = try! JSONSerialization.data(withJSONObject: params, options: [])
-    let decoded = String(data: jsonData, encoding: .utf8)!
-        log.verbose("Targeted URL = \(API.TwoFactor_Methods.UPDATE_TWOFACTOR_API)")
-    log.verbose("Decoded String = \(decoded)")
-    AF.request(API.TwoFactor_Methods.UPDATE_TWOFACTOR_API, method: .post, parameters: params, encoding:URLEncoding.default , headers: nil).responseJSON { (response) in
+    static let instance = TwoFactorManager()
+    
+    func updateTwoFactor(AccessToken:String,
+                         userId:Int,
+                         twoFactor:String,
+                         completionBlock: @escaping (_ Success:TwoFactorUpdateModel.TwoFactorUpdateSuccessModel?,
+                                                     _ SessionError:TwoFactorUpdateModel.sessionErrorModel?,
+                                                     Error?) ->()) {
+        let params = [
+            API.Params.AccessToken: AccessToken,
+            API.Params.user_id: userId,
+            API.Params.two_factor: twoFactor,
+            API.Params.ServerKey: API.SERVER_KEY.Server_Key
+        ] as [String : Any]
         
-        if (response.value != nil){
-            guard let res = response.value as? [String:Any] else {return}
-            
-            guard let apiStatus = res["status"]  as? Int else {return}
-            if apiStatus ==  API.ERROR_CODES.E_TwoH{
+        let jsonData = try! JSONSerialization.data(withJSONObject: params, options: [])
+        let decoded = String(data: jsonData, encoding: .utf8)!
+        log.verbose("Targeted URL = \(API.TwoFactor_Methods.UPDATE_TWOFACTOR_API)")
+        log.verbose("Decoded String = \(decoded)")
+        
+        AF.request(API.TwoFactor_Methods.UPDATE_TWOFACTOR_API,
+                   method: .post,
+                   parameters: params,
+                   encoding: URLEncoding.default,
+                   headers: nil).responseJSON { (response) in
+            if (response.value != nil) {
+                guard let res = response.value as? [String:Any] else {return}
+                guard let apiStatus = res["status"] as? Int else {return}
                 log.verbose("apiStatus Int = \(apiStatus)")
-                let data = try! JSONSerialization.data(withJSONObject: response.value!, options: [])
-                let result = try! JSONDecoder().decode(TwoFactorUpdateModel.TwoFactorUpdateSuccessModel.self, from: data)
-                completionBlock(result,nil,nil)
+                if apiStatus == API.ERROR_CODES.E_TwoH {
+                    do {
+                        let data = try JSONSerialization.data(withJSONObject: response.value!, options: [])
+                        let result = try JSONDecoder().decode(TwoFactorUpdateModel.TwoFactorUpdateSuccessModel.self, from: data)
+                        completionBlock(result,nil,nil)
+                    }catch(let err){
+                        log.error("error = \(err.localizedDescription)")
+                        completionBlock(nil,nil,err)
+                    }
+                } else {
+                    do {
+                        let data = try JSONSerialization.data(withJSONObject: response.value as Any, options: [])
+                        let result = try JSONDecoder().decode(TwoFactorUpdateModel.sessionErrorModel.self, from: data)
+                        log.error("AuthError = \(result.error ?? "")")
+                        completionBlock(nil,result,nil)
+                    }catch(let err) {
+                        log.error("error = \(err.localizedDescription)")
+                        completionBlock(nil,nil,err)
+                    }
+                }
             }else{
-                log.verbose("apiStatus String = \(apiStatus)")
-                let data = try! JSONSerialization.data(withJSONObject: response.value as Any, options: [])
-                let result = try! JSONDecoder().decode(TwoFactorUpdateModel.sessionErrorModel.self, from: data)
-                log.error("AuthError = \(result.error ?? "")")
-                completionBlock(nil,result,nil)
+                log.error("error = \(response.error?.localizedDescription ?? "")")
+                completionBlock(nil,nil,response.error)
             }
-        }else{
-            log.error("error = \(response.error?.localizedDescription ?? "")")
-            completionBlock(nil,nil,response.error)
         }
     }
-}
-    func verifyTwoFactor(AccessToken:String,userId:Int,code:String,completionBlock: @escaping (_ Success:TwoFactorUpdateModel.TwoFactorUpdateSuccessModel?,_ SessionError:TwoFactorUpdateModel.sessionErrorModel?, Error?) ->()){
+    
+    func verifyTwoFactor(AccessToken:String,
+                         userId:Int,
+                         code:String,
+                         completionBlock: @escaping (_ Success:TwoFactorUpdateModel.TwoFactorUpdateSuccessModel?,
+                                                     _ SessionError:TwoFactorUpdateModel.sessionErrorModel?,
+                                                     Error?) ->()) {
         let params = [
-            
             API.Params.AccessToken: AccessToken,
             API.Params.user_id: userId,
             API.Params.code: code,
             API.Params.ServerKey: API.SERVER_KEY.Server_Key
-            
-            ] as [String : Any]
+        ] as [String : Any]
         
         let jsonData = try! JSONSerialization.data(withJSONObject: params, options: [])
         let decoded = String(data: jsonData, encoding: .utf8)!
-            log.verbose("Targeted URL = \(API.TwoFactor_Methods.VERIFY_TWOFACTOR_API)")
+        log.verbose("Targeted URL = \(API.TwoFactor_Methods.VERIFY_TWOFACTOR_API)")
         log.verbose("Decoded String = \(decoded)")
-        AF.request(API.TwoFactor_Methods.VERIFY_TWOFACTOR_API, method: .post, parameters: params, encoding:URLEncoding.default , headers: nil).responseJSON { (response) in
-            
-            if (response.value != nil){
+        
+        AF.request(API.TwoFactor_Methods.VERIFY_TWOFACTOR_API,
+                   method: .post,
+                   parameters: params,
+                   encoding: URLEncoding.default,
+                   headers: nil).responseJSON { (response) in
+            if (response.value != nil) {
                 guard let res = response.value as? [String:Any] else {return}
-                
-                guard let apiStatus = res["status"]  as? Int else {return}
-                if apiStatus ==  API.ERROR_CODES.E_TwoH{
-                    log.verbose("apiStatus Int = \(apiStatus)")
-                    let data = try! JSONSerialization.data(withJSONObject: response.value!, options: [])
-                    let result = try! JSONDecoder().decode(TwoFactorUpdateModel.TwoFactorUpdateSuccessModel.self, from: data)
-                    completionBlock(result,nil,nil)
-                }else{
-                    log.verbose("apiStatus String = \(apiStatus)")
-                    let data = try! JSONSerialization.data(withJSONObject: response.value as Any, options: [])
-                    let result = try! JSONDecoder().decode(TwoFactorUpdateModel.sessionErrorModel.self, from: data)
-                    log.error("AuthError = \(result.error ?? "")")
-                    completionBlock(nil,result,nil)
+                guard let apiStatus = res["status"] as? Int else {return}
+                log.verbose("apiStatus Int = \(apiStatus)")
+                if apiStatus == API.ERROR_CODES.E_TwoH {
+                    do {
+                        let data = try JSONSerialization.data(withJSONObject: response.value!, options: [])
+                        let result = try JSONDecoder().decode(TwoFactorUpdateModel.TwoFactorUpdateSuccessModel.self, from: data)
+                        completionBlock(result,nil,nil)
+                    }catch(let err){
+                        log.error("error = \(err.localizedDescription)")
+                        completionBlock(nil,nil,err)
+                    }
+                } else {
+                    do {
+                        let data = try JSONSerialization.data(withJSONObject: response.value as Any, options: [])
+                        let result = try JSONDecoder().decode(TwoFactorUpdateModel.sessionErrorModel.self, from: data)
+                        log.error("AuthError = \(result.error ?? "")")
+                        completionBlock(nil,result,nil)
+                    }catch(let err) {
+                        log.error("error = \(err.localizedDescription)")
+                        completionBlock(nil,nil,err)
+                    }
                 }
             }else{
                 log.error("error = \(response.error?.localizedDescription ?? "")")

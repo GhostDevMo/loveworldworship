@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="urbanist_medium.ttf">
+            <string>Urbanist-Medium</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="TargetAudienceTableCell" rowHeight="39" id="KGk-i7-Jjw" customClass="TargetAudienceTableCell" customModule="DeepSoundiOS" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="40"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="40"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VLl-sc-dJq">
+                        <rect key="frame" x="16" y="0.0" width="288" height="40"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_uncheckmark" translatesAutoresizingMaskIntoConstraints="NO" id="h9a-Bf-3dM">
+                                <rect key="frame" x="5" y="10" width="20" height="20"/>
+                                <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="h9a-Bf-3dM" secondAttribute="height" id="SQU-Vo-VDg"/>
+                                    <constraint firstAttribute="height" constant="20" id="u0e-Ei-DRN"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xdC-h0-d8L">
+                                <rect key="frame" x="41" y="10.333333333333334" width="239" height="19.333333333333329"/>
+                                <fontDescription key="fontDescription" name="Urbanist-Medium" family="Urbanist" pointSize="16"/>
+                                <color key="textColor" name="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="h9a-Bf-3dM" firstAttribute="top" relation="greaterThanOrEqual" secondItem="VLl-sc-dJq" secondAttribute="top" constant="8" id="5Kr-Tv-8HV"/>
+                            <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="h9a-Bf-3dM" secondAttribute="bottom" constant="8" id="5LS-NE-0Gh"/>
+                            <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="xdC-h0-d8L" secondAttribute="bottom" constant="8" id="8Ss-BB-mYR"/>
+                            <constraint firstItem="h9a-Bf-3dM" firstAttribute="centerY" secondItem="VLl-sc-dJq" secondAttribute="centerY" id="FV5-PJ-6ni"/>
+                            <constraint firstAttribute="trailing" secondItem="xdC-h0-d8L" secondAttribute="trailing" constant="8" id="FaF-eb-E23"/>
+                            <constraint firstItem="xdC-h0-d8L" firstAttribute="centerY" secondItem="h9a-Bf-3dM" secondAttribute="centerY" id="J8V-g2-zUT"/>
+                            <constraint firstItem="xdC-h0-d8L" firstAttribute="top" relation="greaterThanOrEqual" secondItem="VLl-sc-dJq" secondAttribute="top" constant="8" id="uH8-pj-Wy7"/>
+                            <constraint firstItem="xdC-h0-d8L" firstAttribute="leading" secondItem="h9a-Bf-3dM" secondAttribute="trailing" constant="16" id="wgE-EE-dPB"/>
+                            <constraint firstItem="h9a-Bf-3dM" firstAttribute="leading" secondItem="VLl-sc-dJq" secondAttribute="leading" constant="5" id="yXt-m1-K3h"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="VLl-sc-dJq" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="aL8-ix-chg"/>
+                    <constraint firstAttribute="trailing" secondItem="VLl-sc-dJq" secondAttribute="trailing" constant="16" id="d6f-qQ-DG9"/>
+                    <constraint firstItem="VLl-sc-dJq" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="kuO-U2-lFI"/>
+                    <constraint firstAttribute="bottom" secondItem="VLl-sc-dJq" secondAttribute="bottom" id="nL1-Wp-7X9"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="imageSelected" destination="h9a-Bf-3dM" id="Vhk-gO-vDc"/>
+                <outlet property="lblTitle" destination="xdC-h0-d8L" id="4WA-UA-Bnp"/>
+            </connections>
+            <point key="canvasLocation" x="129.7709923664122" y="-32.74647887323944"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="icon_uncheckmark" width="448" height="448"/>
+        <namedColor name="textColor">
+            <color red="0.12941176470588237" green="0.12941176470588237" blue="0.12941176470588237" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

@@ -9,102 +9,103 @@
 import UIKit
 import Async
 import DeepSoundSDK
+import Toast_Swift
+
 class ChatVC: BaseVC {
     
-    @IBOutlet weak var noMsgLabel: UILabel!
-    @IBOutlet weak var noMsgImage: UIImageView!
+    // MARK: - IBOutlets
+    
+    @IBOutlet weak var emptyView: UIStackView!
+    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
     @IBOutlet var tableView: UITableView!
     
-    var chatMessagesArray: [GetChatsModel.Datum] = []
-    private var refreshControl = UIRefreshControl()
+    // MARK: - Properties
     
+    var chatMessagesArray: [ChatConversationModel] = []
+    
+    // MARK: - View Life Cycles
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.setupUI()
-        self.noMsgImage.tintColor = .mainColor
-        
-        
+        self.tableView.addPullToRefresh {
+            self.chatMessagesArray.removeAll()
+            self.tableView.reloadData()
+            self.fetchChats()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: false)
+        
+        self.tabBarController?.tabBar.isHidden = true
+        self.navigationController?.navigationBar.isHidden = true
+        self.activityIndicatorView.isHidden = false
+        self.activityIndicatorView.startAnimating()
         self.fetchChats()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: false)
+        self.tabBarController?.tabBar.isHidden = false
     }
     
-    private func setupUI(){
-        
-        self.title = "Chats"
-        self.noMsgImage.isHidden = true
-        self.noMsgLabel.isHidden = true
-        refreshControl.attributedTitle = NSAttributedString(string: "")
-        refreshControl.addTarget(self, action: #selector(refresh(sender:)), for: UIControl.Event.valueChanged)
-        tableView.addSubview(refreshControl)
+    // MARK: - Helper Functions
+    
+    private func setupUI() {
         self.tableView.separatorStyle = .none
-        tableView.register(ChatTableItem.nib, forCellReuseIdentifier: ChatTableItem.identifier)
+        self.tableView.register(UINib(resource: R.nib.chatScreenTableItem), forCellReuseIdentifier: R.reuseIdentifier.chatScreenTableItem.identifier)
     }
-    @objc func refresh(sender:AnyObject) {
-        self.chatMessagesArray.removeAll()
-        self.tableView.reloadData()
-        self.fetchChats()
-        refreshControl.endRefreshing()
-    }
-    //MARK: - Methods
-    private func fetchChats(){
-        if Connectivity.isConnectedToNetwork(){
-            chatMessagesArray.removeAll()
-            
-            self.showProgressDialog(text: "Loading...")
-            
+    
+}
+
+// MARK: - Extensions
+
+// MARK: Api Call
+extension ChatVC {
+    
+    private func fetchChats() {
+        if Connectivity.isConnectedToNetwork() {
             let accessToken = AppInstance.instance.accessToken ?? ""
-            
-            Async.background({
+            Async.background {
                 ChatManager.instance.getChats(AccessToken: accessToken, limit: 10, offset: 0) { (success, sessionError, error) in
-                    if success != nil{
-                        Async.main({
+                    Async.main {
+                        self.activityIndicatorView.isHidden = true
+                        self.activityIndicatorView.stopAnimating()
+                        self.tableView.stopPullToRefresh()
+                    }
+                    if success != nil {
+                        Async.main {
                             self.dismissProgressDialog {
-                                
                                 log.debug("userList = \(success?.data ?? [])")
-                                
                                 self.chatMessagesArray = success?.data ?? []
-                                
-                                if self.chatMessagesArray.isEmpty{
-                                    
-                                    self.noMsgImage.isHidden = false
-                                    self.noMsgLabel.isHidden = false
-                                }else{
-                                    self.noMsgImage.isHidden = true
-                                    self.noMsgLabel.isHidden = true
+                                if self.chatMessagesArray.isEmpty {
+                                    self.emptyView.isHidden = false
+                                } else {
+                                    self.emptyView.isHidden = true
                                     self.tableView.reloadData()
                                 }
                             }
-                        })
-                    }else if sessionError != nil{
-                        Async.main({
+                        }
+                    } else if sessionError != nil {
+                        Async.main {
                             self.dismissProgressDialog {
-                                
                                 self.view.makeToast(sessionError?.error ?? "")
                                 log.error("sessionError = \(sessionError?.error ?? "")")
                             }
-                        })
-                    }else {
-                        Async.main({
+                        }
+                    } else {
+                        Async.main {
                             self.dismissProgressDialog {
                                 self.view.makeToast(error?.localizedDescription ?? "")
                                 log.error("error = \(error?.localizedDescription ?? "")")
                             }
-                        })
+                        }
                     }
                 }
-            })
-            
-        }else{
+            }
+        } else {
             log.error("internetError = \(InterNetError)")
             self.view.makeToast(InterNetError)
         }
@@ -112,45 +113,38 @@ class ChatVC: BaseVC {
     
 }
 
+// MARK: TableView Setup
+
 extension ChatVC: UITableViewDelegate, UITableViewDataSource {
     
-    
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        
-        return 80
+        return UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
+        if chatMessagesArray.count == 0 {
+            return 0
+        }
         return chatMessagesArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: ChatTableItem.identifier, for: indexPath) as! ChatTableItem
-        
-        if chatMessagesArray.count == 0{
+        let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.chatScreenTableItem.identifier, for: indexPath) as! ChatScreenTableItem
+        if chatMessagesArray.count == 0 {
             return UITableViewCell()
         }
         cell.selectionStyle = .none
         let object = chatMessagesArray[indexPath.row]
+        cell.selectedImageView.isHidden = true
         cell.bind(object)
-        
-        
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
         let object = chatMessagesArray[indexPath.row]
         let vc = R.storyboard.chat.chatScreenVC()
-        vc?.toUserId  = object.user.id ?? 0
-        vc?.usernameString = object.user.username ?? ""
-        vc?.lastSeenString =  object.user.lastActive ?? 0
-        vc?.profileImageString = object.user.avatar ?? ""
+        vc?.userData = object.user
         self.navigationController?.pushViewController(vc!, animated: true)
-        
-        
     }
+    
 }

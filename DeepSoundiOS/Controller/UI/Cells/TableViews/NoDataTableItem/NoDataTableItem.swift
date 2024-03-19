@@ -11,6 +11,7 @@ import UIKit
 class NoDataTableItem: UITableViewCell {
 
     @IBOutlet weak var noDataLabel: UILabel!
+    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var noDataImage: UIImageView!
     override func awakeFromNib() {
         super.awakeFromNib()

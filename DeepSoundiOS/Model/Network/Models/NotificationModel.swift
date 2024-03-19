@@ -7,80 +7,60 @@
 //
 
 import Foundation
-class NotificationModel:BaseModel{
-    struct NotificationSuccessModel: Codable {
-        let status: Int?
-        let notifiations: [Notifiation]?
+
+struct NotificationModel: Codable {
+    
+    let status : Int?
+    let notifiations : [Notifiations]?
+
+    enum CodingKeys: String, CodingKey {
+
+        case status = "status"
+        case notifiations = "notifiations"
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        status = try values.decodeIfPresent(Int.self, forKey: .status)
+        notifiations = try values.decodeIfPresent([Notifiations].self, forKey: .notifiations)
     }
     
-    // MARK: - Notifiation
-    struct Notifiation: Codable {
-        let userData: UserData?
-        let nID: Int?
-        let nTime, nText: String?
-        let nURL: String?
-        let nAURL, nType: String?
-        
-        enum CodingKeys: String, CodingKey {
-            case userData = "USER_DATA"
-            case nID = "n_id"
-            case nTime = "n_time"
-            case nText = "n_text"
-            case nURL = "n_url"
-            case nAURL = "n_a_url"
-            case nType = "n_type"
-        }
-    }
-    
-    // MARK: - UserData
-    struct UserData: Codable {
-        let id: Int?
-        let username, email, ipAddress, password: String?
-        let name, gender, emailCode, language: String?
-        let avatar, cover: String?
-        let src: String?
-        let countryID, age: Int?
-        let about, google, facebook, twitter: String?
-        let instagram: String?
-        let active, admin, verified, lastActive: Int?
-        let registered: String?
-        let wallet, balance, website: String?
-        let artist, isPro, proTime, lastFollowID: Int?
-        let iosDeviceID, androidDeviceID, webDeviceID, orAvatar: String?
-        let orCover: String?
-        let url: String?
-        let aboutDecoded, nameV, countryName, genderText: String?
-        
-        enum CodingKeys: String, CodingKey {
-            case id, username, email
-            case ipAddress = "ip_address"
-            case password, name, gender
-            case emailCode = "email_code"
-            case language, avatar, cover, src
-            case countryID = "country_id"
-            case age, about, google, facebook, twitter, instagram, active, admin, verified
-            case lastActive = "last_active"
-            case registered, wallet, balance, website, artist
-            case isPro = "is_pro"
-            case proTime = "pro_time"
-            case lastFollowID = "last_follow_id"
-            case iosDeviceID = "ios_device_id"
-            case androidDeviceID = "android_device_id"
-            case webDeviceID = "web_device_id"
-            case orAvatar = "or_avatar"
-            case orCover = "or_cover"
-            case url
-            case aboutDecoded = "about_decoded"
-            case nameV = "name_v"
-            case countryName = "country_name"
-            case genderText = "gender_text"
-        }
-    }
 }
-class notificationUnseenCountModel:BaseModel
-{
+
+class notificationUnseenCountModel: BaseModel {
     struct notificationUnseenCountSuccessModel: Codable {
         let status, count, msgs: Int?
+    }
+}
+
+struct Notifiations : Codable {
+    let uSER_DATA : Publisher?
+    let n_id : Int?
+    let n_time : String?
+    let n_text : String?
+    let n_url : String?
+    let n_a_url : String?
+    let n_type : String?
+
+    enum CodingKeys: String, CodingKey {
+        case uSER_DATA = "USER_DATA"
+        case n_id = "n_id"
+        case n_time = "n_time"
+        case n_text = "n_text"
+        case n_url = "n_url"
+        case n_a_url = "n_a_url"
+        case n_type = "n_type"
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        uSER_DATA = try values.decodeIfPresent(Publisher.self, forKey: .uSER_DATA)
+        n_id = try values.decodeIfPresent(Int.self, forKey: .n_id)
+        n_time = try values.decodeIfPresent(String.self, forKey: .n_time)
+        n_text = try values.decodeIfPresent(String.self, forKey: .n_text)
+        n_url = try values.decodeIfPresent(String.self, forKey: .n_url)
+        n_a_url = try values.decodeIfPresent(String.self, forKey: .n_a_url)
+        n_type = try values.decodeIfPresent(String.self, forKey: .n_type)
     }
 
 }

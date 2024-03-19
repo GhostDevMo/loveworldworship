@@ -1,5 +1,5 @@
 //
-//  productsSectionItem.swift
+//  ProductsSectionItem.swift
 //  DeepSoundiOS
 //
 //  Created by Muhammad Haris But on 17/12/2021.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class productsSectionItem: UITableViewCell {
+class ProductsSectionItem: UITableViewCell {
 
     @IBOutlet weak var image1: UIImageView!
     @IBOutlet weak var title: UILabel!

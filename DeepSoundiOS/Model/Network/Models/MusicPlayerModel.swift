@@ -9,7 +9,7 @@
 
 import Foundation
 
-struct MusicPlayerModel:Codable {
+/*struct MusicPlayerModel:Codable {
     var name:String?
     var time:String?
     var title:String?
@@ -33,5 +33,5 @@ struct MusicPlayerModel:Codable {
     var isDemoTrack:Bool?
     var isPurchased:Bool?
     var isOwner:Bool?
-    var duration:String?
 }
+*/

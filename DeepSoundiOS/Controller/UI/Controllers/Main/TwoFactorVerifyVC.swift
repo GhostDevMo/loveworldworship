@@ -11,39 +11,51 @@ import UIKit
 import Async
 import DeepSoundSDK
 class TwoFactorVerifyVC: BaseVC {
-    @IBOutlet weak var verifyCodeTextField: UITextField!
-    @IBOutlet weak var topLabel: UILabel!
     
+    //MARK: - Properties -
+    @IBOutlet weak var verifyCodeTextField: UITextField!
     @IBOutlet weak var verifyBtn: UIButton!
-    @IBOutlet weak var bottomLabel: UILabel!
+    
     var code:String? = ""
     var userID : Int? = 0
     var error = ""
     var password:String?  = ""
     
+    //MARK: - Life Cycle Functions -
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.topLabel.text = NSLocalizedString("To log in, you need to verify  your identity.", comment: "To log in, you need to verify  your identity.")
-        self.bottomLabel.text = NSLocalizedString("We have sent you the confirmation code to your email address.", comment: "We have sent you the confirmation code to your email address.")
         self.verifyCodeTextField.placeholder = NSLocalizedString("Add code number", comment: "Add code number")
         self.verifyBtn.setTitle(NSLocalizedString("VERIFY", comment: "VERIFY"), for: .normal)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.isNavigationBarHidden = false
-    }
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+        self.navigationController?.isNavigationBarHidden = true
+        self.tabBarController?.tabBar.isHidden = true
     }
     
-    @IBAction func verifyPressed(_ sender: Any) {
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.tabBarController?.tabBar.isHidden = false
+    }
+    
+    //MARK: - Selectors -
+    @IBAction func backButtonPressed(_ sender: UIButton) {
+        self.view.endEditing(true)
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    @IBAction func verifyPressed(_ sender: UIButton) {
         if self.verifyCodeTextField.text!.isEmpty{
             self.view.makeToast("Please enter Code")
         }else{
             self.verifyTwoFactor()
         }
     }
+}
+
+//MARK: - API Services -
+extension TwoFactorVerifyVC {
     private func verifyTwoFactor(){
         
         if appDelegate.isInternetConnected{
@@ -65,11 +77,11 @@ class TwoFactorVerifyVC: BaseVC {
                                     log.verbose("Success = \(success?.accessToken)")
                                     log.verbose("Success = \(success?.accessToken ?? "")")
                                     AppInstance.instance.getUserSession()
-                                    AppInstance.instance.fetchUserProfile()
-                                    UserDefaults.standard.setPassword(value: self.password ?? "", ForKey: Local.USER_SESSION.Current_Password)
-                                    let vc = R.storyboard.dashboard.dashBoardTabbar()
-                                    vc?.modalPresentationStyle = .fullScreen
-                                    self.present(vc!, animated: true, completion: nil)
+                                    AppInstance.instance.fetchUserProfile(isNew: true) { isSuccess in
+                                        UserDefaults.standard.setPassword(value: self.password ?? "", ForKey: Local.USER_SESSION.Current_Password)
+                                        let vc = R.storyboard.dashboard.tabBarNav()
+                                        self.appDelegate.window?.rootViewController = vc
+                                    }                                    
                                     self.view.makeToast("Login Successfull!!")
                                 }
                             }

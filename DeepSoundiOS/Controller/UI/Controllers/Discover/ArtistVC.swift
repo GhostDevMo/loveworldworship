@@ -10,7 +10,6 @@ import UIKit
 import DeepSoundSDK
 import SwiftEventBus
 import Async
-//import Floaty
 import SwiftEventBus
 import DeepSoundSDK
 
@@ -21,8 +20,7 @@ class ArtistVC: BaseVC {
     @IBOutlet weak var showLabel: UILabel!
     
     var userID:Int? = 0
-    private var floaty = Floaty()
-    private var artistArray = [ArtistModel.Datum]()
+    private var artistArray = [Publisher]()
     private var refreshControl = UIRefreshControl()
     private var fetchSatus:Bool? = true
     
@@ -40,20 +38,20 @@ class ArtistVC: BaseVC {
             self.view.makeToast(InterNetError)
         }
         
-        SwiftEventBus.onMainThread(self, name:   EventBusConstants.EventBusConstantsUtils.EVENT_DISMISS_POPOVER) { result in
+        SwiftEventBus.onMainThread(self, name: EventBusConstants.EventBusConstantsUtils.EVENT_DISMISS_POPOVER) { result in
             log.verbose("To dismiss the popover")
-            AppInstance.instance.player = nil
+            
             self.tabBarController?.dismissPopupBar(animated: true, completion: nil)
         }
-        SwiftEventBus.onMainThread(self, name:   "PlayerReload") { result in
+        SwiftEventBus.onMainThread(self, name: "PlayerReload") { result in
             let stringValue = result?.object as? String
             self.view.makeToast(stringValue)
-            log.verbose(stringValue)
+            log.verbose(stringValue ?? "")
         }
     }
    
     override func viewWillAppear(_ animated: Bool) {
-        navigationController?.setNavigationBarHidden(false, animated: true)
+        
     }
     override func viewWillDisappear(_ animated: Bool) {
         SwiftEventBus.unregister(self)
@@ -68,15 +66,12 @@ class ArtistVC: BaseVC {
         self.showImage.isHidden = true
         self.showLabel.isHidden = true
         self.followersTableView.separatorStyle = .none
-        followersTableView.register(Followers_TableCell.nib, forCellReuseIdentifier: Followers_TableCell.identifier)
-        followersTableView.register(ArtistTableCell.nib, forCellReuseIdentifier: ArtistTableCell.identifier)
+        followersTableView.register(UINib(resource: R.nib.artistTableCell), forCellReuseIdentifier: R.reuseIdentifier.artistTableCell.identifier)
         refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
         refreshControl.addTarget(self, action: #selector(self.refresh(sender:)), for: UIControl.Event.valueChanged)
         followersTableView.addSubview(refreshControl)
-        
-       
-        
     }
+    
     @objc func refresh(sender:AnyObject) {
         self.artistArray.removeAll()
         self.followersTableView.reloadData()
@@ -96,7 +91,7 @@ class ArtistVC: BaseVC {
             let accessToken = AppInstance.instance.accessToken ?? ""
             let userId = self.userID ?? 0
             Async.background({
-                ArtistManager.instance.getDiscover(AccessToken: accessToken, Limit: 10, Offset: 0) { (success, sessionError, error) in
+                ArtistManager.instance.getArtistAPI(Limit: 10, Offset: 0) { (success, sessionError, error) in
                     if success != nil{
                         Async.main({
                             self.dismissProgressDialog {
@@ -140,14 +135,14 @@ class ArtistVC: BaseVC {
         }
     }
     
-    @objc func didTapFollowArtist(sender:UIButton){
+    /*@objc func didTapFollowArtist(sender:UIButton){
         
         let userId = self.artistArray[sender.tag].id ?? 0
         if userId == AppInstance.instance.userId {
             self.view.makeToast(NSLocalizedString(("you cannot follow to yourself!"), comment: ""))
             return
         }
-        if self.artistArray[sender.tag].lastFollowID == 0{
+        if self.artistArray[sender.tag].last_follow_id == 0{
             
             sender.backgroundColor = UIColor.white
             sender.setTitle((NSLocalizedString(("Following"), comment: "")), for: .normal)
@@ -162,89 +157,7 @@ class ArtistVC: BaseVC {
             sender.setTitleColor(UIColor.white, for: .normal)
             self.unFollowUser(index: sender.tag)
         }
-    }
-    func followUser(index: Int) {
-        if Connectivity.isConnectedToNetwork(){
-            let accessToken = AppInstance.instance.accessToken ?? ""
-            let userId = self.artistArray[index].id ?? 0
-            if userId == AppInstance.instance.userId {
-                self.view.makeToast(NSLocalizedString(("you cannot follow to yourself!"), comment: ""))
-                return
-            }
-            self.showProgressDialog(text: (NSLocalizedString(("Loading..."), comment: "")))
-            Async.background({
-                
-                FollowManager.instance.followUser(Id: userId, AccessToken: accessToken, completionBlock: { (success, sessionError, error) in
-                    if success != nil{
-                        Async.main({
-                            self.dismissProgressDialog {
-                                log.debug("success = \(success?.status ?? 0)")
-                                self.view.makeToast(NSLocalizedString(("User has been Followed"), comment: ""))
-                            }
-                        })
-                        
-                    }else if sessionError != nil{
-                        Async.main({
-                            self.dismissProgressDialog {
-                                log.error("sessionError = \(sessionError?.error ?? "")")
-                                self.view.makeToast(sessionError?.error ?? "")
-                            }
-                        })
-                    }else {
-                        Async.main({
-                            self.dismissProgressDialog {
-                                log.error("error = \(error?.localizedDescription ?? "")")
-                                self.view.makeToast(error?.localizedDescription ?? "")
-                            }
-                        })
-                    }
-                })
-            })
-        }else{
-            log.error("internetErrro = \(InterNetError)")
-            self.view.makeToast(InterNetError)
-        }
-    }
-    func unFollowUser(index: Int) {
-        if Connectivity.isConnectedToNetwork(){
-            let accessToken = AppInstance.instance.accessToken ?? ""
-            let userId = self.artistArray[index].id ?? 0
-           
-            self.showProgressDialog(text: (NSLocalizedString(("Loading..."), comment: "")))
-            Async.background({
-                FollowManager.instance.unFollowUser(Id: userId, AccessToken: accessToken, completionBlock: { (success, sessionError, error) in
-                    if success != nil{
-                        Async.main({
-                            self.dismissProgressDialog {
-                                log.debug("success = \(success?.status ?? 0)")
-                                self.view.makeToast((NSLocalizedString(("User has been unfollowed"), comment: "")))
-                            }
-                        })
-                        
-                    }else if sessionError != nil{
-                        Async.main({
-                            self.dismissProgressDialog {
-                                log.error("sessionError = \(sessionError?.error ?? "")")
-                                self.view.makeToast(sessionError?.error ?? "")
-                            }
-                        })
-                    }else {
-                        Async.main({
-                            self.dismissProgressDialog {
-                                log.error("error = \(error?.localizedDescription ?? "")")
-                                self.view.makeToast(error?.localizedDescription ?? "")
-                            }
-                        })
-                    }
-                })
-            })
-        }else{
-            log.error("internetErrro = \(InterNetError)")
-            self.view.makeToast(InterNetError)
-        }
-    }
-    
-    
+    }*/
 }
 
 extension ArtistVC:UITableViewDelegate,UITableViewDataSource{
@@ -253,30 +166,134 @@ extension ArtistVC:UITableViewDelegate,UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: ArtistTableCell.identifier) as? ArtistTableCell
-       // cell?.loggedHomeVC = self
-        cell?.selectionStyle = .none
-        cell?.btnMore.tag = indexPath.row
-        cell?.btnMore.addTarget(self, action: #selector(didTapFollowArtist(sender:)), for: .touchUpInside)
-        cell?.bind(self.artistArray[indexPath.row])
-        return cell!
-        
-        
+        let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.artistTableCell.identifier, for: indexPath) as! ArtistTableCell
+        cell.selectionStyle = .none
+        cell.btnFollow.tag = indexPath.row
+        cell.delegate = self
+        cell.bind(self.artistArray[indexPath.row])
+        return cell
     }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        let storyBoard: UIStoryboard = UIStoryboard(name: "Discover", bundle: nil)
-         let vc = storyBoard.instantiateViewController(withIdentifier: "ArtistInfoVC") as! ArtistInfoVC
-        vc.artistObject = self.artistArray[indexPath.row]
-        self.navigationController?.pushViewController(vc, animated: true)
- 
+        self.view.endEditing(true)
+        let vc = R.storyboard.discover.artistDetailsVC()
+        vc?.artistObject = self.artistArray[indexPath.row]
+        self.navigationController?.pushViewController(vc!, animated: true)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }
+}
+
+// MARK: - Warning Popup Delegate Methods -
+extension ArtistVC: WarningPopupVCDelegate {
+    func warningPopupOKButtonPressed(_ sender: UIButton,_ songObject: Song?) {
+        self.view.endEditing(true)
+        if sender.tag == 1001 {
+            let newVC = R.storyboard.login.loginNav()
+            self.appDelegate.window?.rootViewController = newVC
+        }else if sender.tag == 1003 {
+            let newVC = R.storyboard.settings.settingWalletVC()
+            self.navigationController?.pushViewController(newVC!, animated: true)
+        }else if sender.tag == 1002 {
+            
+        }
+    }
+}
+
+extension ArtistVC: followUserDelegate {
+    func followUser(_ index: Int, _ sender: UIButton) {
+        if !AppInstance.instance.isLoginUser {
+            self.showLoginAlert(delegate: self)
+            return
+        }
+        let userId = self.artistArray[sender.tag].id ?? 0
+        if userId == AppInstance.instance.userId {
+            self.view.makeToast(NSLocalizedString(("you cannot follow to yourself!"), comment: ""))
+            return
+        }
+        artistArray[sender.tag].is_following = !(artistArray[sender.tag].is_following)
+        if sender.currentTitle == "Follow" {
+            sender.setTitle("Following", for: .normal)
+            sender.backgroundColor = .hexStringToUIColor(hex: "FFF8ED")
+            sender.setTitleColor(.mainColor, for: .normal)
+            self.followUser(userId: userId)
+        }else {
+            sender.setTitle("Follow", for: .normal)
+            sender.backgroundColor = .mainColor
+            sender.setTitleColor(.white, for: .normal)
+            self.unFollowUser(userId: userId)
+        }
+    }
     
+    func followUser(userId: Int) {
+        if Connectivity.isConnectedToNetwork(){
+            let accessToken = AppInstance.instance.accessToken ?? ""
+            Async.background({
+                FollowManager.instance.followUser(Id: userId, AccessToken: accessToken, completionBlock: { (success, sessionError, error) in
+                    if success != nil{
+                        Async.main({
+                            self.dismissProgressDialog {
+                                log.debug("success = \(success?.status ?? 0)")
+                                self.view.makeToast("User has been Followed")
+                            }
+                        })
+                    }else if sessionError != nil{
+                        Async.main({
+                            self.dismissProgressDialog {
+                                log.error("sessionError = \(sessionError?.error ?? "")")
+                                self.view.makeToast(sessionError?.error ?? "")
+                            }
+                        })
+                    }else {
+                        Async.main({
+                            self.dismissProgressDialog {
+                                log.error("error = \(error?.localizedDescription ?? "")")
+                                self.view.makeToast(error?.localizedDescription ?? "")
+                            }
+                        })
+                    }
+                })
+            })
+        }else{
+            log.error("internetErrro = \(InterNetError)")
+            self.view.makeToast(InterNetError)
+        }
+    }
     
-    
+    func unFollowUser(userId: Int) {
+        if Connectivity.isConnectedToNetwork(){
+            let accessToken = AppInstance.instance.accessToken ?? ""
+            Async.background({
+                FollowManager.instance.unFollowUser(Id: userId, AccessToken: accessToken, completionBlock: { (success, sessionError, error) in
+                    if success != nil{
+                        Async.main({
+                            self.dismissProgressDialog {
+                                log.debug("success = \(success?.status ?? 0)")
+                                self.view.makeToast("User has been unfollowed")
+                            }
+                        })
+                    }else if sessionError != nil{
+                        Async.main({
+                            self.dismissProgressDialog {
+                                log.error("sessionError = \(sessionError?.error ?? "")")
+                                self.view.makeToast(sessionError?.error ?? "")
+                            }
+                        })
+                    }else {
+                        Async.main({
+                            self.dismissProgressDialog {
+                                log.error("error = \(error?.localizedDescription ?? "")")
+                                self.view.makeToast(error?.localizedDescription ?? "")
+                            }
+                        })
+                    }
+                })
+            })
+        }else{
+            log.error("internetErrro = \(InterNetError)")
+            self.view.makeToast(InterNetError)
+        }
+    }
 }

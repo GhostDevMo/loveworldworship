@@ -9,145 +9,144 @@
 import UIKit
 import DeepSoundSDK
 import Async
-import BraintreeDropIn
-import Braintree
 import PassKit
 import StoreKit
+import Toast_Swift
 
 class UpgradeProVC: BaseVC {
     
-    @IBOutlet weak var topLabel: UILabel!
-    var braintree: BTAPIClient?
-    var braintreeClient: BTAPIClient?
-    var paymentRequest = PKPaymentRequest()
+    // MARK: - IBOutlets
     
-    @IBOutlet weak var downloadSongsLabel: UILabel!
-    @IBOutlet weak var spotlightLabel: UILabel!
-    @IBOutlet weak var badgeLabel: UILabel!
-    @IBOutlet weak var uploadLabel: UILabel!
-    @IBOutlet weak var proLabel: UILabel!
     @IBOutlet weak var moneyLabel: UILabel!
-    @IBOutlet weak var upgradeNowBtn: UIButton!
     
-    var status:Bool? = false
+    // MARK: - View Life Cycles
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.topLabel.text = NSLocalizedString("Dicover more features with \(ControlSettings.appName) Pro Package", comment: "Dicover more features with DeepSound Pro Package")
-        self.proLabel.text = NSLocalizedString("Pro Member", comment: "Pro Member")
-        self.uploadLabel.text = NSLocalizedString("Upload unlimited songs", comment: "Upload unlimited songs")
-        self.proLabel.text = NSLocalizedString("Pro badge", comment: "Pro badge")
-        self.spotlightLabel.text = NSLocalizedString("Spotlight your songs(featured)", comment: "Spotlight your songs(featured)")
-        self.downloadSongsLabel.text = NSLocalizedString("Download Songs", comment: "Download Songs")
-        self.upgradeNowBtn.setTitle(NSLocalizedString("UPGRADE NOW", comment: "UPGRADE NOW"), for: .normal) 
-        self.upgradeNowBtn.backgroundColor = .ButtonColor
-        self.moneyLabel.textColor = .mainColor
-        self.moneyLabel.text = "$\(ControlSettings.upgradeProAmount ?? 0.0)"
+        
+        self.initialConfig()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationItem.largeTitleDisplayMode = .never
-        
+        self.tabBarController?.tabBar.isHidden = true
     }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        navigationItem.largeTitleDisplayMode = .automatic
+        self.tabBarController?.tabBar.isHidden = false
     }
-    @IBAction func upgradeNowPressed(_ sender: Any) {
-        
-        
-            let alert = UIAlertController(title: "", message: NSLocalizedString("Go Pro", comment: ""), preferredStyle: .actionSheet)
-            let wallet = UIAlertAction(title: NSLocalizedString("Wallet", comment: "Wallet"), style: .default) { (action) in
-                if Double(AppInstance.instance.userProfile?.data?.wallet ?? "0.0")! < ControlSettings.upgradePaymentAmount ?? 0.0 ?? 0.0{
-                    self.view.makeToast("Sorry You cannot buy because there is not enough balance in the wallet")
-                }else{
-                    self.purchaseGOPro()
-                }
-            }
-          
-            let cancel = UIAlertAction(title: NSLocalizedString("Cancel", comment: "Cancel"), style: .destructive, handler: nil)
-            alert.addAction(wallet)
-           
-            alert.addAction(cancel)
-            self.present(alert, animated: true, completion: nil)
-        
-       
+    
+    // MARK: - Selectors
+    // Back Button Action
+    @IBAction override func backButtonAction(_ sender: UIButton) {
+        self.view.endEditing(true)
+        self.navigationController?.popViewController(animated: true)
     }
-    private func purchaseGOPro(){
-        if Connectivity.isConnectedToNetwork(){
+    
+    // Upgrade Now Button Action
+    @IBAction func upgradeNowButtonAction(_ sender: UIButton) {
+        self.view.endEditing(true)
+        if let newVC = R.storyboard.popups.goProPopupVC() {
+            newVC.delegate = self
+            self.present(newVC, animated: true)
+        }
+    }
+    
+    // MARK: - Helper Functions
+    
+    // Initial Config
+    func initialConfig() {
+        AppInstance.instance.fetchUserProfile(isNew: true) { _ in
+            
+        }
+        self.moneyLabel.text = "$\(ControlSettings.upgradeProAmount)"
+    }
+    
+    private func purchaseGOPro() {
+        if Connectivity.isConnectedToNetwork() {
             let accessToken = AppInstance.instance.accessToken ?? ""
-            let userid = AppInstance.instance.userId ?? 0
-            Async.background({
+            Async.background {
                 UpgradeMemberShipManager.instance.purchase(AccessToken: accessToken, type: "go_pro") { success, sessionError, error in
-                    if success != nil{
-                        Async.main({
+                    if success != nil {
+                        Async.main {
                             self.dismissProgressDialog {
                                 self.upgradeMemberShip()
                             }
-                        })
-                    }else if sessionError != nil{
-                        Async.main({
+                        }
+                    } else if sessionError != nil {
+                        Async.main {
                             self.dismissProgressDialog {
                                 self.view.makeToast(sessionError ?? "")
                                 log.error("sessionError = \(sessionError ?? "")")
                             }
-                        })
-                    }else {
-                        Async.main({
+                        }
+                    } else {
+                        Async.main {
                             self.dismissProgressDialog {
                                 self.view.makeToast(error?.localizedDescription ?? "")
                                 log.error("error = \(error?.localizedDescription ?? "")")
                             }
-                        })
+                        }
                     }
                 }
-               
-            })
-            
-        }else{
+            }
+        } else {
             log.error("internetError = \(InterNetError)")
             self.view.makeToast(InterNetError)
         }
     }
-   
-    private func upgradeMemberShip(){
-        if Connectivity.isConnectedToNetwork(){
+    
+    private func upgradeMemberShip() {
+        if Connectivity.isConnectedToNetwork() {
             let accessToken = AppInstance.instance.accessToken ?? ""
-            let userid = AppInstance.instance.userId ?? 0
-            Async.background({
-                UpgradeMemberShipManager.instance.upgradeMemberShip(userId: userid, AccessToken: accessToken, completionBlock: { (success, sessionError, error) in
-                    if success != nil{
-                        Async.main({
+            let userId = AppInstance.instance.userId ?? 0
+            Async.background {
+                UpgradeMemberShipManager.instance.upgradeMemberShip(userId: userId, AccessToken: accessToken, completionBlock: { (success, sessionError, error) in
+                    if success != nil {
+                        Async.main {
                             self.dismissProgressDialog {
-                                
                                 log.debug("userList = \(success?.data ?? "")")
+                                AppInstance.instance.fetchUserProfile(isNew: true) { _ in }
                                 self.navigationController?.popViewController(animated: true)
-                                
                             }
-                        })
-                    }else if sessionError != nil{
-                        Async.main({
+                        }
+                    } else if sessionError != nil {
+                        Async.main {
                             self.dismissProgressDialog {
-                                
                                 self.view.makeToast(sessionError?.error ?? "")
                                 log.error("sessionError = \(sessionError?.error ?? "")")
                             }
-                        })
-                    }else {
-                        Async.main({
+                        }
+                    } else {
+                        Async.main {
                             self.dismissProgressDialog {
                                 self.view.makeToast(error?.localizedDescription ?? "")
                                 log.error("error = \(error?.localizedDescription ?? "")")
                             }
-                        })
+                        }
                     }
                 })
-            })
-            
-        }else{
+            }
+        } else {
             log.error("internetError = \(InterNetError)")
             self.view.makeToast(InterNetError)
         }
     }
+    
 }
 
+// MARK: - Extensions
+
+// MARK: GoProPopupVCDelegate Methods
+extension UpgradeProVC: GoProPopupVCDelegate {
+    
+    func handleWalletTap(_ sender: UIButton) {
+        if Double(AppInstance.instance.userProfile?.data?.wallet ?? "0.0") ?? 0 < ControlSettings.upgradeProAmount {
+            self.view.makeToast("Sorry You cannot buy because there is not enough balance in the wallet")
+        } else {
+            self.purchaseGOPro()
+        }
+    }
+    
+}

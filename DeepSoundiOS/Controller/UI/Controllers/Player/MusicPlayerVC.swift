@@ -10,1253 +10,1016 @@ import UIKit
 import SwiftEventBus
 import Async
 import Alamofire
-import CircleProgressView
 import AVFoundation
 import MediaPlayer
 import DeepSoundSDK
 import LNPopupController
 
-class MusicPlayerVC: BaseVC {
+let appDelegate = UIApplication.shared.delegate as! AppDelegate
+
+class MusicPlayerVC: UIViewController {
     
-    @IBOutlet weak var showWiteLine: UIImageView!
+    // MARK: - IBOutlets
+    
     @IBOutlet weak var dislikeBtn: UIButton!
     @IBOutlet weak var totalDurationLengthLabel: UILabel!
     @IBOutlet weak var calculatedTimeLenghtLabel: UILabel!
     @IBOutlet weak var progressSlider: UISlider!
     @IBOutlet weak var downloadBtn: UIButton!
-    @IBOutlet weak var progressCircularView: CircleProgressView!
     @IBOutlet weak var favoriteBtn: UIButton!
     @IBOutlet weak var likeBtn: UIButton!
     @IBOutlet weak var circularView: UIView!
-    @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var titleLabel: MarqueeLabel!
-    @IBOutlet weak var backGroundImage: UIImageView!
     @IBOutlet weak var musicTypeLabel: UILabel!
-    @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var playBtn: UIButton!
     @IBOutlet weak var thumbnailImage: UIImageView!
     @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet weak var pushUPView: UIView!
-    @IBOutlet weak var pushUpimg: UIImageView!
     
-    //    var payPalConfig = PayPalConfiguration() // default
-    //    var environment:String = PayPalEnvironmentSandbox {
-    //        willSet(newEnvironment) {
-    //            if (newEnvironment != environment) {
-    //                PayPalMobile.preconnect(withEnvironment: newEnvironment)
-    //            }
-    //        }
-    //    }
+    // MARK: - Properties
     
-    
-    var musicObject:MusicPlayerModel?
-    private var player1:AVAudioPlayer?
-    var player = AVPlayer()
-    var audioLength:Double? = 0.0
-    var audioPlayer:AVAudioPlayer! = nil
-    var totalLengthOfAudio = ""
-    var currentAudioIndex = 0
-    var timer:Timer!
-    var shuffleState = false
+    var playSpeed: Float = 1.0
+    var musicObject: Song?
+    var isDemo = false
+    var audioString: String = ""
+    var player: AVPlayer?
+    var currentAudioIndex: Int?
     var repeatState = false
-    var musicArray = [MusicPlayerModel]()
-    var urlString:URL?
+    var musicArray = [Song]()
+    var urlString: URL?
     var shuffleArray = [Int]()
-    var status:Bool? = false
-    var scrolled:Bool = false
-    var songCodeStatus:Int? = 0
+    var playerItem: AVPlayerItem?
+    fileprivate let seekDuration: Float64 = 10
     var nowPlayingInfo = [String : Any]()
-    
-    let playerTimescale = AppInstance.instance.player?.currentItem?.asset.duration.timescale ?? 1
-    
-    
-    var timer1: Timer?
-    var index: Int = Int()
     var isPaused: Bool!
-    var favoriteStatus:Bool? = false
-    var isShuffle:Bool? = false
+    var favoriteStatus: Bool = false
+    var isShuffle: Bool = false
+    var timeObserver: Any?
+    var timeObserverAdded: Bool = false
+    var delegate: BottomSheetDelegate?
+    
+    // MARK: - View Life Cycles
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //rotateThumbnailImageContinuously()
-        let pause = UIBarButtonItem(image: R.image.playButton(), style: .plain, target: self, action: #selector(self.playPause))
+        let pause = UIBarButtonItem(image: R.image.playButton(), style: .plain, target: self, action: #selector(self.playPressed))
         let next = UIBarButtonItem(image: R.image.icPlayNext()?.withTintColor(.ButtonColor), style: .plain, target: self, action: #selector(self.nextSongBottom))
         let cancel = UIBarButtonItem(image: R.image.ic_action_close(), style: .plain, target: self, action: #selector(self.cancel))
+        popupItem.rightBarButtonItems = [pause,next,cancel]
         
-        
-        popupItem.rightBarButtonItems = [ pause,next,cancel ]
-        
-        if UIApplication.shared.responds(to: #selector(UIApplication.beginReceivingRemoteControlEvents)){
-            UIApplication.shared.beginReceivingRemoteControlEvents()
-            UIApplication.shared.beginBackgroundTask(expirationHandler: { () -> Void in
-            })
+        SwiftEventBus.onMainThread(self, name: EventBusConstants.EventBusConstantsUtils.EVENT_DISMISS_POPOVER) { [self] result in
+            self.player?.pause()
+            self.player = nil
+            AppInstance.instance.AlreadyPlayed = false
+            self.currentAudioIndex = nil
         }
         
         SwiftEventBus.onMainThread(self, name: EventBusConstants.EventBusConstantsUtils.EVENT_PLAY_PAUSE_BTN) { (notification) in
-            log.verbose("Notification = \(notification?.object as? Bool)")
-            let statusBool = notification?.object as? Bool
-            if statusBool!{
-                AppInstance.instance.player?.play()
-                pause.image = R.image.pauseSymbol()
-                self.playBtn.setImage(R.image.ic_pause(), for: .normal)
-                
-            }else{
-                AppInstance.instance.player?.pause()
-                pause.image = R.image.playButton()
-                self.playBtn.setImage(R.image.ic_playPlayer(), for: .normal)
-                
+            log.verbose("Notification = \(notification?.object as! Bool)")
+            if let statusBool = notification?.object as? Bool {
+                if !statusBool {
+                    AppInstance.instance.AlreadyPlayed = true
+                    self.player?.play()
+                    pause.image = R.image.pauseSymbol()
+                    self.playBtn.setImage(R.image.ic_pause(), for: .normal)
+                } else {
+                    AppInstance.instance.AlreadyPlayed = false
+                    self.player?.pause()
+                    pause.image = R.image.playButton()
+                    self.playBtn.setImage(R.image.ic_playPlayer(), for: .normal)
+                }
             }
         }
-        log.verbose("NewCellTapped = \(musicObject?.audioID)")
+        log.verbose("NewCellTapped = \(musicObject?.audio_id ?? "")")
         
-    }
-    
-    @objc func cancel(){
-        SwiftEventBus.postToMainThread(EventBusConstants.EventBusConstantsUtils.EVENT_DISMISS_POPOVER)
-        
-    }
-    @objc func nextSongBottom(){
-        nextTrack()
-        setup()
-    }
-    
-    @objc func playPause(){
-    
-        if AppInstance.instance.AlreadyPlayed!{
-            
-            if AppInstance.instance.player?.timeControlStatus == .playing { SwiftEventBus.postToMainThread(EventBusConstants.EventBusConstantsUtils.EVENT_PLAY_PAUSE_BTN, sender: false)
-            }else{
-                SwiftEventBus.postToMainThread(EventBusConstants.EventBusConstantsUtils.EVENT_PLAY_PAUSE_BTN, sender: true)
-            }
-        }else{
-            setup()
-        }
-        
-        
-        
-        
-        print("playPausePressed")
+        let panGesture = UIPanGestureRecognizer(target: self, action:  #selector(self.panGesture))
+        self.progressSlider.addGestureRecognizer(panGesture)
+        self.pRemoteCommandCenter()
+        self.AudioSession()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        //rotateThumbnailImageContinuously()
-        //        PayPalMobile.preconnect(withEnvironment: environment)
-        
-        log.verbose("SongCodeStatus = \(self.songCodeStatus!)")
-        if AppInstance.instance.player?.currentItem != nil{
+        popupPresentationContainer?.popupContentView.popupCloseButtonStyle = .none
+        popupPresentationContainer?.popupBar.progressViewStyle = .top
+        popupPresentationContainer?.popupBar.imageView.contentMode = .scaleAspectFill
+        if self.player?.currentItem != nil {
             log.verbose("Item is playing")
-        }else{
-            if  AppInstance.instance.AlreadyPlayed!{
-                log.verbose("Item is playing")
-                
-            }else{
-                log.verbose("Item is not Playing")
-                self.setup()
-                
-            }
-            
-        }
-    }
-    
-    @IBAction func dislikePressed(_ sender: Any) {
-        if  AppInstance.instance.getUserSession(){
-                   let audioId = self.musicObject?.audioID ?? ""
-                   self.likeDislikeTrack(audioId:audioId)
-                   
-               }else{
-                   AppInstance.instance.player?.pause()
-                   self.loginAlert()
-                }
-    }
-    @IBAction func playPressed(_ sender: AnyObject) {
-        
-        self.togglePlayPause()
-    }
-    
-    @IBAction func didPressPushUp(_ sender: UIButton) {
-        
-        if !scrolled{
-        self.scrollView.setContentOffset(CGPoint(x: 0, y: self.pushUPView.frame.minY), animated: true)
-            scrolled = true
-            pushUpimg.image = R.image.ic_action_arrow_down_sign()
-        }
-        else{
-        self.scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
-            scrolled = false
-            pushUpimg.image = R.image.icScrollupArrow()
-        }
-    }
-    func togglePlayPause() {
-        if AppInstance.instance.player?.timeControlStatus == .playing  {
-            self.playBtn.setImage(R.image.ic_playPlayer(), for: .normal)
-            AppInstance.instance.player?.pause()
-            SwiftEventBus.postToMainThread(EventBusConstants.EventBusConstantsUtils.EVENT_PLAY_PAUSE_BTN, sender: false)
-            isPaused = true
         } else {
-            self.playBtn.setImage(R.image.ic_pause(), for: .normal)
-            AppInstance.instance.player?.play()
-            SwiftEventBus.postToMainThread(EventBusConstants.EventBusConstantsUtils.EVENT_PLAY_PAUSE_BTN, sender: true)
-            isPaused = false
+            if  AppInstance.instance.AlreadyPlayed {
+                log.verbose("Item is playing")
+            } else {
+                log.verbose("Item is not Playing")
+            }
         }
     }
     
+    // MARK: - Selectors
     
-    func setup(){
-        self.showWiteLine.isHidden = true
-        self.downloadBtn.isHidden = true
-        if ControlSettings.showHideDownloadBtn{
-            self.downloadBtn.isHidden = true
-            self.progressCircularView.isHidden = true
-            self.showWiteLine.isHidden = true
-                  
-        }else{
-           // self.downloadBtn.isHidden = false
-           // self.progressCircularView.isHidden = false
-            //self.showWiteLine.isHidden = false
-
-             checkOfflineDownload()
+    @IBAction func closeAction(_ sender: UIButton) {
+        self.view.endEditing(true)
+        popupPresentationContainer?.closePopup(animated: true, completion: nil)
+    }
+    
+    @IBAction func songSpeedAction(_ sender: UIButton) {
+        sender.setTitleColor(.mainColor, for: .normal)
+        if sender.currentTitle == "1x" {
+            sender.setTitle("1.5x", for: .normal)
+            self.playSpeed = 1.5
+        } else if sender.currentTitle == "1.5x" {
+            sender.setTitle("2x", for: .normal)
+            self.playSpeed = 2.0
+        } else {
+            sender.setTitle("1x", for: .normal)
+            self.playSpeed = 1.0
         }
-//        if !AppInstance.instance.getUserSession(){
-//            dislikeBtn.isHidden = true
-//            likeBtn.isHidden = true
-//
-//        }
-//        else{
-//
-//        }
+        player?.playImmediately(atRate: self.playSpeed)
+    }
+    
+    @IBAction func moreBtnAction(_ sender: UIButton) {
+        self.view.endEditing(true)
+        if let object = musicObject {
+            let panVC: PanModalPresentable.LayoutType = TopSongBottomSheetController(song: object, delegate: self)
+            presentPanModal(panVC)
+        }
+    }
+    
+    @IBAction func fastForawardPressed(_ sender: UIButton) {
+        self.view.endEditing(true)
+        if player == nil { return }
+        if let duration = player?.currentItem?.duration {
+            let playerCurrentTime = CMTimeGetSeconds(player?.currentTime() ?? .zero)
+            let newTime = playerCurrentTime + seekDuration
+            if newTime < CMTimeGetSeconds(duration) {
+                let selectedTime: CMTime = CMTimeMake(value: Int64(newTime * 1000 as Float64), timescale: 1000)
+                player?.seek(to: selectedTime)
+            }
+            player?.pause()
+            player?.play()
+        }
+    }
+    
+    @IBAction func fastBackwardPressed(_ sender: UIButton) {
+        self.view.endEditing(true)
+        if player == nil { return }
+        let playerCurrenTime = CMTimeGetSeconds(player?.currentTime() ?? .zero)
+        var newTime = playerCurrenTime - seekDuration
+        if newTime < 0 { newTime = 0 }
+        player?.pause()
+        let selectedTime: CMTime = CMTimeMake(value: Int64(newTime * 1000 as Float64), timescale: 1000)
+        player?.seek(to: selectedTime)
+        player?.play()
+    }
+    
+    @IBAction func showInfoPressed(_ sender: UIButton) {
+        self.view.endEditing(true)
+        self.player?.pause()
+        if let newVC = R.storyboard.player.playerShowInfoVC() {
+            newVC.musicObject = self.musicArray[(currentAudioIndex ?? 0)]
+            self.present(newVC, animated: true, completion: nil)
+        }
+    }
+    
+    @IBAction func addToPlayListPressed(_ sender: UIButton) {
+        self.view.endEditing(true)
+        if AppInstance.instance.isLoginUser {
+            if let newVC = R.storyboard.popups.selectAPlaylistVC() {
+                newVC.createPlaylistDelegate = self
+                newVC.trackId = self.musicArray[(currentAudioIndex ?? 0)].id ?? 0
+                self.present(newVC, animated: true, completion: nil)
+            }
+        } else {
+            self.player?.pause()
+            self.showLoginAlert(delegate: self)
+        }
+    }
+    
+    @IBAction func sharedPressed(_ sender: UIButton) {
+        self.view.endEditing(true)
+        if let object = self.musicObject {
+            if  AppInstance.instance.isLoginUser {
+                var audioString:String = ""
+                if object.demo_track == ""{
+                    audioString = object.audio_location ?? ""
+                } else if object.demo_track != "" && object.audio_location != "" {
+                    audioString = object.audio_location ?? ""
+                } else {
+                    audioString = object.demo_track ?? ""
+                }
+                self.shareSong(stringURL: audioString)
+            }
+        } else {
+            self.player?.pause()
+            self.showLoginAlert(delegate: self)
+        }
+    }
+    
+    @IBAction func commentPressed(_ sender: UIButton) {
+        self.view.endEditing(true)
+        if  AppInstance.instance.isLoginUser {
+            if let newVC = R.storyboard.comment.commentsVC() {
+                newVC.trackId = self.musicArray[(currentAudioIndex ?? 0)].id ?? 0
+                newVC.trackIdString = self.musicArray[(currentAudioIndex ?? 0)].audio_id ?? ""
+                self.present(newVC, animated: true, completion: nil)
+            }
+        } else {
+            self.player?.pause()
+            self.showLoginAlert(delegate: self)
+        }
+    }
+    
+    @IBAction func offlinePressed(_ sender: UIButton) {
+        self.view.endEditing(true)
+        if AppInstance.instance.userProfile?.data?.is_pro == 0 {
+            if let warningPopupVC = R.storyboard.popups.warningPopupVC() {
+                warningPopupVC.delegate = self
+                warningPopupVC.titleText = "Warning"
+                warningPopupVC.messageText = "To activate this service, the account must be upgraded"
+                warningPopupVC.okText = "OK"
+                warningPopupVC.cancelText = "CANCEL"
+                self.present(warningPopupVC, animated: true, completion: nil)
+                warningPopupVC.okButton.tag = 10001
+            }
+        } else {
+            if AppInstance.instance.isLoginUser {
+                self.downloadBtn.isEnabled = true
+                if Connectivity.isConnectedToNetwork() {
+                    if getLocalVideoAdded(url: audioString) {
+                        self.view.makeToast("Already added in recently downloaded songs.", duration: 1.0)
+                    } else {
+                        let destination = DownloadRequest.suggestedDownloadDestination(for: .documentDirectory)
+                        AF.download(audioString, to: destination).downloadProgress(closure: { (progress) in
+                            log.verbose("progress = \(progress)")
+                            print(progress.fractionCompleted)
+                        }).response(completionHandler: { (DefaultDownloadResponse) in
+                            print(DefaultDownloadResponse)
+                            if let error = DefaultDownloadResponse.error {
+                                self.view.makeToast(error.localizedDescription)
+                                return
+                            }
+                            Async.main {
+                                self.downloadBtn.isEnabled = false
+                                self.downloadBtn.setImage(R.image.ic_circularTick(), for: .normal)
+                                if let object = self.musicObject,
+                                   let url = URL(string: object.secure_url ?? "") {
+                                    if url.lastPathComponent == DefaultDownloadResponse.fileURL?.lastPathComponent {
+                                        self.setDownloadSongs(objectToEncode: object)
+                                    }
+                                }
+                            }
+                        })
+                    }
+                } else {
+                    self.view.makeToast(InterNetError)
+                }
+            } else {
+                self.showLoginAlert(delegate: self)
+            }
+        }
+    }
+    
+    @IBAction func repeatPressed(_ sender: UIButton) {
+        self.view.endEditing(true)
+        self.repeatState = !repeatState
+        sender.tintColor = self.repeatState ? .mainColor : .textColor
+    }
+    
+    @IBAction func shufflePressed(_ sender: UIButton) {
+        self.view.endEditing(true)
+        self.isShuffle = !isShuffle
+        sender.tintColor = self.isShuffle ? .mainColor : .textColor
+        shuffleArray.removeAll()
+        let shuffledArray = self.musicArray.shuffled()
+        self.musicArray.removeAll()
+        self.musicArray = shuffledArray
+    }
+    
+    @IBAction func nextPressed(_ sender: UIButton) {
+        self.view.endEditing(true)
+        self.nextTrack()
+    }
+    
+    @IBAction func previousPressed(_ sender: UIButton) {
+        self.view.endEditing(true)
+        self.prevTrack()
+    }
+    
+    @IBAction func favoritePressed(_ sender: UIButton) {
+        self.view.endEditing(true)
+        if  AppInstance.instance.isLoginUser {
+            let audioId = self.musicObject?.audio_id ?? ""
+            self.favoriteUnFavoriteSong(audioId: audioId)
+        } else {
+            self.player?.pause()
+            self.showLoginAlert(delegate: self)
+        }
+    }
+    
+    @IBAction func likedPressed(_ sender: UIButton) {
+        self.view.endEditing(true)
+        if  AppInstance.instance.isLoginUser {
+            let audioId = self.musicObject?.audio_id ?? ""
+            self.likeDislikeSong(audioId:audioId)
+        } else {
+            self.player?.pause()
+            self.showLoginAlert(delegate: self)
+        }
+    }
+    
+    @objc func cancel() {
+        self.nowPlayingInfo = [:]
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
+        popupContentController?.musicObject = nil
+        SwiftEventBus.postToMainThread(EventBusConstants.EventBusConstantsUtils.EVENT_DISMISS_POPOVER)
+    }
+    
+    @objc func nextSongBottom() {
+        nextTrack()
+    }
+    
+    @IBAction func dislikePressed(_ sender: UIButton) {
+        self.view.endEditing(true)
+        if AppInstance.instance.isLoginUser {
+            let audioId = self.musicObject?.audio_id ?? ""
+            self.likeDislikeTrack(audioId:audioId)
+        } else {
+            self.player?.pause()
+            self.showLoginAlert(delegate: self)
+        }
+    }
+    
+    @IBAction func playPressed(_ sender: UIButton) {
+        self.view.endEditing(true)
+        if self.player != nil {
+            if AppInstance.instance.AlreadyPlayed {
+                SwiftEventBus.postToMainThread(EventBusConstants.EventBusConstantsUtils.EVENT_PLAY_PAUSE_BTN, sender: true)
+                isPaused = true
+            } else {
+                SwiftEventBus.postToMainThread(EventBusConstants.EventBusConstantsUtils.EVENT_PLAY_PAUSE_BTN, sender: false)
+                isPaused = false
+            }
+        } else {
+            setup()
+        }
+    }
+    
+    @objc func panGesture(_ gesture: UIPanGestureRecognizer) {
+        let currentPoint = gesture.location(in: progressSlider)
+        let percentage = currentPoint.x/progressSlider.bounds.size.width;
+        let delta = Float(percentage) *  (progressSlider.maximumValue - progressSlider.minimumValue)
+        let value = progressSlider.minimumValue + delta
+        progressSlider.setValue(value, animated: true)
+        let seconds : Int64 = Int64(value)
+        let targetTime:CMTime = CMTimeMake(value: seconds, timescale: 1)
+        switch gesture.state {
+        case .began:
+            self.player?.pause()
+        case .changed:
+            self.player?.seek(to: targetTime)
+            let time : Float64 = CMTimeGetSeconds(self.player?.currentTime() ?? .zero)
+            self.calculatedTimeLenghtLabel.text = stringFromTimeInterval(interval: time)
+            break
+        case .ended:
+            self.player?.play()
+        default:
+            break
+        }
+    }
+    
+    @objc func finishedPlaying( _ myNotification:NSNotification) {
+        self.view.endEditing(true)
+        self.isPaused = true
+        self.progressSlider.value = 0
+        self.calculatedTimeLenghtLabel.text = "00:00"
+        self.totalDurationLengthLabel.text = "00:00"
+        if !repeatState {
+            self.nextTrack()
+        } else {
+            self.setRepeatPlay()
+        }
+    }
+    
+    @objc func playbackSliderValueChanged(sender: UISlider, event: UIEvent) {
+        if let touchEvent = event.allTouches?.first {
+            switch touchEvent.phase {
+            case .began:
+                self.player?.pause()
+                if let timeObserver = timeObserver {
+                    if (self.timeObserverAdded) {
+                        self.player?.removeTimeObserver(timeObserver)
+                    }
+                }
+                self.timeObserverAdded = false
+                break
+            case .moved:
+                let seconds : Int64 = Int64(sender.value)
+                let targetTime:CMTime = CMTimeMake(value: seconds, timescale: 1)
+                self.player?.seek(to: targetTime)
+                self.player?.play()
+                let time : Float64 = CMTimeGetSeconds(self.player?.currentTime() ?? .zero)
+                self.calculatedTimeLenghtLabel.text = stringFromTimeInterval(interval: time)
+            case .ended:
+                self.addTimeObserver()
+            default:
+                break
+            }
+        }
+    }
+    
+}
+
+// MARK: - Extensions
+
+// MARK: Helper Functions
+extension MusicPlayerVC {
+    
+    func showLoginAlert(delegate: WarningPopupVCDelegate?) {
+        self.view.endEditing(true)
+        if let warningPopupVC = R.storyboard.popups.warningPopupVC() {
+            warningPopupVC.delegate = self
+            warningPopupVC.titleText = "Login"
+            warningPopupVC.messageText = "Sorry you can not continue, you must log in and enjoy access to everything you want?"
+            warningPopupVC.okText = "YES"
+            warningPopupVC.cancelText = "NO"
+            self.present(warningPopupVC, animated: true, completion: nil)
+            warningPopupVC.okButton.tag = 1001
+        }
+    }
+    
+    func setup() {
+        let object = musicArray[(currentAudioIndex ?? 0)]
+        self.addToRecentlyWatched(trackId: object.audio_id ?? "")
+        self.musicObject = object
+        self.setupUI(object: object)
+        if let can_listen = object.can_listen, can_listen {
+            log.verbose("URL = \(self.audioString)")
+            log.verbose("IsDemoTrack = \(isDemo)")
+            let replaced = self.audioString.replacingOccurrences(of: "\(API.baseURL)/", with: "")
+            log.verbose("replaced = \(replaced)")
+            self.playBtn.setImage(R.image.ic_pause(), for: .normal)
+            isPaused = false
+            var songUrlString: String = ""
+            if urlString == nil {
+                if isDemo {
+                    if (self.audioString.contains(find: "http")) {
+                        songUrlString = audioString
+                    } else {
+                        songUrlString = "\(API.baseURL)/" + audioString
+                    }
+                } else {
+                    let replaced = audioString.replacingOccurrences(of: "\(API.baseURL)/", with: "")
+                    if replaced.startsWith(string: "upload") {
+                        songUrlString = "\(API.baseURL)/" + replaced.htmlAttributedString!
+                    } else {
+                        songUrlString = replaced.htmlAttributedString!
+                    }
+                }
+                guard let songUrl = URL(string: songUrlString) else{ return }
+                self.play(url: songUrl)
+            } else {
+                if let url = self.urlString {
+                    self.play(url: url)
+                }
+            }
+            AppInstance.instance.AlreadyPlayed = true
+        } else {
+            if let warningPopupVC = R.storyboard.popups.purchaseRequiredPopupVC() {
+                warningPopupVC.delegate = self
+                warningPopupVC.object = object
+                appDelegate.window?.rootViewController?.present(warningPopupVC, animated: true, completion: nil)
+            }
+        }
+    }
+    
+    func setupUI(object: Song) {
+        if object.demo_track == "" {
+            audioString = object.audio_location ?? ""
+            isDemo = false
+        } else if object.demo_track != "" && object.audio_location != "" {
+            audioString = object.audio_location ?? ""
+            isDemo = false
+        } else {
+            audioString = object.demo_track ?? ""
+            isDemo = true
+        }
+        if ControlSettings.showHideDownloadBtn {
+            self.downloadBtn.isHidden = true
+        } else {
+            checkOfflineDownload()
+        }
         log.verbose("Music Object = \(musicArray)")
         self.musicArray.forEach { (it) in
             log.verbose("Music Object = \(it.title ?? "")")
         }
-
         self.playBtn.cornerRadiusV = self.playBtn.frame.height / 2
-        self.nameLabel.text = self.musicArray[currentAudioIndex].name ?? ""
-        self.titleLabel.text = self.musicArray[currentAudioIndex].title?.htmlAttributedString ?? ""
-        
-        self.timeLabel.text = self.musicArray[currentAudioIndex].time ?? ""
-        self.musicTypeLabel.text = (self.musicArray[currentAudioIndex].musicType ?? "") + " Music"
-        let thumbnailURL = URL.init(string:self.musicArray[currentAudioIndex].ThumbnailImageString ?? "")
-        thumbnailImage.sd_setImage(with: thumbnailURL , placeholderImage:R.image.imagePlacholder())
-       // backGroundImage.sd_setImage(with: thumbnailURL , placeholderImage:R.image.imagePlacholder())
-        if (self.musicArray[currentAudioIndex].isLiked ?? false) {
+        self.titleLabel.text = object.title?.htmlAttributedString
+        self.totalDurationLengthLabel.text = object.duration
+        var album_name = ""
+        if object.album_name != "" {
+            album_name = "in album \(object.album_name ?? "")"
+        }
+        self.musicTypeLabel.text = (object.songArray?.sCategory ?? "") + " Music" + album_name
+        self.popupItem.title = object.title?.htmlAttributedString ?? ""
+        let thumbnailURL = URL.init(string:object.songArray?.sThumbnail ?? "")
+        thumbnailImage.sd_setImage(with: thumbnailURL, placeholderImage: R.image.imagePlacholder()) { image, err, type, url in
+            if let image = image {
+                self.popupItem.image = image
+            } else {
+                self.popupItem.image = R.image.imagePlacholder()
+            }
+        }
+        if let isLiked = object.isLiked, isLiked {
             likeBtn.setImage(R.image.icHeartOrangeBs(), for: .normal)
-        }else{
+        } else {
             likeBtn.setImage(R.image.icHeartBs(), for: .normal)
         }
-        
-        if (self.musicArray[currentAudioIndex].isFavorite!) {
-            favoriteBtn.setImage(R.image.ic_starYellow(), for: .normal)
-            
-        }else{
-            favoriteBtn.setImage(R.image.ic_starPlayer(), for: .normal)
+        if let is_favoriated = object.is_favoriated, !is_favoriated {
+            self.favoriteBtn.setImage(R.image.ic_starPlayer(), for: .normal)
+            self.favoriteBtn.tintColor = UIColor(named: "textColor")
+        } else {
+            self.favoriteBtn.setImage(UIImage(named: "icn_fill_star")?.withRenderingMode(.alwaysTemplate), for: .normal)
+            self.favoriteBtn.tintColor = .mainColor
         }
-        
-        //self.rotateThumbnailImageContinuously()
-        log.verbose("URL = \(self.musicArray[currentAudioIndex].audioString ?? "")")
-        log.verbose("IsDemoTrack = \(self.musicArray[currentAudioIndex].isDemoTrack ?? false)")
-        let replaced = self.musicArray[currentAudioIndex].audioString!.replacingOccurrences(of: "\(API.baseURL)/", with: "")
-        log.verbose("replaced = \(replaced)")
-        self.playBtn.setImage(R.image.ic_pause(), for: .normal)
-        isPaused = false
-        var songUrlString:String? = ""
-        if musicArray[self.currentAudioIndex].isDemoTrack!{
-            if (musicArray[self.currentAudioIndex].audioString?.contains(find: "http"))!{
-                songUrlString  = musicArray[self.currentAudioIndex].audioString!
-            }else{
-                songUrlString  = "\(API.baseURL)/"+musicArray[self.currentAudioIndex].audioString!
+    }
+    
+    func play(url: URL) {
+        Async.background({ [self] in
+            playerItem = AVPlayerItem(url: url)
+            self.player = AVPlayer(playerItem: playerItem)
+            NotificationCenter.default.addObserver(self, selector: #selector(self.finishedPlaying(_:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: playerItem)
+            self.player?.volume = 1.0
+            self.player?.playImmediately(atRate: self.playSpeed)
+            self.isPaused = false
+            Async.main { [self] in
+                self.progressSlider.minimumValue = 0
+                let duration : CMTime = playerItem?.asset.duration ?? .zero
+                let seconds : Float64 = CMTimeGetSeconds(duration)
+                self.totalDurationLengthLabel.text = stringFromTimeInterval(interval: seconds)
+                let duration1 : CMTime = playerItem?.currentTime() ?? .zero
+                let seconds1 : Float64 = CMTimeGetSeconds(duration1)
+                self.calculatedTimeLenghtLabel.text = stringFromTimeInterval(interval: seconds1)
+                self.progressSlider.maximumValue = Float(seconds)
+                self.progressSlider.isContinuous = true
+                self.player?.addObserver(self, forKeyPath: "currentItem.loadedTimeRanges", options: .new, context: nil)
+                self.addTimeObserver()
             }
-            
-        }else{
-            let replaced = self.musicArray[currentAudioIndex].audioString!.replacingOccurrences(of: "\(API.baseURL)/", with: "")
+        })
+    }
+    
+    // MARK: Player Observer
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == "currentItem.loadedTimeRanges" {
+            self.player?.removeObserver(self, forKeyPath: "currentItem.loadedTimeRanges")
+            self.setupNowPlaying(title: self.musicObject?.title ?? "", image: self.thumbnailImage.image ?? UIImage())
+        }
+    }
+    
+    func addTimeObserver() {
+        timeObserver = self.player?.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(1, preferredTimescale: 1), queue: DispatchQueue.main) { [self] (CMTime) -> Void in
+            self.timeObserverAdded = true
+            if playerItem?.status == .readyToPlay {
+                let time : Float64 = CMTimeGetSeconds(self.player?.currentTime() ?? .zero)
+                self.progressSlider.value = Float(time)
+                self.calculatedTimeLenghtLabel.text = stringFromTimeInterval(interval: time)
+                self.nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = self.player?.currentItem?.currentTime().seconds
+                self.nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = self.player?.rate
+                MPNowPlayingInfoCenter.default().nowPlayingInfo = self.nowPlayingInfo
+            }
+            let playbackLikelyToKeepUp = self.player?.currentItem?.isPlaybackLikelyToKeepUp
+            if playbackLikelyToKeepUp == false {
+                print("IsBuffering")
+            } else {
+                print("Buffering completed")
+            }
+        }
+    }
+    
+    func setRepeatPlay() {
+        var songUrlString: String = ""
+        if isDemo {
+            if (self.audioString.contains(find: "http")) {
+                songUrlString  = audioString
+            } else {
+                songUrlString  = "\(API.baseURL)/"+audioString
+            }
+        } else {
+            let replaced = audioString.replacingOccurrences(of: "\(API.baseURL)/", with: "")
             if replaced.startsWith(string: "upload"){
                 songUrlString  = "\(API.baseURL)/"+replaced.htmlAttributedString!
-            }else{
+            } else {
                 songUrlString  = replaced.htmlAttributedString!
             }
         }
-        //        guard let songUrlString = musicArray[self.currentAudioIndex].audioString as? String else {return}
-        guard let songUrl = URL(string:songUrlString!) else{return}
-        //        self.setupRemoteCommandCenter()
-        
+        guard let songUrl = URL(string:songUrlString) else{return}
         self.play(url: songUrl)
-        
-        self.setupTimer()
-        self.pRemoteCommandCenter()
-        self.AudioSession()
-        Async.main({
-            self.setupNowPlaying(title: self.musicObject?.title ?? "", image: self.thumbnailImage.image ?? UIImage())
-        })
-        AppInstance.instance.AlreadyPlayed = true
     }
     
     func setupNowPlaying(title : String, image: UIImage) {
-        // Define Now Playing Info
-        
-        nowPlayingInfo[MPMediaItemPropertyTitle] = ControlSettings.appName
-        nowPlayingInfo[MPMediaItemPropertyArtist] = title
-        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = 1.0
-        nowPlayingInfo[MPNowPlayingInfoPropertyIsLiveStream] = false
-        
-        //        nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = playerItem.currentTime().seconds
-        //        nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = playerItem.asset.duration.seconds
-        //        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = player.rate
-        
-        Async.main({
-            let image =  image //self.trackImage!.image!
-            let artwork = MPMediaItemArtwork.init(boundsSize: image.size, requestHandler: { (size) -> UIImage in
-                return image
-            })
-            self.nowPlayingInfo[MPMediaItemPropertyArtwork] = artwork
+        self.nowPlayingInfo[MPMediaItemPropertyArtwork] = MPMediaItemArtwork.init(boundsSize: image.size, requestHandler: { (size) -> UIImage in
+            return image
         })
-        
-        // Set the metadata
-        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+        self.nowPlayingInfo[MPMediaItemPropertyTitle] = ControlSettings.appName
+        self.nowPlayingInfo[MPMediaItemPropertyArtist] = title
+        self.nowPlayingInfo[MPNowPlayingInfoPropertyIsLiveStream] = false
+        self.nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = self.player?.currentItem?.asset.duration.seconds
+        self.nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = self.player?.currentItem?.currentTime().seconds
+        self.nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = self.player?.rate
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = self.nowPlayingInfo
         MPNowPlayingInfoCenter.default().playbackState = .playing
     }
     
     func AudioSession() {
         do {
-            try! AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback, options: [])
-            try! AVAudioSession.sharedInstance().setCategory(.playback)
-            
-            try! AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback, options: AVAudioSession.CategoryOptions.mixWithOthers)
-            
-            //            try! AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, withOptions: [])
-            
-            if #available(iOS 10.0, *) {
-                try! AVAudioSession.sharedInstance().setCategory(.playback, mode: .moviePlayback)
-            }
-            else {
-                // Workaround until https://forums.swift.org/t/using-methods-marked-unavailable-in-swift-4-2/14949 isn't fixed
-                AVAudioSession.sharedInstance().perform(NSSelectorFromString("setCategory:error:"), with: AVAudioSession.Category.playback)
-            }
+            try AVAudioSession.sharedInstance().setCategory(.playback)
             try AVAudioSession.sharedInstance().setActive(true)
         } catch {
-            debugPrint("Error setting the AVAudioSession:", error.localizedDescription)
+            print(error.localizedDescription)
         }
     }
     
     func pRemoteCommandCenter() {
         let commandCenter = MPRemoteCommandCenter.shared();
         commandCenter.playCommand.isEnabled = true
-        commandCenter.playCommand.addTarget {event in
-            self.playPause()
+        commandCenter.playCommand.addTarget { event in
+            self.playPressed(self.playBtn)
             return .success
         }
         commandCenter.pauseCommand.isEnabled = true
-        commandCenter.pauseCommand.addTarget {event in
-            self.playPause()
-            
+        commandCenter.pauseCommand.addTarget { event in
+            self.playPressed(self.playBtn)
             return .success
         }
-        commandCenter.seekForwardCommand.isEnabled = true
-        commandCenter.seekForwardCommand.addTarget {event in
+        commandCenter.nextTrackCommand.isEnabled = true
+        commandCenter.nextTrackCommand.addTarget { event in
             self.nextTrack()
-            
             return .success
         }
-        commandCenter.seekBackwardCommand.addTarget {event in
+        commandCenter.previousTrackCommand.isEnabled = true
+        commandCenter.previousTrackCommand.addTarget { event in
             self.prevTrack()
             return .success
         }
     }
-    func setupTimer(){
-        NotificationCenter.default.addObserver(self, selector: #selector(self.didPlayToEnd), name: .AVPlayerItemDidPlayToEndTime, object: nil)
-        timer = Timer(timeInterval: 0.001, target: self, selector: #selector(self.tick), userInfo: nil, repeats: true)
-        RunLoop.current.add(timer!, forMode: RunLoop.Mode.common)
-    }
     
-    @objc func didPlayToEnd() {
-        if ControlSettings.isPurchase{
-            if self.musicArray[self.currentAudioIndex].isDemoTrack!{
-                
-                let alert = UIAlertController(title: "nil", message: "To continue listening to this track, you need to purchase the song", preferredStyle: .alert)
-                let ok = UIAlertAction(title: "Pay", style: .default) { (action) in
-                    let alertA = UIAlertController(title: "Pay", message: "", preferredStyle: .actionSheet)
-                    let wallet = UIAlertAction(title: "Wallet", style: .default) { action in
-                        log.verbose("Wallet")
-                        self.purchaseSongWallet(trackId: self.musicArray[self.currentAudioIndex].audioID ?? "")
-                    }
-                    let cancel =  UIAlertAction(title: "Cancel", style: .destructive, handler: nil)
-                    alertA.addAction(wallet)
-                    alertA.addAction(cancel)
-                    self.present(alertA, animated: true, completion: nil)
-                }
-                let cancel = UIAlertAction(title: "Cancel", style: .destructive, handler: nil)
-                alert.addAction(ok)
-                alert.addAction(cancel)
-                self.present(alert, animated: true, completion: nil)
-            }else{
-                self.nextTrack()
-                
-            }
-        }else{
-            if repeatState {
-                currentTrack()
-            } else {
-                self.nextTrack()
-            }
-        }
-        
-        
-    }
-    
-    @objc func tick(){
-        if(isPaused == false){
-            if(AppInstance.instance.player?.rate == nil){
-                AppInstance.instance.player?.play()
-                
-            }else{
-            }
-            
-        }
-        
-        if((AppInstance.instance.player?.currentItem?.asset.duration) != nil){
-            if AppInstance.instance.player?.currentItem?.status == .readyToPlay {
-                if let _ = AppInstance.instance.player?.currentItem?.asset.duration{}else{return}
-                if let _ = AppInstance.instance.player?.currentItem?.currentTime(){}else{return}
-                let currentTime1 : CMTime = (AppInstance.instance.player?.currentItem?.asset.duration)!
-                let seconds1 : Float64 = CMTimeGetSeconds(currentTime1)
-                let time1 : Float = Float(seconds1)
-                
-                let timeData = musicObject?.duration ?? "0:0"
-                let parts = timeData.split(separator: ":")
-                let minutesData = Int(parts[0])!
-                let secondsData = Int(parts[1])!
-                let totalData = minutesData * 60 + secondsData
-                print(totalData)
-                
-                
-                progressSlider.minimumValue = 0
-                progressSlider.maximumValue = Float(totalData)
-                
-                let currentTime : CMTime = ((AppInstance.instance.player?.currentTime())!)
-                let seconds : Float64 = CMTimeGetSeconds(currentTime)
-                let time : Float = Float(seconds)
-                self.progressSlider.value = time
-                totalDurationLengthLabel.text =  self.formatTimeFromSeconds(totalSeconds: Int32(Float(totalData)))
-                calculatedTimeLenghtLabel.text = self.formatTimeFromSeconds(totalSeconds: Int32(Float(Float64(CMTimeGetSeconds((AppInstance.instance.player?.currentItem?.currentTime())!)))))
-            } else {
-                progressSlider.value = 0
-                progressSlider.minimumValue = 0
-                progressSlider.maximumValue = 0
-            }
-        }else{
-            progressSlider.value = 0
-            progressSlider.minimumValue = 0
-            progressSlider.maximumValue = 0
-            //            totalTime.text = "Live stream \(self.formatTimeFromSeconds(totalSeconds: Int32(CMTimeGetSeconds((AppInstance.instance.player?.currentItem?.currentTime() ?? CMTime())))))"
-        }
-    }
-    func nextTrack(){
-        
-        if(currentAudioIndex < musicArray.count-1){
-            currentAudioIndex = currentAudioIndex + 1
-            isPaused = false
-            
-            self.playBtn.setImage(R.image.ic_pause(), for: .normal)
-            self.play(url: URL(string:(musicArray[self.currentAudioIndex].audioString!))!)
-            self.nameLabel.text = self.musicArray[currentAudioIndex].name ?? ""
-            self.titleLabel.text = self.musicArray[currentAudioIndex].title?.htmlAttributedString ?? ""
-            
-            self.timeLabel.text = self.musicArray[currentAudioIndex].time ?? ""
-            self.musicTypeLabel.text = (self.musicArray[currentAudioIndex].musicType ?? "") + " Music"
-            let thumbnailURL = URL.init(string:self.musicArray[currentAudioIndex].ThumbnailImageString ?? "")
-            thumbnailImage.sd_setImage(with: thumbnailURL , placeholderImage:R.image.imagePlacholder())
-            popupItem.image = thumbnailImage.image
-            popupItem.title = self.musicArray[currentAudioIndex].name ?? ""
-            popupItem.subtitle = self.musicArray[currentAudioIndex].title?.htmlAttributedString ?? ""
-           // backGroundImage.sd_setImage(with: thumbnailURL , placeholderImage:R.image.imagePlacholder())
-            if (self.musicArray[currentAudioIndex].isLiked ?? false) {
-                likeBtn.setImage(R.image.icHeartOrangeBs(), for: .normal)
-            }else{
-                likeBtn.setImage(R.image.icHeartBs(), for: .normal)
-            }
-            
-            if (self.musicArray[currentAudioIndex].isFavorite!) {
-                favoriteBtn.setImage(R.image.ic_starYellow(), for: .normal)
-                
-            }else{
-                favoriteBtn.setImage(R.image.ic_starPlayer(), for: .normal)
-            }
-            
-           // self.rotateThumbnailImageContinuously()
-            
-        }else{
+    func nextTrack() {
+        self.player = nil
+        AppInstance.instance.AlreadyPlayed = false
+        if((currentAudioIndex ?? 0) < musicArray.count-1) {
+            currentAudioIndex = (currentAudioIndex ?? 0) + 1
+        } else {
             self.playBtn.cornerRadiusV = self.playBtn.frame.height / 2
-            self.nameLabel.text = self.musicArray[currentAudioIndex].name ?? ""
-            self.titleLabel.text = self.musicArray[currentAudioIndex].title?.htmlAttributedString ?? ""
-            
-            self.timeLabel.text = self.musicArray[currentAudioIndex].time ?? ""
-            self.musicTypeLabel.text = (self.musicArray[currentAudioIndex].musicType ?? "") + " Music"
-            let thumbnailURL = URL.init(string:self.musicArray[currentAudioIndex].ThumbnailImageString ?? "")
-            thumbnailImage.sd_setImage(with: thumbnailURL , placeholderImage:R.image.imagePlacholder())
-            popupItem.image = thumbnailImage.image
-            popupItem.title = self.musicArray[currentAudioIndex].name ?? ""
-            popupItem.subtitle = self.musicArray[currentAudioIndex].title?.htmlAttributedString ?? ""
-          //  backGroundImage.sd_setImage(with: thumbnailURL , placeholderImage:R.image.imagePlacholder())
-            if (self.musicArray[currentAudioIndex].isLiked ?? false) {
-                likeBtn.setImage(R.image.icHeartOrangeBs(), for: .normal)
-            }else{
-                likeBtn.setImage(R.image.icHeartBs(), for: .normal)
-            }
-            
-            if (self.musicArray[currentAudioIndex].isFavorite!) {
-                favoriteBtn.setImage(R.image.ic_starYellow(), for: .normal)
-                
-            }else{
-                favoriteBtn.setImage(R.image.ic_starPlayer(), for: .normal)
-            }
-            
-            //self.rotateThumbnailImageContinuously()
             currentAudioIndex = 0
-            isPaused = false
-            self.playBtn.setImage(R.image.ic_pause(), for: .normal)
-            
-            self.play(url: URL(string:(musicArray[self.currentAudioIndex].audioString as! String))!)
-            self.setupNowPlaying(title: musicArray[self.currentAudioIndex].title ?? "", image: self.thumbnailImage.image ?? UIImage())
         }
+        self.setup()
+        SwiftEventBus.postToMainThread("EVENT_NEXT_TRACK_BTN", sender: true)
     }
     
-    func currentTrack(){
-        
-        if(currentAudioIndex < musicArray.count-1){
-
+    func prevTrack() {
+        if((currentAudioIndex ?? 0) > 0) {
+            currentAudioIndex = (currentAudioIndex ?? 0) - 1
             isPaused = false
-            
-            self.playBtn.setImage(R.image.ic_pause(), for: .normal)
-            self.play(url: URL(string:(musicArray[self.currentAudioIndex].audioString!))!)
-            self.nameLabel.text = self.musicArray[currentAudioIndex].name ?? ""
-            self.titleLabel.text = self.musicArray[currentAudioIndex].title?.htmlAttributedString ?? ""
-            
-            self.timeLabel.text = self.musicArray[currentAudioIndex].time ?? ""
-            self.musicTypeLabel.text = (self.musicArray[currentAudioIndex].musicType ?? "") + " Music"
-            let thumbnailURL = URL.init(string:self.musicArray[currentAudioIndex].ThumbnailImageString ?? "")
-            thumbnailImage.sd_setImage(with: thumbnailURL , placeholderImage:R.image.imagePlacholder())
-            popupItem.image = thumbnailImage.image
-            popupItem.title = self.musicArray[currentAudioIndex].name ?? ""
-            popupItem.subtitle = self.musicArray[currentAudioIndex].title?.htmlAttributedString ?? ""
-           // backGroundImage.sd_setImage(with: thumbnailURL , placeholderImage:R.image.imagePlacholder())
-            if (self.musicArray[currentAudioIndex].isLiked ?? false) {
-                likeBtn.setImage(R.image.icHeartOrangeBs(), for: .normal)
-            }else{
-                likeBtn.setImage(R.image.icHeartBs(), for: .normal)
-            }
-            
-            if (self.musicArray[currentAudioIndex].isFavorite!) {
-                favoriteBtn.setImage(R.image.ic_starYellow(), for: .normal)
-                
-            }else{
-                favoriteBtn.setImage(R.image.ic_starPlayer(), for: .normal)
-            }
-            
-           // self.rotateThumbnailImageContinuously()
-            
-        }else{
-            self.playBtn.cornerRadiusV = self.playBtn.frame.height / 2
-            self.nameLabel.text = self.musicArray[currentAudioIndex].name ?? ""
-            self.titleLabel.text = self.musicArray[currentAudioIndex].title?.htmlAttributedString ?? ""
-            
-            self.timeLabel.text = self.musicArray[currentAudioIndex].time ?? ""
-            self.musicTypeLabel.text = (self.musicArray[currentAudioIndex].musicType ?? "") + " Music"
-            let thumbnailURL = URL.init(string:self.musicArray[currentAudioIndex].ThumbnailImageString ?? "")
-            thumbnailImage.sd_setImage(with: thumbnailURL , placeholderImage:R.image.imagePlacholder())
-            popupItem.image = thumbnailImage.image
-            popupItem.title = self.musicArray[currentAudioIndex].name ?? ""
-            popupItem.subtitle = self.musicArray[currentAudioIndex].title?.htmlAttributedString ?? ""
-          //  backGroundImage.sd_setImage(with: thumbnailURL , placeholderImage:R.image.imagePlacholder())
-            if (self.musicArray[currentAudioIndex].isLiked ?? false) {
-                likeBtn.setImage(R.image.icHeartOrangeBs(), for: .normal)
-            }else{
-                likeBtn.setImage(R.image.icHeartBs(), for: .normal)
-            }
-            
-            if (self.musicArray[currentAudioIndex].isFavorite!) {
-                favoriteBtn.setImage(R.image.ic_starYellow(), for: .normal)
-                
-            }else{
-                favoriteBtn.setImage(R.image.ic_starPlayer(), for: .normal)
-            }
-            
-            //self.rotateThumbnailImageContinuously()
-            currentAudioIndex = 0
-            isPaused = false
-            self.playBtn.setImage(R.image.ic_pause(), for: .normal)
-            
-            self.play(url: URL(string:(musicArray[self.currentAudioIndex].audioString as! String))!)
-            self.setupNowPlaying(title: musicArray[self.currentAudioIndex].title ?? "", image: self.thumbnailImage.image ?? UIImage())
+            self.setup()
         }
+        SwiftEventBus.postToMainThread("EVENT_NEXT_TRACK_BTN", sender: true)
     }
     
-    func prevTrack(){
-        if(currentAudioIndex > 0){
-            currentAudioIndex = currentAudioIndex - 1
-            isPaused = false
-            self.playBtn.cornerRadiusV = self.playBtn.frame.height / 2
-            self.nameLabel.text = self.musicArray[currentAudioIndex].name ?? ""
-            self.titleLabel.text = self.musicArray[currentAudioIndex].title?.htmlAttributedString ?? ""
-            
-            self.timeLabel.text = self.musicArray[currentAudioIndex].time ?? ""
-            self.musicTypeLabel.text = (self.musicArray[currentAudioIndex].musicType ?? "") + " Music"
-            let thumbnailURL = URL.init(string:self.musicArray[currentAudioIndex].ThumbnailImageString ?? "")
-            thumbnailImage.sd_setImage(with: thumbnailURL , placeholderImage:R.image.imagePlacholder())
-            //backGroundImage.sd_setImage(with: thumbnailURL , placeholderImage:R.image.imagePlacholder())
-            if (self.musicArray[currentAudioIndex].isLiked ?? false) {
-                likeBtn.setImage(R.image.icHeartOrangeBs(), for: .normal)
-            }else{
-                likeBtn.setImage(R.image.icHeartBs(), for: .normal)
-            }
-            
-            if (self.musicArray[currentAudioIndex].isFavorite!) {
-                favoriteBtn.setImage(R.image.ic_starYellow(), for: .normal)
-                
-            }else{
-                favoriteBtn.setImage(R.image.ic_starPlayer(), for: .normal)
-            }
-            
-           // self.rotateThumbnailImageContinuously()
-            self.playBtn.setImage(R.image.ic_pause(), for: .normal)
-            self.play(url: URL(string:(musicArray[self.currentAudioIndex].audioString as! String))!)
-            self.setupNowPlaying(title: musicArray[self.currentAudioIndex].title ?? "", image: self.thumbnailImage.image ?? UIImage())
-        }
-    }
-    
-    func formatTimeFromSeconds(totalSeconds: Int32) -> String {
-        let seconds: Int32 = totalSeconds%60
-        let minutes: Int32 = (totalSeconds/60)%60
-        let hours: Int32 = totalSeconds/3600
-        return String(format: "%02d:%02d", minutes,seconds)
-    }
-    func assingSliderUI () {
-        let minImage = R.image.sliderTrackFill()!.withRenderingMode(.alwaysTemplate)
-        let maxImage = R.image.sliderTrack()!.withRenderingMode(.alwaysTemplate)
-        let thumb = R.image.thumb()!.withRenderingMode(.alwaysTemplate)
-        
-        progressSlider.minimumTrackTintColor = .red
-        progressSlider.thumbTintColor = .red
-        progressSlider.setMinimumTrackImage(minImage, for: UIControl.State())
-        progressSlider.setMaximumTrackImage(maxImage, for: UIControl.State())
-        progressSlider.setThumbImage(thumb, for: UIControl.State())
-        
-        
-    }
-    private func checkOfflineDownload(){
-        
-        let audioUrl = URL(string: self.musicArray[currentAudioIndex].audioString ?? "")
-        let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
-        let url = NSURL(fileURLWithPath: path)
-        if let pathComponent = url.appendingPathComponent(audioUrl!.lastPathComponent) {
-            let filePath = pathComponent.path
-            let fileManager = FileManager.default
-            if fileManager.fileExists(atPath: filePath) {
-                print("FILE AVAILABLE")
-                
-                self.downloadBtn.isEnabled = false
-               // self.progressCircularView.isHidden = true
-                self.downloadBtn.setImage(R.image.ic_circularTick(), for: .normal)
+    private func checkOfflineDownload() {
+        if getLocalVideoAdded(url: audioString) {
+            self.downloadBtn.isEnabled = false
+            self.downloadBtn.setImage(R.image.icn_downloaded_song(), for: .normal)
+            if let audioUrl = URL(string: self.audioString) {
                 let fileManager = FileManager.default
-                
                 let urls = fileManager.urls(for: .documentDirectory, in: .userDomainMask)
-                
-                if let documentDirectoryURL: NSURL = urls.first as? NSURL {
-                    let playYoda = documentDirectoryURL.appendingPathComponent(audioUrl!.lastPathComponent)
+                if let documentDirectoryURL = urls.first {
+                    let playYoda = documentDirectoryURL.appendingPathComponent(audioUrl.lastPathComponent)
                     print("playYoda is \(playYoda)")
-                    self.urlString = playYoda!
+                    self.urlString = playYoda
                     AppInstance.instance.playSongBool = true
-                    
                 }
-            } else {
-                self.downloadBtn.isEnabled = true
-                //self.progressCircularView.isHidden = true
-                self.downloadBtn.setImage(R.image.ic_cloudPlayer(), for: .normal)
-                self.urlString = URL(string: musicArray[currentAudioIndex].audioString ?? "")
-                AppInstance.instance.playSongBool = false
-                
-                
-                print("FILE NOT AVAILABLE")
             }
         } else {
-            print("FILE PATH NOT AVAILABLE")
-        }
-    }
-    private func rotateThumbnailImageContinuously(){
-        let rotation = CABasicAnimation(keyPath: "transform.rotation")
-        rotation.fromValue = 0
-        rotation.toValue = 2 * M_PI
-        rotation.duration = 2.5
-        rotation.repeatCount = Float.infinity
-        circularView.layer.add(rotation, forKey: "Spin")
-    }
-    
-    @IBAction func fastForawardPressed(_ sender: Any) {
-        
-        guard let duration  = AppInstance.instance.player?.currentItem?.duration else {
-            return
-        }
-        let playerCurrentTime = CMTimeGetSeconds((AppInstance.instance.player?.currentTime())!)
-        let newTime = playerCurrentTime + 10.0000
-        
-        if newTime < (CMTimeGetSeconds(duration) - 10.0000) {
-            
-            let time2: CMTime = CMTimeMake(value: Int64(newTime * 1000 as Float64), timescale: 1000)
-            AppInstance.instance.player?.seek(to: time2, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
-            
-        }
-        
-    }
-    
-    @IBAction func fastBackwardPressed(_ sender: Any) {
-        let playerCurrentTime = CMTimeGetSeconds((AppInstance.instance.player?.currentTime())!)
-        var newTime = playerCurrentTime - 10.0000
-        
-        if newTime < 0 {
-            newTime = 0
-        }
-        let time2: CMTime = CMTimeMake(value: Int64(newTime * 1000 as Float64), timescale: 1000)
-        AppInstance.instance.player?.seek(to: time2, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
-        
-        
-        
-        
-    }
-    @IBAction func showInfoPressed(_ sender: Any) {
-        AppInstance.instance.player?.pause()
-        let vc = R.storyboard.player.playerShowInfoVC()
-        vc?.musicObject = self.musicArray[currentAudioIndex]
-        self.present(vc!, animated: true, completion: nil)
-    }
-    
-    @IBAction func addToPlayListPressed(_ sender: Any) {
-        if  AppInstance.instance.getUserSession(){
-            let vc = R.storyboard.popups.selectAPlaylistVC()
-            vc?.createPlaylistDelegate = self
-            vc?.trackId = self.musicArray[currentAudioIndex].trackId ?? 0
-            self.present(vc!, animated: true, completion: nil)
-        }else{
-            AppInstance.instance.player?.pause()
-            
-            self.loginAlert()
-            
-        }
-        
-        
-    }
-    @IBAction func sharedPressed(_ sender: Any) {
-        if  AppInstance.instance.getUserSession(){
-            self.shareSong(stringURL: musicObject?.audioString ?? "")
-        }else{
-            AppInstance.instance.player?.pause()
-            
-            self.loginAlert()
-            
-        }
-        
-    }
-    
-    
-    @IBAction func commentPressed(_ sender: Any) {
-        
-        if  AppInstance.instance.getUserSession(){
-            let vc = R.storyboard.comment.commentsVC()
-            vc?.trackId = self.musicArray[currentAudioIndex].trackId ?? 0
-            vc?.trackIdString = self.musicArray[currentAudioIndex].audioID ?? ""
-            self.present(vc!, animated: true, completion: nil)
-            
-        }else{
-            AppInstance.instance.player?.pause()
-            
-            self.loginAlert()
-            
-        }
-    }
-    
-    @IBAction func offlinePressed(_ sender: Any) {
-        
-        
-        if  AppInstance.instance.getUserSession(){
             self.downloadBtn.isEnabled = true
-            //self.progressCircularView.isHidden = false
-            
-            let destination = DownloadRequest.suggestedDownloadDestination(for: .documentDirectory)
-            
-            AF.download(
-                self.musicArray[currentAudioIndex].audioString ?? "",
-                method: .get,
-                parameters: [:],
-                encoding: JSONEncoding.default,
-                headers: nil,
-                to: destination).downloadProgress(closure: { (progress) in
-                    log.verbose("progress = \(progress)")
-                    //self.progressCircularView.progress = progress.fractionCompleted
-                }).response(completionHandler: { (DefaultDownloadResponse) in
-//                    log.verbose("DefaultDownloadResponse = \(DefaultDownloadResponse.description!)")
-                    self.downloadBtn.isEnabled = false
-                    //self.progressCircularView.isHidden = true
-                    self.downloadBtn.setImage(R.image.ic_circularTick(), for: .normal)
-                    self.setDownloadSongs()
-                })
-            
-        }else{
-            AppInstance.instance.player?.pause()
-            self.loginAlert()
-            
+            self.downloadBtn.setImage(R.image.download(), for: .normal)
+            AppInstance.instance.playSongBool = false
+            self.urlString = nil
         }
     }
     
-    @IBAction func sliderValueChange(_ sender: UISlider) {
-        if self.progressSlider.isTouchInside {
-            AppInstance.instance.player?.pause()
-            let seconds : Int64 = Int64(progressSlider.value)
-            let preferredTimeScale : Int32 = 1
-            let seekTime : CMTime = CMTimeMake(value: seconds, timescale: preferredTimeScale)
-            AppInstance.instance.player?.currentItem!.seek(to: seekTime)
-            AppInstance.instance.player?.play()
-            
-        } else {
-            
-            let duration : CMTime = ( AppInstance.instance.player?.currentItem!.asset.duration)!
-            let seconds : Float64 = CMTimeGetSeconds(duration)
-            self.progressSlider.value = Float(seconds)
-        }
-    }
-    
-    @IBAction func sliderTapped(_ sender: UILongPressGestureRecognizer) {
-        if let slider = sender.view as? UISlider {
-            if slider.isHighlighted { return }
-            let point = sender.location(in: slider)
-            let percentage = Float(point.x / slider.bounds.width)
-            let delta = percentage * (slider.maximumValue - slider.minimumValue)
-            let value = slider.minimumValue + delta
-            slider.setValue(value, animated: false)
-            let seconds : Int64 = Int64(value)
-            let targetTime:CMTime = CMTimeMake(value: seconds, timescale: 1)
-            AppInstance.instance.player?.seek(to: targetTime)
-            if(isPaused == false){
-            }
-        }
-    }
-    
-    @IBAction func repeatPressed(_ sender: UIButton) {
-        if sender.isSelected == true {
-            sender.isSelected = false
-            repeatState = false
-            
-        } else {
-            sender.isSelected = true
-            repeatState = true
-        }
-    }
-    
-    @IBAction func shufflePressed(_ sender: UIButton) {
-        shuffleArray.removeAll()
-        let shuffledArray = self.musicArray.shuffled()
-        self.musicArray.removeAll()
-        self.musicArray = shuffledArray
-        
-    }
-    @IBAction func nextPressed(_ sender: AnyObject) {
-        self.nextTrack()
-    }
-    
-    @IBAction func previousPressed(_ sender: AnyObject) {
-        self.prevTrack()
-    }
-    @IBAction func favoritePressed(_ sender: Any) {
-        if  AppInstance.instance.getUserSession(){
-            
-            let audioId = self.musicObject?.audioID ?? ""
-            self.favoriteUnFavoriteSong(audioId: audioId)
-            
-        }else{
-            AppInstance.instance.player?.pause()
-            
-            self.loginAlert()
-            
-        }
-        
-    }
-    
-    @IBAction func likedPressed(_ sender: Any) {
-        if  AppInstance.instance.getUserSession(){
-            let audioId = self.musicObject?.audioID ?? ""
-            self.likeDislikeSong(audioId:audioId)
-            
-        }else{
-            AppInstance.instance.player?.pause()
-            
-            self.loginAlert()
-            
-        }
-        
-    }
-    private func shareSong(stringURL:String){
+    private func shareSong(stringURL: String) {
         let someText:String = stringURL
-        let objectsToShare:URL = URL(string: stringURL)!
-        let sharedObjects:[AnyObject] = [objectsToShare as AnyObject,someText as AnyObject]
-        let activityViewController = UIActivityViewController(activityItems : sharedObjects, applicationActivities: nil)
-        activityViewController.popoverPresentationController?.sourceView = self.view
-        
-        activityViewController.excludedActivityTypes = [ UIActivity.ActivityType.airDrop, UIActivity.ActivityType.postToFacebook,UIActivity.ActivityType.postToTwitter,UIActivity.ActivityType.mail,UIActivity.ActivityType.postToTencentWeibo]
-        self.setSharedSongs()
-        self.present(activityViewController, animated: true, completion: nil)
+        if let objectsToShare:URL = URL(string: stringURL) {
+            let sharedObjects:[AnyObject] = [objectsToShare as AnyObject,someText as AnyObject]
+            let activityViewController = UIActivityViewController(activityItems : sharedObjects, applicationActivities: nil)
+            activityViewController.popoverPresentationController?.sourceView = self.view
+            activityViewController.excludedActivityTypes = [ UIActivity.ActivityType.airDrop, UIActivity.ActivityType.postToFacebook,UIActivity.ActivityType.postToTwitter,UIActivity.ActivityType.mail,UIActivity.ActivityType.postToTencentWeibo]
+            self.setSharedSongs()
+            self.present(activityViewController, animated: true, completion: nil)
+        }
     }
-    private func setSharedSongs(){
+    
+    private func setSharedSongs() {
         log.verbose("Check = \(UserDefaults.standard.getSharedSongs(Key: Local.SHARE_SONG.Share_Song))")
-        
-        let objectToEncode = self.musicArray[currentAudioIndex]
+        let objectToEncode = self.musicArray[(currentAudioIndex ?? 0)]
         let data = try? PropertyListEncoder().encode(objectToEncode)
         var getSharedSongsrData = UserDefaults.standard.getSharedSongs(Key: Local.SHARE_SONG.Share_Song)
-        if UserDefaults.standard.getSharedSongs(Key: Local.SHARE_SONG.Share_Song).contains(data!){
-            self.view.makeToast("Already added in shared videos")
-        }else{
-            getSharedSongsrData.append(data!)
-            UserDefaults.standard.setSharedSongs(value: getSharedSongsrData, ForKey: Local.SHARE_SONG.Share_Song)
-            self.view.makeToast("Added to shared song")
+        if let data = data {
+            if UserDefaults.standard.getSharedSongs(Key: Local.SHARE_SONG.Share_Song).contains(data){
+                appDelegate.window?.rootViewController?.view.makeToast("Already added in shared videos")
+            } else {
+                getSharedSongsrData.append(data)
+                UserDefaults.standard.setSharedSongs(value: getSharedSongsrData, ForKey: Local.SHARE_SONG.Share_Song)
+                appDelegate.window?.rootViewController?.view.makeToast("Added to shared song")
+            }
         }
     }
     
-    private func setDownloadSongs(){
+    private func setDownloadSongs(objectToEncode: Song) {
         log.verbose("Check = \(UserDefaults.standard.getDownloadSongs(Key: Local.SHARE_SONG.Share_Song))")
-        let objectToEncode = self.musicArray[currentAudioIndex]
-        let data = try? PropertyListEncoder().encode(objectToEncode)
-        var getDownloadSongsrData = UserDefaults.standard.getDownloadSongs(Key: Local.DOWNLOAD_SONG.Download_Song)
-        if UserDefaults.standard.getDownloadSongs(Key: Local.DOWNLOAD_SONG.Download_Song).contains(data!){
-            self.view.makeToast("Already added in recently downloaded songs.")
-        }else{
-            getDownloadSongsrData.append(data!)
+        do {
+            let data = try PropertyListEncoder().encode(objectToEncode)
+            var getDownloadSongsrData = UserDefaults.standard.getDownloadSongs(Key: Local.DOWNLOAD_SONG.Download_Song)
+            getDownloadSongsrData.append(data)
             UserDefaults.standard.setDownloadSongs(value: getDownloadSongsrData, ForKey: Local.DOWNLOAD_SONG.Download_Song)
-            self.view.makeToast("Added to recently downloaded songs")
+            appDelegate.window?.rootViewController?.view.makeToast("Added to recently downloaded songs", duration: 1.0)
+        } catch {
+            appDelegate.window?.rootViewController?.view.makeToast(error.localizedDescription)
         }
     }
-    private func likeDislikeSong(audioId:String){
-        if Connectivity.isConnectedToNetwork(){
+    
+}
+
+// MARK: - API Call
+extension MusicPlayerVC {
+    
+    func addToRecentlyWatched(trackId: String) {
+        if Connectivity.isConnectedToNetwork() {
             let accessToken = AppInstance.instance.accessToken ?? ""
-            let audioId = audioId ?? ""
-            Async.background({
-                likeManager.instance.likeDisLikeSong(audiotId: audioId, AccessToken: accessToken, completionBlock: { (success, sessionError, error) in
-                    if success != nil{
-                        Async.main({
-                            self.dismissProgressDialog {
-                                log.debug("success = \(success?.mode ?? "")")
-                                if success?.mode == "disliked"{
-                                    self.likeBtn.setImage(R.image.icHeartOrangeBs(), for: .normal)
-                                }else{
-                                    self.likeBtn.setImage(R.image.icHeartBs(), for: .normal)
-                                }
-                            }
-                        })
-                        
-                    }else if sessionError != nil{
-                        Async.main({
-                            self.dismissProgressDialog {
-                                log.error("sessionError = \(sessionError?.error ?? "")")
-                                self.view.makeToast(sessionError?.error ?? "")
-                            }
-                        })
-                    }else {
-                        Async.main({
-                            self.dismissProgressDialog {
-                                log.error("error = \(error?.localizedDescription ?? "")")
-                                self.view.makeToast(error?.localizedDescription ?? "")
-                            }
-                        })
-                    }
-                })
-            })
-        }else{
-            log.error("internetErrro = \(InterNetError)")
-            self.view.makeToast(InterNetError)
-        }
-        
-    }
-    private func likeDislikeTrack(audioId:String){
-        if Connectivity.isConnectedToNetwork(){
-            let accessToken = AppInstance.instance.accessToken ?? ""
-            let audioId = audioId ?? ""
-            Async.background({
-                likeManager.instance.likeDisLikeTrack(audiotId: audioId, AccessToken: accessToken, completionBlock: { (success, sessionError, error) in
-                    if success != nil{
-                        Async.main({
-                            self.dismissProgressDialog {
-                                log.debug("success = \(success?.mode ?? "")")
-                                if success?.mode == "disliked"{
-                                    self.dislikeBtn.setImage(UIImage(named: "ic-dislike-heart-fill"), for: .normal)
-                                }else{
-                                    self.dislikeBtn.setImage(UIImage(named: "ic-dislike-heart-border"), for: .normal)
-                                }
-                            }
-                        })
-                        
-                    }else if sessionError != nil{
-                        Async.main({
-                            self.dismissProgressDialog {
-                                log.error("sessionError = \(sessionError?.error ?? "")")
-                                self.view.makeToast(sessionError?.error ?? "")
-                            }
-                        })
-                    }else {
-                        Async.main({
-                            self.dismissProgressDialog {
-                                log.error("error = \(error?.localizedDescription ?? "")")
-                                self.view.makeToast(error?.localizedDescription ?? "")
-                            }
-                        })
-                    }
-                })
-            })
-        }else{
-            log.error("internetErrro = \(InterNetError)")
-            self.view.makeToast(InterNetError)
-        }
-        
-    }
-    private func favoriteUnFavoriteSong(audioId:String){
-        if Connectivity.isConnectedToNetwork(){
-            let accessToken = AppInstance.instance.accessToken ?? ""
-            let audioId = audioId ?? ""
-            Async.background({
-                FavoriteManager.instance.favoriteSong(audiotId: audioId, AccessToken: accessToken
-                    , completionBlock: { (success, sessionError, error) in
-                        if success != nil{
-                            Async.main({
-                                self.dismissProgressDialog {
-                                    log.debug("success = \(success?.mode ?? "")")
-                                    if success?.mode == "Remove from favorite"{
-                                        self.favoriteBtn.setImage(R.image.ic_starPlayer(), for: .normal)
-                                    }else{
-                                        self.favoriteBtn.setImage(R.image.ic_starYellow(), for: .normal)
-                                    }
-                                }
-                            })
-                            
-                        }else if sessionError != nil{
-                            Async.main({
-                                self.dismissProgressDialog {
-                                    log.error("sessionError = \(sessionError?.error ?? "")")
-                                    self.view.makeToast(sessionError?.error ?? "")
-                                }
-                            })
-                        }else {
-                            Async.main({
-                                self.dismissProgressDialog {
-                                    log.error("error = \(error?.localizedDescription ?? "")")
-                                    self.view.makeToast(error?.localizedDescription ?? "")
-                                }
-                            })
+            let track_id = trackId
+            Async.background {
+                TrackManager.instance.getTrackInfo(TrackId: track_id, AccessToken: accessToken, completionBlock: { (success, sessionError, error) in
+                    if success != nil {
+                        Async.main {
+                            log.debug("userList = \(success?.status ?? 0)")
                         }
+                    } else if sessionError != nil {
+                        Async.main {
+                            log.error("sessionError = \(sessionError?.error ?? "")")
+                        }
+                    } else {
+                        Async.main{
+                            log.error("error = \(error?.localizedDescription ?? "")")
+                        }
+                    }
                 })
-            })
-        }else{
-            log.error("internetErrro = \(InterNetError)")
-            self.view.makeToast(InterNetError)
+            }
+        } else {
+            log.error("internetError = \(InterNetError)")
+            appDelegate.window?.rootViewController?.view.makeToast(InterNetError)
         }
     }
-    private func purchaseSong(trackId:Int){
-        if Connectivity.isConnectedToNetwork(){
+    
+    private func likeDislikeSong(audioId: String) {
+        if Connectivity.isConnectedToNetwork() {
+            let accessToken = AppInstance.instance.accessToken ?? ""
+            let audioId = audioId
+            Async.background {
+                LikeManager.instance.likeDisLikeSong(audiotId: audioId, AccessToken: accessToken, completionBlock: { (success, sessionError, error) in
+                    if success != nil {
+                        Async.main {
+                            log.debug("success = \(success?.mode ?? "")")
+                            if success?.mode != "disliked" {
+                                self.likeBtn.setImage(R.image.icHeartOrangeBs(), for: .normal)
+                            } else {
+                                self.likeBtn.setImage(R.image.icHeartBs(), for: .normal)
+                            }
+                        }
+                    } else if sessionError != nil {
+                        Async.main {
+                            log.error("sessionError = \(sessionError?.error ?? "")")
+                            appDelegate.window?.rootViewController?.view.makeToast(sessionError?.error ?? "")
+                        }
+                    } else {
+                        Async.main {
+                            log.error("error = \(error?.localizedDescription ?? "")")
+                            appDelegate.window?.rootViewController?.view.makeToast(error?.localizedDescription ?? "")
+                        }
+                    }
+                })
+            }
+        } else {
+            log.error("internetErrro = \(InterNetError)")
+            appDelegate.window?.rootViewController?.view.makeToast(InterNetError)
+        }
+    }
+    
+    private func likeDislikeTrack(audioId: String) {
+        if Connectivity.isConnectedToNetwork() {
+            let accessToken = AppInstance.instance.accessToken ?? ""
+            let audioId = audioId
+            Async.background {
+                LikeManager.instance.likeDisLikeTrack(audiotId: audioId, AccessToken: accessToken, completionBlock: { (success, sessionError, error) in
+                    if success != nil {
+                        Async.main {
+                            log.debug("success = \(success?.mode ?? "")")
+                            if success?.mode == "disliked" {
+                                self.dislikeBtn.setImage(UIImage(named: "ic-dislike-heart-fill"), for: .normal)
+                            } else {
+                                self.dislikeBtn.setImage(UIImage(named: "ic-dislike-heart-border"), for: .normal)
+                            }
+                        }
+                    } else if sessionError != nil {
+                        Async.main {
+                            log.error("sessionError = \(sessionError?.error ?? "")")
+                            appDelegate.window?.rootViewController?.view.makeToast(sessionError?.error ?? "")
+                        }
+                    } else {
+                        Async.main {
+                            log.error("error = \(error?.localizedDescription ?? "")")
+                            appDelegate.window?.rootViewController?.view.makeToast(error?.localizedDescription ?? "")
+                        }
+                    }
+                })
+            }
+        } else {
+            log.error("internetErrro = \(InterNetError)")
+            appDelegate.window?.rootViewController?.view.makeToast(InterNetError)
+        }
+    }
+    
+    private func favoriteUnFavoriteSong(audioId: String) {
+        if Connectivity.isConnectedToNetwork() {
+            let accessToken = AppInstance.instance.accessToken ?? ""
+            let audioId = audioId
+            Async.background {
+                FavoriteManager.instance.favoriteSong(audiotId: audioId, AccessToken: accessToken, completionBlock: { (success, sessionError, error) in
+                    if success != nil {
+                        Async.main {
+                            log.debug("success = \(success?.mode ?? "")")
+                            if success?.mode == "Remove from favorite" {
+                                self.favoriteBtn.setImage(R.image.ic_starPlayer(), for: .normal)
+                                self.favoriteBtn.tintColor = UIColor(named: "textColor")
+                            } else {
+                                self.favoriteBtn.setImage(UIImage(named: "icn_fill_star")?.withRenderingMode(.alwaysTemplate), for: .normal)
+                                self.favoriteBtn.tintColor = .mainColor
+                            }
+                        }
+                    } else if sessionError != nil {
+                        Async.main {
+                            log.error("sessionError = \(sessionError?.error ?? "")")
+                            appDelegate.window?.rootViewController?.view.makeToast(sessionError?.error ?? "")
+                        }
+                    } else {
+                        Async.main {
+                            log.error("error = \(error?.localizedDescription ?? "")")
+                            appDelegate.window?.rootViewController?.view.makeToast(error?.localizedDescription ?? "")
+                        }
+                    }
+                })
+            }
+        } else {
+            log.error("internetErrro = \(InterNetError)")
+            appDelegate.window?.rootViewController?.view.makeToast(InterNetError)
+        }
+    }
+    
+    private func purchaseSong(trackId: Int) {
+        if Connectivity.isConnectedToNetwork() {
             let accessToken = AppInstance.instance.accessToken ?? ""
             let userid = AppInstance.instance.userId ?? 0
-            Async.background({
+            Async.background {
                 PurchaseTrackManager.instance.purchaseTrack(AccessToken: accessToken, userId: userid, TrackId: trackId, completionBlock: { (success, sessionError, error) in
                     if success != nil{
-                        Async.main({
-                            self.dismissProgressDialog {
-                                log.debug("userList = \(success?.message ?? "")")
-                                
-                                
-                            }
-                        })
-                    }else if sessionError != nil{
-                        Async.main({
-                            self.dismissProgressDialog {
-                                
-                                self.view.makeToast(sessionError?.error ?? "")
-                                log.error("sessionError = \(sessionError?.error ?? "")")
-                            }
-                        })
-                    }else {
-                        Async.main({
-                            self.dismissProgressDialog {
-                                self.view.makeToast(error?.localizedDescription ?? "")
-                                log.error("error = \(error?.localizedDescription ?? "")")
-                            }
-                        })
+                        Async.main {
+                            log.debug("userList = \(success?.message ?? "")")
+                        }
+                    } else if sessionError != nil {
+                        Async.main {
+                            appDelegate.window?.rootViewController?.view.makeToast(sessionError?.error ?? "")
+                            log.error("sessionError = \(sessionError?.error ?? "")")
+                        }
+                    } else {
+                        Async.main {
+                            appDelegate.window?.rootViewController?.view.makeToast(error?.localizedDescription ?? "")
+                            log.error("error = \(error?.localizedDescription ?? "")")
+                        }
                     }
                 })
-            })
-            
-        }else{
+            }
+        } else {
             log.error("internetError = \(InterNetError)")
-            self.view.makeToast(InterNetError)
+            appDelegate.window?.rootViewController?.view.makeToast(InterNetError)
         }
     }
-    private func purchaseSongWallet(trackId:String){
-        if Connectivity.isConnectedToNetwork(){
+    
+    private func purchaseSongWallet(trackId: String) {
+        if Connectivity.isConnectedToNetwork() {
             let accessToken = AppInstance.instance.accessToken ?? ""
-            let userid = AppInstance.instance.userId ?? 0
-            Async.background({
+            Async.background {
                 UpgradeMemberShipManager.instance.purchaseTrack(AccessToken: accessToken, type: "buy_song", TrackID: trackId) { success, sessionError, error in
-                    if success != nil{
-                        Async.main({
-                            self.dismissProgressDialog {
-                                log.debug("userList = \(success ?? "")")
-                                self.view.makeToast(success ?? "")
-                            }
-                        })
-                    }else if sessionError != nil{
-                        Async.main({
-                            self.dismissProgressDialog {
-                                
-                                self.view.makeToast(sessionError ?? "")
-                                log.error("sessionError = \(sessionError ?? "")")
-                            }
-                        })
-                    }else {
-                        Async.main({
-                            self.dismissProgressDialog {
-                                self.view.makeToast(error?.localizedDescription ?? "")
-                                log.error("error = \(error?.localizedDescription ?? "")")
-                            }
-                        })
+                    if success != nil {
+                        Async.main {
+                            log.debug("userList = \(success ?? "")")
+                            appDelegate.window?.rootViewController?.view.makeToast(success ?? "")
+                        }
+                    } else if sessionError != nil {
+                        Async.main {
+                            appDelegate.window?.rootViewController?.view.makeToast(sessionError ?? "")
+                            log.error("sessionError = \(sessionError ?? "")")
+                        }
+                    } else {
+                        Async.main {
+                            appDelegate.window?.rootViewController?.view.makeToast(error?.localizedDescription ?? "")
+                            log.error("error = \(error?.localizedDescription ?? "")")
+                        }
                     }
                 }
-            })
-            
-        }else{
+            }
+        } else {
             log.error("internetError = \(InterNetError)")
-            self.view.makeToast(InterNetError)
+            appDelegate.window?.rootViewController?.view.makeToast(InterNetError)
         }
     }
-    func loginAlert(){
-        let alert = UIAlertController(title: "Login", message: "Sorry you can not continue, you must log in and enjoy access to everything you want", preferredStyle: .alert)
-        let yes = UIAlertAction(title: "YES", style: .default) { (action) in
-            self.appDelegate.window?.rootViewController = R.storyboard.login.main()
-        }
-        let no = UIAlertAction(title: "NO", style: .cancel, handler: nil)
-        alert.addAction(yes)
-        alert.addAction(no)
-        self.present(alert, animated: true, completion: nil)
-        
-    }
+    
 }
-extension MusicPlayerVC:createPlaylistDelegate{
+
+// MARK: Create PlayList delegate Methods
+extension MusicPlayerVC: createPlaylistDelegate {
+    
     func createPlaylist(status: Bool) {
-        if status{
-            let vc = R.storyboard.playlist.createPlaylistVC()
-            self.present(vc!, animated: true, completion: nil)
-        }
-    }
-}
-
-extension MusicPlayerVC:AVAudioPlayerDelegate{
-    
-    // MARK:- AVAudioPlayer Delegate's Callback method
-    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool){
-        if flag == true {
-            
-            if shuffleState == false && repeatState == false {
-                // do nothing
-                playBtn.setImage(R.image.ic_playPlayer(), for: UIControl.State())
-                return
-                
-            } else if shuffleState == false && repeatState == true {
-                //repeat same song
-                //                setupUI()
-                //                playAudio()
-                
-            } else if shuffleState == true && repeatState == false {
-                //shuffle songs but do not repeat at the end
-                //Shuffle Logic : Create an array and put current song into the array then when next song come randomly choose song from available song and check against the array it is in the array try until you find one if the array and number of songs are same then stop playing as all songs are already played.
-                shuffleArray.append(currentAudioIndex)
-                if shuffleArray.count >= musicArray.count {
-                    playBtn.setImage(R.image.ic_playPlayer(), for: UIControl.State())
-                    return
-                    
-                }
-                
-                var randomIndex = 0
-                var newIndex = false
-                while newIndex == false {
-                    randomIndex =  Int(arc4random_uniform(UInt32(musicArray.count)))
-                    if shuffleArray.contains(randomIndex) {
-                        newIndex = false
-                    }else{
-                        newIndex = true
-                    }
-                }
-                currentAudioIndex = randomIndex
-                setup()
-                //                playAudio()
-                
-            } else if shuffleState == true && repeatState == true {
-                //shuffle song endlessly
-                shuffleArray.append(currentAudioIndex)
-                if shuffleArray.count >= musicArray.count {
-                    shuffleArray.removeAll()
-                }
-                
-                var randomIndex = 0
-                var newIndex = false
-                while newIndex == false {
-                    randomIndex =  Int(arc4random_uniform(UInt32(musicArray.count)))
-                    if shuffleArray.contains(randomIndex) {
-                        newIndex = false
-                    }else{
-                        newIndex = true
-                    }
-                }
-                currentAudioIndex = randomIndex
-                //                stopAudiplayer()
-                setup()
-                //                playAudio()
-            }
-        }
-    }
-    func showMediaInfo(){
-        let artistName = self.musicObject?.name ?? ""
-        let songName = self.musicObject?.title ?? ""
-        
-        MPNowPlayingInfoCenter.default().nowPlayingInfo = [MPMediaItemPropertyArtist : artistName,  MPMediaItemPropertyTitle : songName]
-    }
-    
-    override func remoteControlReceived(with event: UIEvent?) {
-        if event!.type == UIEvent.EventType.remoteControl{
-            switch event!.subtype{
-            case UIEvent.EventSubtype.remoteControlPlay:
-                playPressed(self)
-            case UIEvent.EventSubtype.remoteControlPause:
-                playPressed(self)
-            case UIEvent.EventSubtype.remoteControlNextTrack:
-                nextPressed(self)
-            case UIEvent.EventSubtype.remoteControlPreviousTrack:
-                previousPressed(self)
-            default:
-                print("There is an issue with the control")
+        if status {
+            if let newVC = R.storyboard.playlist.createPlaylistVC() {
+                let panVC: PanModalPresentable.LayoutType = newVC
+                presentPanModal(panVC)
             }
         }
     }
     
+}
+
+// MARK: Warning Popup Delegate Methods
+extension MusicPlayerVC: WarningPopupVCDelegate {
+    
+    func warningPopupOKButtonPressed(_ sender: UIButton, _ songObject: Song?) {
+        self.view.endEditing(true)
+        if sender.tag == 1001 {
+            let newVC = R.storyboard.login.loginNav()
+            appDelegate.window?.rootViewController = newVC
+        }
+    }
     
 }
-//extension MusicPlayerVC:PayPalPaymentDelegate{
-//    // PayPalPaymentDelegate
-//    func payPalPaymentDidCancel(_ paymentViewController: PayPalPaymentViewController) {
-//        print("PayPal Payment Cancelled")
-//        paymentViewController.dismiss(animated: true, completion: nil)
-//    }
-//    func payPalPaymentViewController(_ paymentViewController: PayPalPaymentViewController, didComplete completedPayment: PayPalPayment) {
-//        print("PayPal Payment Success !")
-//        purchaseSong(trackId: self.musicArray[self.currentAudioIndex].trackId ?? 0)
-//        paymentViewController.dismiss(animated: true, completion: { () -> Void in
-//            
-//            print("Here is your proof of payment:nn(completedPayment.confirmation)nnSend this to your server for confirmation and fulfillment.")
-//        })
-//    }
-//}
 
-extension AVPlayer {
-    func duration() -> Double {
-        guard let currentItem = currentItem else { return 0.0 }
-        return CMTimeGetSeconds(currentItem.duration)
+// MARK: Purchase Required Popup Delegate Methods
+extension MusicPlayerVC: PurchaseRequiredPopupDelegate {
+    
+    func purchaseButtonPressed(_ sender: UIButton, _ songObject: Song?) {
+        self.view.endEditing(true)
+        if AppInstance.instance.isLoginUser {
+            if let object = songObject {
+                let sell_music = object.price ?? 0.0
+                print("Amount >>>>>", sell_music)
+                AppInstance.instance.fetchUserProfile(isNew: true) { success in
+                    if success {
+                        let walletBalance = AppInstance.instance.userProfile?.data?.wallet?.doubleValue() ?? 0.0
+                        if sell_music < walletBalance {
+                            self.purchaseSongWallet(trackId: songObject?.audio_id ?? "")
+                        } else {
+                            let warningPopupVC = R.storyboard.popups.warningPopupVC()
+                            warningPopupVC?.delegate = self
+                            warningPopupVC?.okButton.tag = 1003
+                            warningPopupVC?.titleText  = "Wallet"
+                            warningPopupVC?.messageText = "Sorry, You do not have enough money please top up your wallet"
+                            warningPopupVC?.okText = "ADD WALLET"
+                            appDelegate.window?.rootViewController?.present(warningPopupVC!, animated: true, completion: nil)
+                        }
+                    }
+                }
+            }
+        } else {
+            self.showLoginAlert(delegate: self)
+        }
     }
+    
+}
+
+func stringFromTimeInterval(interval: TimeInterval) -> String {
+    let interval = Int(interval)
+    let seconds = interval % 60
+    let minutes = (interval / 60) % 60
+    return String(format: "%02d:%02d", minutes, seconds)
+}
+
+// MARK: BottomSheet Delegate Methods
+extension MusicPlayerVC: BottomSheetDelegate {
+    
+    func goToArtist(artist: Publisher) {
+        self.view.endEditing(true)
+        popupPresentationContainer?.closePopup(animated: true) {
+            self.delegate?.goToArtist(artist: artist)
+        }
+    }
+    
+    func goToAlbum() {
+        self.delegate?.goToAlbum()
+    }
+    
 }

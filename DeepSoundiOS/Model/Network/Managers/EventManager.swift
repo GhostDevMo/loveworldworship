@@ -9,12 +9,18 @@
 import Foundation
 import Alamofire
 import DeepSoundSDK
-class EventManager{
+
+class EventManager {
+    
     static let instance = EventManager()
     
-    func getEvents(AccessToken:String,limit:Int,offset:Int,completionBlock: @escaping (_ Success: [[String:Any]]?,_ SessionError:String?, Error?) ->()){
+    func getEvents(AccessToken:String,
+                   limit:Int,
+                   offset:Int,
+                   completionBlock: @escaping (_ Success: EventsModel.EventsModelSuccessModel?,
+                                               _ SessionError:EventsModel.sessionErrorModel?,
+                                               Error?) ->()) {
         let params = [
-            
             API.Params.AccessToken: AccessToken,
             API.Params.ServerKey: API.SERVER_KEY.Server_Key,
             API.Params.Limit: limit,
@@ -25,20 +31,36 @@ class EventManager{
         let decoded = String(data: jsonData, encoding: .utf8)!
         log.verbose("Targeted URL = \(API.Events.GET_EVENTS)")
         log.verbose("Decoded String = \(decoded)")
-        AF.request(API.Events.GET_EVENTS, method: .post, parameters: params, encoding:URLEncoding.default , headers: nil).responseJSON { (response) in
+        
+        AF.request(API.Events.GET_EVENTS,
+                   method: .post,
+                   parameters: params,
+                   encoding:URLEncoding.default,
+                   headers: nil).responseJSON { (response) in
             
-            if (response.value != nil){
+            if (response.value != nil) {
                 guard let res = response.value as? [String:Any] else {return}
-                
                 guard let apiStatus = res["status"]  as? Int else {return}
-                if apiStatus ==  API.ERROR_CODES.E_TwoH{
-                    let data = res["data"] as? [[String:Any]]
-                    log.verbose("apiStatus Int = \(apiStatus)")
-                    completionBlock(data,nil,nil)
+                log.verbose("apiStatus Int = \(apiStatus)")
+                if apiStatus == API.ERROR_CODES.E_TwoH {
+                    do {
+                        let data = try JSONSerialization.data(withJSONObject: response.value!, options: [])
+                        let result = try JSONDecoder().decode(EventsModel.EventsModelSuccessModel.self, from: data)
+                        completionBlock(result,nil,nil)
+                    }catch(let err){
+                        log.error("error = \(err.localizedDescription)")
+                        completionBlock(nil,nil,err)
+                    }
                 }else{
-                    log.verbose("apiStatus String = \(apiStatus)")
-                    let error = res["error"] as? String
-                    completionBlock(nil,error,nil)
+                    do {
+                        let data = try JSONSerialization.data(withJSONObject: response.value as Any, options: [])
+                        let result = try JSONDecoder().decode(EventsModel.sessionErrorModel.self, from: data)
+                        log.error("AuthError = \(result.error ?? "")")
+                        completionBlock(nil,result,nil)
+                    }catch(let err) {
+                        log.error("error = \(err.localizedDescription)")
+                        completionBlock(nil,nil,err)
+                    }
                 }
             }else{
                 log.error("error = \(response.error?.localizedDescription ?? "")")
@@ -46,27 +68,12 @@ class EventManager{
             }
         }
     }
-    func createEvent(AccessToken:String,name:String,location:String,Desc:String,Startdate:String,startTime:String,endDate:String,endTime:String,timezone:String,SellTicket:String,onlineURL:String,image:Data?,address:String,ticketAvailable:String,ticketPrice:String,completionBlock: @escaping (_ Success: [String:Any]?,_ SessionError:String?, Error?) ->()){
-        let params = [
-            
-            API.Params.AccessToken: AccessToken,
-            API.Params.ServerKey: API.SERVER_KEY.Server_Key,
-            API.Params.Name: name,
-            API.Params.location: location,
-            API.Params.desc: Desc,
-            API.Params.start_date:Startdate,
-            API.Params.start_time:startTime,
-            API.Params.end_date:endDate,
-            API.Params.end_time : endTime,
-            API.Params.timezone:timezone,
-            API.Params.sell_tickets:SellTicket,
-            API.Params.online_url:onlineURL,
-            API.Params.real_address:address,
-            API.Params.ticket_price: ticketPrice,
-            API.Params.available_tickets: ticketAvailable
-            
-        ] as [String : Any]
-        
+    
+    func createEvent(params: JSON,
+                     image: Data?,
+                     completionBlock: @escaping (_ Success: [String:Any]?,
+                                                 _ SessionError:String?,
+                                                 Error?) ->()) {
         let jsonData = try! JSONSerialization.data(withJSONObject: params, options: [])
         let decoded = String(data: jsonData, encoding: .utf8)!
         log.verbose("Targeted URL =  \(API.Events.CREATE_EVENTS)")
@@ -74,28 +81,25 @@ class EventManager{
         let headers: HTTPHeaders = [
             "Content-type": "multipart/form-data"
         ]
+        
         AF.upload(multipartFormData: { (multipartFormData) in
             for (key, value) in params {
                 multipartFormData.append("\(value)".data(using: String.Encoding.utf8)!, withName: key as String)
             }
-            if let data = image{
+            if let data = image {
                 multipartFormData.append(data, withName: "image", fileName: "media.png", mimeType: "image/png")
             }
-            
         }, to: API.Events.CREATE_EVENTS, usingThreshold: UInt64.init(), method: .post, headers: headers).responseJSON { (response) in
             print("Succesfully uploaded")
-            log.verbose("response = \(response.value)")
+            log.verbose("Succesfully uploaded")
             if (response.value != nil){
                 guard let res = response.value as? [String:Any] else {return}
                 log.verbose("Response = \(res)")
                 guard let apiStatus = res["status"]  as? Int else {return}
-                if apiStatus ==  API.ERROR_CODES.E_TwoH{
-                    log.verbose("apiStatus Int = \(apiStatus)")
+                log.verbose("apiStatus Int = \(apiStatus)")
+                if apiStatus ==  API.ERROR_CODES.E_TwoH {
                     completionBlock(res,nil,nil)
                 }else{
-                    let apiStatusString = apiStatus as? String
-                    
-                    log.verbose("apiStatus String = \(apiStatus)")
                     let error = res["error"] as? String
                     completionBlock(nil,error,nil)
                 }
@@ -105,27 +109,12 @@ class EventManager{
             }
         }
     }
-    func updateEvent(AccessToken:String,id:Int,name:String,location:String,Desc:String,Startdate:String,startTime:String,endDate:String,endTime:String,timezone:String,SellTicket:String,onlineURL:String,image:Data?,address:String,ticketAvailable:String,ticketPrice:String,completionBlock: @escaping (_ Success: [String:Any]?,_ SessionError:String?, Error?) ->()){
-        let params = [
-            
-            API.Params.AccessToken: AccessToken,
-            API.Params.ServerKey: API.SERVER_KEY.Server_Key,
-            API.Params.Id: id,
-            API.Params.Name: name,
-            API.Params.location: location,
-            API.Params.desc: Desc,
-            API.Params.start_date:Startdate,
-            API.Params.start_time:startTime,
-            API.Params.end_date:endDate,
-            API.Params.end_time : endTime,
-            API.Params.timezone:timezone,
-            API.Params.sell_tickets:SellTicket,
-            API.Params.online_url:onlineURL,
-            API.Params.real_address:address,
-            API.Params.ticket_price: ticketPrice,
-            API.Params.available_tickets: ticketAvailable
-            
-        ] as [String : Any]
+    
+    func updateEvent(params: JSON,
+                     image: Data?,
+                     completionBlock: @escaping (_ Success: [String:Any]?,
+                                                 _ SessionError:String?,
+                                                 Error?) ->()) {
         
         let jsonData = try! JSONSerialization.data(withJSONObject: params, options: [])
         let decoded = String(data: jsonData, encoding: .utf8)!
@@ -134,6 +123,7 @@ class EventManager{
         let headers: HTTPHeaders = [
             "Content-type": "multipart/form-data"
         ]
+        
         AF.upload(multipartFormData: { (multipartFormData) in
             for (key, value) in params {
                 multipartFormData.append("\(value)".data(using: String.Encoding.utf8)!, withName: key as String)
@@ -141,21 +131,19 @@ class EventManager{
             if let data = image{
                 multipartFormData.append(data, withName: "image", fileName: "media.png", mimeType: "image/png")
             }
-            
-        }, to: API.Events.EDIT_EVENTS, usingThreshold: UInt64.init(), method: .post, headers: headers).responseJSON { (response) in
-            print("Succesfully uploaded")
-            log.verbose("response = \(response.value)")
-            if (response.value != nil){
+        }, to: API.Events.EDIT_EVENTS,
+                  usingThreshold: UInt64.init(),
+                  method: .post,
+                  headers: headers).responseJSON { (response) in
+            log.verbose("Updated Succesfully")
+            if (response.value != nil) {
                 guard let res = response.value as? [String:Any] else {return}
                 log.verbose("Response = \(res)")
-                guard let apiStatus = res["status"]  as? Int else {return}
-                if apiStatus ==  API.ERROR_CODES.E_TwoH{
-                    log.verbose("apiStatus Int = \(apiStatus)")
+                guard let apiStatus = res["status"] as? Int else {return}
+                log.verbose("apiStatus Int = \(apiStatus)")
+                if apiStatus ==  API.ERROR_CODES.E_TwoH {
                     completionBlock(res,nil,nil)
                 }else{
-                    let apiStatusString = apiStatus as? String
-                    
-                    log.verbose("apiStatus String = \(apiStatus)")
                     let error = res["error"] as? String
                     completionBlock(nil,error,nil)
                 }
@@ -165,9 +153,14 @@ class EventManager{
             }
         }
     }
-    func joinUnjoin(AccessToken:String,id:Int,type:String,completionBlock: @escaping (_ Success: String?,_ SessionError:String?, Error?) ->()){
+    
+    func joinUnjoin(AccessToken:String,
+                    id:Int,
+                    type:String,
+                    completionBlock: @escaping (_ Success: String?,
+                                                _ SessionError:String?,
+                                                Error?) ->()) {
         let params = [
-            
             API.Params.AccessToken: AccessToken,
             API.Params.ServerKey: API.SERVER_KEY.Server_Key,
             API.Params.type: type,
@@ -178,18 +171,20 @@ class EventManager{
         let decoded = String(data: jsonData, encoding: .utf8)!
         log.verbose("Targeted URL = \(API.Events.JOIN_UNJOIN_EVENTS)")
         log.verbose("Decoded String = \(decoded)")
-        AF.request(API.Events.JOIN_UNJOIN_EVENTS, method: .post, parameters: params, encoding:URLEncoding.default , headers: nil).responseJSON { (response) in
-            
-            if (response.value != nil){
+        
+        AF.request(API.Events.JOIN_UNJOIN_EVENTS,
+                   method: .post,
+                   parameters: params,
+                   encoding:URLEncoding.default,
+                   headers: nil).responseJSON { (response) in
+            if (response.value != nil) {
                 guard let res = response.value as? [String:Any] else {return}
-                
-                guard let apiStatus = res["status"]  as? Int else {return}
-                if apiStatus ==  API.ERROR_CODES.E_TwoH{
+                guard let apiStatus = res["status"] as? Int else {return}
+                log.verbose("apiStatus Int = \(apiStatus)")
+                if apiStatus ==  API.ERROR_CODES.E_TwoH {
                     let data = res["type"] as? String
-                    log.verbose("apiStatus Int = \(apiStatus)")
                     completionBlock(data,nil,nil)
                 }else{
-                    log.verbose("apiStatus String = \(apiStatus)")
                     let error = res["error"] as? String
                     completionBlock(nil,error,nil)
                 }
@@ -199,30 +194,36 @@ class EventManager{
             }
         }
     }
-    func buyTicket(AccessToken:String,id:Int,completionBlock: @escaping (_ Success: String?,_ SessionError:String?, Error?) ->()){
+    
+    func buyTicket(AccessToken:String,
+                   id:Int,
+                   completionBlock: @escaping (_ Success: String?,
+                                               _ SessionError:String?,
+                                               Error?) ->()) {
         let params = [
-            
             API.Params.AccessToken: AccessToken,
             API.Params.ServerKey: API.SERVER_KEY.Server_Key,
             API.Params.Id: id
-        ] as [String : Any]
+        ] as [String: Any]
         
         let jsonData = try! JSONSerialization.data(withJSONObject: params, options: [])
         let decoded = String(data: jsonData, encoding: .utf8)!
         log.verbose("Targeted URL = \(API.Events.BUY_TICKET_EVENTS)")
         log.verbose("Decoded String = \(decoded)")
-        AF.request(API.Events.BUY_TICKET_EVENTS, method: .post, parameters: params, encoding:URLEncoding.default , headers: nil).responseJSON { (response) in
-            
-            if (response.value != nil){
+        
+        AF.request(API.Events.BUY_TICKET_EVENTS,
+                   method: .post,
+                   parameters: params,
+                   encoding:URLEncoding.default,
+                   headers: nil).responseJSON { (response) in
+            if (response.value != nil) {
                 guard let res = response.value as? [String:Any] else {return}
-                
-                guard let apiStatus = res["status"]  as? Int else {return}
-                if apiStatus ==  API.ERROR_CODES.E_TwoH{
+                guard let apiStatus = res["status"] as? Int else {return}
+                log.verbose("apiStatus Int = \(apiStatus)")
+                if apiStatus ==  API.ERROR_CODES.E_TwoH {
                     let data = res["message"] as? String
-                    log.verbose("apiStatus Int = \(apiStatus)")
                     completionBlock(data,nil,nil)
                 }else{
-                    log.verbose("apiStatus String = \(apiStatus)")
                     let error = res["error"] as? String
                     completionBlock(nil,error,nil)
                 }

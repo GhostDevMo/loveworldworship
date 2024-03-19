@@ -9,8 +9,9 @@
 import UIKit
 
 class EventShowTableItem: UITableViewCell {
-    @IBOutlet weak var statusLabel: UILabel!
     
+    @IBOutlet weak var statusLabel: UILabel!
+    @IBOutlet weak var mainView: UIView!
     @IBOutlet weak var backgroundCol: UIView!
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
@@ -19,6 +20,7 @@ class EventShowTableItem: UITableViewCell {
     @IBOutlet weak var imageLabel: UIImageView!
     override func awakeFromNib() {
         super.awakeFromNib()
+        self.mainView.addShadow()
         // Initialization code
     }
 
@@ -26,33 +28,23 @@ class EventShowTableItem: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
-    func bind(_ object:[String:Any]){
-    let name = object["name"] as? String
-        let description = object["desc"] as? String
-        let isJoined = object["is_joined"] as? Int
-        let eventDate = object["start_date"] as? String
-        let image = object["image"] as? String
-        let onlineUrl = object["online_url"] as? String
-        let location = object["real_address"] as? String
-        self.titleLabel.text = name
-        self.descriptionLabel.text = description
-        self.dateLabel.text = eventDate
-        self.locationLabel.text = onlineUrl
-        if onlineUrl == nil {
-            self.locationLabel.text = location ?? ""
-        }else{
-            self.locationLabel.text = onlineUrl ?? ""
+    func bind(_ object: Events) {
+        self.titleLabel.text = object.name
+        self.descriptionLabel.text = object.desc?.htmlAttributedString
+        self.dateLabel.text = object.start_date
+        if object.real_address == "" || object.real_address == nil {
+            self.locationLabel.text = object.online_url
+        }else {
+            self.locationLabel.text = object.real_address?.htmlAttributedString?.replacingOccurrences(of: "<br>", with: "")
         }
-        let url = URL.init(string:image ?? "")
+        let url = URL.init(string:object.image ?? "")
         self.imageLabel.sd_setImage(with: url , placeholderImage:R.image.imagePlacholder())
-        if isJoined == 0{
-            self.backgroundCol.backgroundColor = .orange
+        if object.user_id != AppInstance.instance.userId {
+            self.backgroundCol.backgroundColor = .mainColor
             self.statusLabel.text = "Event"
         }else{
-            self.backgroundCol.backgroundColor = .green
-            self.statusLabel.text = "Joined"
+            self.backgroundCol.backgroundColor = .red
+            self.statusLabel.text = "My Event"
         }
-
     }
-    
 }

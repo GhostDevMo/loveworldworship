@@ -21,7 +21,7 @@ class PremiumPopupVC: UIViewController {
     }
     
     private func setupUI(){
-        self.expirationDateLabel.text  = "Expiration Date : \(getDate(unixdate: AppInstance.instance.userProfile?.data?.proTime ?? 0 , timezone: "GMT"))"
+        self.expirationDateLabel.text  = "Expiration Date : \(getDate(unixdate: AppInstance.instance.userProfile?.data?.pro_time ?? 0 , timezone: "GMT"))"
         self.SkipLabel.setTitle((NSLocalizedString("Skip", comment: "")), for: .normal)
         self.proLabel.text = (NSLocalizedString("You are Premium User", comment: ""))
     }
@@ -37,7 +37,7 @@ class PremiumPopupVC: UIViewController {
     }
     
     
-    @IBAction func skipPressed(_ sender: Any) {
+    @IBAction func skipPressed(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
     }
 }

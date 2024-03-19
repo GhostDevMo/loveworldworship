@@ -7,12 +7,12 @@
 //
 
 import UIKit
-import SkyFloatingLabelTextField
 import Async
 import DeepSoundSDK
 
 class RegisterVC: BaseVC {
     
+    //MARK: - Properties -
     @IBOutlet weak var createAccount: UIButton!
     @IBOutlet weak var policyLabel: UILabel!
     @IBOutlet weak var signUpLabel: UILabel!
@@ -20,9 +20,8 @@ class RegisterVC: BaseVC {
     @IBOutlet weak var confirmPasswordTextField: BorderedTextField!
     @IBOutlet weak var usernameTextField: BorderedTextField!
     @IBOutlet weak var emailTextField: BorderedTextField!
-    @IBOutlet weak var lastNameTextField: BorderedTextField!
-    @IBOutlet weak var firstNameTextField: BorderedTextField!
     
+    //MARK: - Life Cycle Functions -
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupUI()
@@ -30,10 +29,16 @@ class RegisterVC: BaseVC {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.isNavigationBarHidden = false
     }
     
-    @IBAction func termsOFServicePressed(_ sender: Any) {
+    //MARK: - Selectors -
+    @IBAction func backButton(_ sender: UIButton) {
+        self.view.endEditing(true)
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    @IBAction func termsOFServicePressed(_ sender: UIButton) {
+        self.view.endEditing(true)
         let url = URL(string: ControlSettings.termsOfUse)!
         if UIApplication.shared.canOpenURL(url) {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
@@ -43,30 +48,28 @@ class RegisterVC: BaseVC {
             })
         }
     }
-    @IBAction func createAccountPressed(_ sender: Any) {
+    
+    @IBAction func createAccountPressed(_ sender: UIButton) {
+        self.view.endEditing(true)
         self.registerPressed()
     }
-    @IBAction func didTapSignin(_ sender: Any) {
+    @IBAction func didTapSignin(_ sender: UIButton) {
+        self.view.endEditing(true)
         let vc = R.storyboard.login.loginVC()
         self.navigationController?.pushViewController(vc!, animated: true)
     }
-    @IBAction func didTapShowPassword(_ sender: Any) {
-        passwordTextField.textField.isSecureTextEntry = !passwordTextField.textField.isSecureTextEntry
+}
+
+//MARK: - Helper Functions -
+extension RegisterVC {
+    private func setupUI() {
+        self.emailTextField.updateLeftImageTint(tintColor: .unselectedTextFieldTintColor)
+        self.usernameTextField.updateLeftImageTint(tintColor: .unselectedTextFieldTintColor)
+        self.passwordTextField.updateLeftImageTint(tintColor: .unselectedTextFieldTintColor)
+        self.passwordTextField.updateRightImageTint(tintColor: .unselectedTextFieldTintColor)
+        self.confirmPasswordTextField.updateLeftImageTint(tintColor: .unselectedTextFieldTintColor)
+        self.confirmPasswordTextField.updateRightImageTint(tintColor: .unselectedTextFieldTintColor)
         
-    }
-    @IBAction func didTapShowConfirmPassword(_ sender: Any) {
-        confirmPasswordTextField.textField.isSecureTextEntry = !confirmPasswordTextField.textField.isSecureTextEntry
-        
-    }
-    
-    private func setupUI(){
-//        self.firstNameTextField.updateLeftImageTint(tintColor: .lightGray)
-//        self.lastNameTextField.updateLeftImageTint(tintColor: .lightGray)
-        self.emailTextField.updateLeftImageTint(tintColor: .lightGray)
-        self.usernameTextField.updateLeftImageTint(tintColor: .lightGray)
-        self.passwordTextField.updateLeftImageTint(tintColor: .lightGray)
-        self.confirmPasswordTextField.updateLeftImageTint(tintColor: .lightGray)
-       
         self.emailTextField.textField.delegate = self
         self.usernameTextField.textField.delegate = self
         self.passwordTextField.textField.delegate = self
@@ -79,62 +82,67 @@ class RegisterVC: BaseVC {
         self.passwordTextField.textField.isSecureTextEntry = true
         self.confirmPasswordTextField.textField.isSecureTextEntry = true
         
+        self.usernameTextField.backgroundColor = .unselectedTextFieldBackGroundColor
+        self.passwordTextField.backgroundColor = .unselectedTextFieldBackGroundColor
+        self.emailTextField.backgroundColor = .unselectedTextFieldBackGroundColor
+        self.confirmPasswordTextField.backgroundColor = .unselectedTextFieldBackGroundColor
+        
+        passwordTextField.rightButtonHandler = { sender, imageView in
+            self.passwordTextField.textField.isSecureTextEntry = !self.passwordTextField.textField.isSecureTextEntry
+            let image = self.passwordTextField.textField.isSecureTextEntry ? "icn_eye_off" : "icn_eye_on"
+            imageView.image = UIImage(named: image)
+        }
+        
+        confirmPasswordTextField.rightButtonHandler = { sender, imageView in
+            self.confirmPasswordTextField.textField.isSecureTextEntry = !self.confirmPasswordTextField.textField.isSecureTextEntry
+            let image = self.confirmPasswordTextField.textField.isSecureTextEntry ? "icn_eye_off" : "icn_eye_on"
+            imageView.image = UIImage(named: image)
+        }
+        
         self.signUpLabel.text = NSLocalizedString("Create Your Account", comment: "")
-//        self.firstNameTextField.placeholder = NSLocalizedString("First Name", comment: "")
-//        self.lastNameTextField.placeholder = NSLocalizedString("Last Name", comment: "")
         self.emailTextField.placeholder = NSLocalizedString("Email", comment: "")
         self.usernameTextField.placeholder = NSLocalizedString("Username", comment: "")
         self.passwordTextField.placeholder = NSLocalizedString("Password", comment: "")
         self.confirmPasswordTextField.placeholder = NSLocalizedString("Confirm Password", comment: "")
         self.createAccount.setTitle(NSLocalizedString("Sign up", comment: ""), for: .normal)
         self.policyLabel.text = NSLocalizedString("BY REGISTERING YOU AGREE TO OUR ", comment: "")
-        self.navigationController?.navigationBar.transparentNavigationBar()
     }
-    
-    private func registerPressed(){
-        if appDelegate.isInternetConnected{
-             if (self.emailTextField.text?.isEmpty)!{
-                
+}
+
+//MARK: - API Services -
+extension RegisterVC {
+    private func registerPressed() {
+        if appDelegate.isInternetConnected {
+            if (self.emailTextField.text?.trimmingCharacters(in: .whitespaces).count == 0) {
                 let securityAlertVC = R.storyboard.popups.securityPopupVC()
                 securityAlertVC?.titleText  = NSLocalizedString("Security", comment: "")
                 securityAlertVC?.errorText = NSLocalizedString("Please enter username.", comment: "")
                 self.present(securityAlertVC!, animated: true, completion: nil)
-                
-            }else if (self.usernameTextField.text?.isEmpty)!{
-                
+            }else if (self.usernameTextField.text?.trimmingCharacters(in: .whitespaces).count == 0) {
                 let securityAlertVC = R.storyboard.popups.securityPopupVC()
                 securityAlertVC?.titleText  = NSLocalizedString("Security", comment: "")
                 securityAlertVC?.errorText = NSLocalizedString("Please enter email.", comment: "")
                 self.present(securityAlertVC!, animated: true, completion: nil)
-                
-            }else if (self.passwordTextField.text?.isEmpty)!{
-                
+            }else if (self.passwordTextField.text?.trimmingCharacters(in: .whitespaces).count == 0) {
                 let securityAlertVC = R.storyboard.popups.securityPopupVC()
                 securityAlertVC?.titleText  = NSLocalizedString("Security", comment: "")
                 securityAlertVC?.errorText = NSLocalizedString("Please enter password.", comment: "")
                 self.present(securityAlertVC!, animated: true, completion: nil)
-                
-            }else if (self.confirmPasswordTextField.text?.isEmpty)!{
-                
+            }else if (self.confirmPasswordTextField.text?.trimmingCharacters(in: .whitespaces).count == 0) {
                 let securityAlertVC = R.storyboard.popups.securityPopupVC()
                 securityAlertVC?.titleText  = NSLocalizedString("Security", comment: "")
                 securityAlertVC?.errorText = NSLocalizedString("Please enter confirm password.", comment: "")
                 self.present(securityAlertVC!, animated: true, completion: nil)
-                
-            }else if (self.passwordTextField.text != self.confirmPasswordTextField.text){
-                
+            }else if (self.passwordTextField.text != self.confirmPasswordTextField.text) {
                 let securityAlertVC = R.storyboard.popups.securityPopupVC()
                 securityAlertVC?.titleText  = NSLocalizedString("Security", comment: "")
                 securityAlertVC?.errorText = NSLocalizedString("Password do not match.", comment: "")
                 self.present(securityAlertVC!, animated: true, completion: nil)
-                
-            }else if !((emailTextField.text?.isEmail)!){
-                
+            }else if !((emailTextField.text?.isEmail)!) {
                 let securityAlertVC = R.storyboard.popups.securityPopupVC()
                 securityAlertVC?.titleText  = NSLocalizedString("Security", comment: "")
                 securityAlertVC?.errorText = NSLocalizedString("Email is badly formatted.", comment: "")
                 self.present(securityAlertVC!, animated: true, completion: nil)
-                
             }else{
                 let alert = UIAlertController(title: "", message: NSLocalizedString("By registering you agree to our terms of service", comment: ""), preferredStyle: .alert)
                 let okay = UIAlertAction(title: NSLocalizedString("OKAY", comment: ""), style: .default) { (action) in
@@ -159,14 +167,12 @@ class RegisterVC: BaseVC {
                             print("Open url : \(success)")
                         })
                     }
-                    
                 }
                 alert.addAction(termsOfService)
                 alert.addAction(privacy)
                 alert.addAction(okay)
                 self.present(alert, animated: true, completion: nil)
             }
-            
         }else{
             self.dismissProgressDialog {
                 let securityAlertVC = R.storyboard.popups.securityPopupVC()
@@ -177,16 +183,16 @@ class RegisterVC: BaseVC {
             }
         }
     }
-    private func registerPressedfunc(){
+    
+    private func registerPressedfunc() {
         self.showProgressDialog(text: NSLocalizedString("Loading...", comment: ""))
         let name = self.usernameTextField.text ?? ""
         let username = self.usernameTextField.text ?? ""
         let email = self.emailTextField.text ?? ""
         let password = self.passwordTextField.text ?? ""
         let confirmPassword = self.confirmPasswordTextField.text ?? ""
-        let deviceId = UserDefaults.standard.getDeviceId(Key: Local.DEVICE_ID.DeviceId) ?? ""
-        Async.background({
-            
+        let deviceId = UserDefaults.standard.getDeviceId(Key: Local.DEVICE_ID.DeviceId)
+        Async.background({            
             UserManager.instance.registerUser(Name: name, Email: email, UserName: username, Password: password, ConfirmPassword: confirmPassword, DeviceId: deviceId, completionBlock: { (success, sessionError, error) in
                 if success != nil{
                     Async.main{
@@ -198,25 +204,21 @@ class RegisterVC: BaseVC {
                                 securityAlertVC?.errorText = NSLocalizedString("Please Verify your email" , comment: "Please Verify your email")
                                 self.present(securityAlertVC!, animated: true, completion: nil)
                             }else{
-                                let User_Session = [Local.USER_SESSION.Access_token:success?.accessToken as Any,Local.USER_SESSION.User_id:success?.data?.id as Any] as [String : Any]
-                                UserDefaults.standard.setUserSession(value: User_Session, ForKey: Local.USER_SESSION.User_Session)
                                 log.verbose("Success = \(success?.accessToken ?? "")")
                                 AppInstance.instance.getUserSession()
-                                AppInstance.instance.fetchUserProfile()
-                                UserDefaults.standard.setPassword(value: password, ForKey: Local.USER_SESSION.Current_Password)
-                                let vc = R.storyboard.dashboard.dashBoardTabbar()
-                                vc?.modalPresentationStyle = .fullScreen
-                                self.present(vc!, animated: true, completion: nil)
+                                AppInstance.instance.fetchUserProfile(isNew: true) { isSuccess in
+                                    let User_Session = [Local.USER_SESSION.Access_token:success?.accessToken as Any,Local.USER_SESSION.User_id:success?.data?.id as Any] as [String : Any]
+                                    UserDefaults.standard.setUserSession(value: User_Session, ForKey: Local.USER_SESSION.User_Session)
+                                    UserDefaults.standard.setPassword(value: password, ForKey: Local.USER_SESSION.Current_Password)
+                                    let vc = R.storyboard.dashboard.tabBarNav()
+                                    self.appDelegate.window?.rootViewController = vc
+                                }
                                 self.view.makeToast(NSLocalizedString("Login Successfull!!", comment: ""))
                             }
-                           
                         }
-                        
                     }
-                    
-                }else if sessionError != nil{
-                    Async.main{
-                        
+                } else if sessionError != nil {
+                    Async.main {
                         self.dismissProgressDialog {
                             log.verbose("session Error = \(sessionError?.error ?? "")")
                             let securityAlertVC = R.storyboard.popups.securityPopupVC()
@@ -225,10 +227,8 @@ class RegisterVC: BaseVC {
                             self.present(securityAlertVC!, animated: true, completion: nil)
                         }
                     }
-                    
                 }else {
                     Async.main({
-                        
                         self.dismissProgressDialog {
                             log.verbose("error = \(error?.localizedDescription ?? "")")
                             let securityAlertVC = R.storyboard.popups.securityPopupVC()
@@ -243,42 +243,50 @@ class RegisterVC: BaseVC {
     }
 }
 
-extension RegisterVC:UITextFieldDelegate{
+//MARK: - TextField delegate Methods -
+extension RegisterVC: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        if textField.tag == 0{
-            self.emailTextField.borderColorV = .ButtonColor
-            self.emailTextField.updateLeftImageTint(tintColor: .ButtonColor)
+        if textField.tag == 0 {
+            emailTextField.backgroundColor = .selectedTextFieldBackGroundColor
+            emailTextField.borderColorV = .ButtonColor
+            emailTextField.updateLeftImageTint(tintColor: .ButtonColor)
+        } else if textField.tag == 1 {
+            usernameTextField.backgroundColor = .selectedTextFieldBackGroundColor
+            usernameTextField.borderColorV = .ButtonColor
+            usernameTextField.updateLeftImageTint(tintColor: .ButtonColor)
+        } else if textField.tag == 2 {
+            passwordTextField.backgroundColor = .selectedTextFieldBackGroundColor
+            passwordTextField.borderColorV = .ButtonColor
+            passwordTextField.updateLeftImageTint(tintColor: .ButtonColor)
+            passwordTextField.updateRightImageTint(tintColor: .ButtonColor)
+        } else if textField.tag == 3 {
+            confirmPasswordTextField.backgroundColor = .selectedTextFieldBackGroundColor
+            confirmPasswordTextField.borderColorV = .ButtonColor
+            confirmPasswordTextField.updateLeftImageTint(tintColor: .ButtonColor)
+            confirmPasswordTextField.updateRightImageTint(tintColor: .ButtonColor)
         }
-        else if textField.tag == 1{
-            self.usernameTextField.borderColorV = .ButtonColor
-            self.usernameTextField.updateLeftImageTint(tintColor: .ButtonColor)
-        }
-        else if textField.tag == 2{
-            self.passwordTextField.borderColorV = .ButtonColor
-            self.passwordTextField.updateLeftImageTint(tintColor: .ButtonColor)
-        }
-        else if textField.tag == 3{
-            self.confirmPasswordTextField.borderColorV = .ButtonColor
-            self.confirmPasswordTextField.updateLeftImageTint(tintColor: .ButtonColor)
-        }
-        
     }
+    
     func textFieldDidEndEditing(_ textField: UITextField) {
-        if textField.tag == 0{
-            self.emailTextField.borderColorV = .lightGray
-            self.emailTextField.updateLeftImageTint(tintColor: .lightGray)
-        }
-        else if textField.tag == 1{
-            self.usernameTextField.borderColorV = .lightGray
-            self.usernameTextField.updateLeftImageTint(tintColor: .lightGray)
-        }
-        else if textField.tag == 2{
-            self.passwordTextField.borderColorV = .lightGray
-            self.passwordTextField.updateLeftImageTint(tintColor: .lightGray)
-        }
-        else if textField.tag == 3{
-            self.confirmPasswordTextField.borderColorV = .lightGray
-            self.confirmPasswordTextField.updateLeftImageTint(tintColor: .lightGray)
+        let isEmpty = textField.text?.trimmingCharacters(in: .whitespaces).count == 0
+        if textField.tag == 0 {
+            self.emailTextField.backgroundColor = .unselectedTextFieldBackGroundColor
+            self.emailTextField.borderColorV = .clear
+            self.emailTextField.updateLeftImageTint(tintColor: !isEmpty ? .textColor : .unselectedTextFieldTintColor)
+        } else if textField.tag == 1 {
+            usernameTextField.backgroundColor = .unselectedTextFieldBackGroundColor
+            usernameTextField.borderColorV = .clear
+            usernameTextField.updateLeftImageTint(tintColor: !isEmpty ? .textColor : .unselectedTextFieldTintColor)
+        } else if textField.tag == 2 {
+            passwordTextField.backgroundColor = .unselectedTextFieldBackGroundColor
+            passwordTextField.borderColorV = .clear
+            passwordTextField.updateLeftImageTint(tintColor: !isEmpty ? .textColor : .unselectedTextFieldTintColor)
+            passwordTextField.updateRightImageTint(tintColor: !isEmpty ? .textColor : .unselectedTextFieldTintColor)
+        } else if textField.tag == 3 {
+            confirmPasswordTextField.backgroundColor = .unselectedTextFieldBackGroundColor
+            confirmPasswordTextField.borderColorV = .clear
+            confirmPasswordTextField.updateLeftImageTint(tintColor: !isEmpty ? .textColor : .unselectedTextFieldTintColor)
+            confirmPasswordTextField.updateRightImageTint(tintColor: !isEmpty ? .textColor : .unselectedTextFieldTintColor)
         }
     }
 }

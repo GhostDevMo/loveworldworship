@@ -27,22 +27,22 @@ class ReportVC: BaseVC {
         self.copyButton.setTitle((NSLocalizedString("Copy", comment: "")), for: .normal)
         self.reportButton.setTitle((NSLocalizedString("Report This Song", comment: "")), for: .normal)
         self.songsLabel.text = (NSLocalizedString("Songs", comment: ""))
-        SwiftEventBus.onMainThread(self, name:   EventBusConstants.EventBusConstantsUtils.EVENT_DISMISS_POPOVER) { result in
+        SwiftEventBus.onMainThread(self, name: EventBusConstants.EventBusConstantsUtils.EVENT_DISMISS_POPOVER) { result in
             log.verbose("To dismiss the popover")
-            AppInstance.instance.player = nil
+            
             self.tabBarController?.dismissPopupBar(animated: true, completion: nil)
         }
-        SwiftEventBus.onMainThread(self, name:   "PlayerReload") { result in
+        SwiftEventBus.onMainThread(self, name: "PlayerReload") { result in
             let stringValue = result?.object as? String
             self.view.makeToast(stringValue)
-            log.verbose(stringValue)
+            log.verbose(stringValue ?? "")
         }
     }
-    @IBAction func closePressed(_ sender: Any) {
+    @IBAction func closePressed(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func reportPressed(_ sender: Any) {
+    @IBAction func reportPressed(_ sender: UIButton) {
         if AppInstance.instance.getUserSession(){
             self.reportTrack()
 
@@ -51,7 +51,7 @@ class ReportVC: BaseVC {
             self.present(vc!, animated: true, completion: nil)
         }
     }
-    @IBAction func copyToClipBoardPressed(_ sender: Any) {
+    @IBAction func copyToClipBoardPressed(_ sender: UIButton) {
         UIPasteboard.general.string = songLink ?? ""
         self.delegate?.showToastString(string: "Copy to Clipboard")
         self.dismiss(animated: true, completion: nil)

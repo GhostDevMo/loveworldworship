@@ -8,130 +8,78 @@
 
 import UIKit
 import Async
+
+protocol ProductsCollectionTableCellDelegate {
+    func cartButtonPressed(_ sender: UIButton, indexPath: IndexPath, products:[Product], cell: ProductsCollectionTableCell)
+    func productDetails(indexPath: IndexPath, products:[Product])
+}
+
 class ProductsCollectionTableCell: UITableViewCell {
 
     @IBOutlet weak var colllection: UICollectionView!
-    var object = [[String:Any]]()
+    
+    var object = [Product]()
+    var delegate: ProductsCollectionTableCellDelegate?
+    var isLoading = true {
+        didSet {
+            if isLoading {
+                self.object.removeAll()
+                self.colllection.reloadData()
+            }
+        }
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         self.colllection.delegate = self
         self.colllection.dataSource = self
     }
-    var vc: PlaylistVC?
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        colllection.register(UINib(nibName: "ProductsCollectionItem", bundle: nil), forCellWithReuseIdentifier: "ProductsCollectionItem")
+        colllection.register(UINib(resource: R.nib.productsCollectionItem), forCellWithReuseIdentifier: R.reuseIdentifier.productsCollectionItem.identifier)
     }
-    func bind(_ object:[[String:Any]]){
+    func bind(_ object: [Product]){
         self.object = object
         self.colllection.reloadData()
         
     }
-     func addToCart(productId:Int){
-        let accessToken = AppInstance.instance.accessToken ?? ""
-        Async.background({
-            ProductManager.instance.AddToCart(AccessToken: accessToken, productID: productId) { success, sessionError, error in
-                if success != nil{
-                    Async.main({
-                        self.vc?.dismissProgressDialog {
-                            self.vc?.view.makeToast("added in cart")
-                        }
-                    })
-                }else if sessionError != nil{
-                    Async.main({
-                        self.vc?.dismissProgressDialog {
-                            
-                            self.vc?.view.makeToast((NSLocalizedString(sessionError ?? "", comment: "")))
-                            log.error("sessionError = \(sessionError ?? "")")
-                        }
-                    })
-                }else {
-                    Async.main({
-                        self.vc?.dismissProgressDialog {
-                            
-                            self.vc?.view.makeToast((NSLocalizedString(error?.localizedDescription ?? "", comment: "")))
-                            log.error("error = \(error?.localizedDescription ?? "")")
-                        }
-                    })
-                }
-            }
-        })
-    }
-    func removeFromCart(productId:Int){
-       let accessToken = AppInstance.instance.accessToken ?? ""
-       Async.background({
-           ProductManager.instance.RemoveFromCart(AccessToken: accessToken, productID: productId) { success, sessionError, error in
-               if success != nil{
-                   Async.main({
-                       self.vc?.dismissProgressDialog {
-                           self.vc?.view.makeToast("Removed from cart")
-                       }
-                   })
-               }else if sessionError != nil{
-                   Async.main({
-                       self.vc?.dismissProgressDialog {
-                           
-                           self.vc?.view.makeToast((NSLocalizedString(sessionError ?? "", comment: "")))
-                           log.error("sessionError = \(sessionError ?? "")")
-                       }
-                   })
-               }else {
-                   Async.main({
-                       self.vc?.dismissProgressDialog {
-                           
-                           self.vc?.view.makeToast((NSLocalizedString(error?.localizedDescription ?? "", comment: "")))
-                           log.error("error = \(error?.localizedDescription ?? "")")
-                       }
-                   })
-               }
-           }
-       })
-   }
-    
-    
 }
-extension ProductsCollectionTableCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
+
+extension ProductsCollectionTableCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.object.count ?? 0
+        if isLoading {
+            return 5
+        }else {
+            return self.object.count
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = colllection.dequeueReusableCell(withReuseIdentifier: "ProductsCollectionItem", for: indexPath) as? ProductsCollectionItem
-        cell?.cell = ProductsCollectionTableCell()
-        let object = self.object[indexPath.row]
-        cell?.bind(object)
-        return cell!
+        if isLoading {
+            let cell = colllection.dequeueReusableCell(withReuseIdentifier: R.reuseIdentifier.productsCollectionItem.identifier, for: indexPath) as? ProductsCollectionItem
+            cell?.startSkelting()
+            return cell!
+        }else {
+            let cell = colllection.dequeueReusableCell(withReuseIdentifier: R.reuseIdentifier.productsCollectionItem.identifier, for: indexPath) as? ProductsCollectionItem
+            cell?.stopSkelting()
+            let object = self.object[indexPath.row]
+            cell?.bind(object)
+            cell?.buttonHandle = { sender in
+                self.delegate?.cartButtonPressed(sender, indexPath: indexPath, products: self.object, cell: self)
+            }
+            return cell!
+        }
     }
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let vc = R.storyboard.products.productsVC()
-        vc?.productDetails = self.object[indexPath.row]
-//              vc!.artistArray = self.artistArray ?? []
-        self.vc?.navigationController?.pushViewController(vc!, animated: true)
+        self.delegate?.productDetails(indexPath: indexPath, products: self.object)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        return CGSize(width: collectionView.frame.width - 10, height: 320)
-        
+        return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
     }
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 8
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 8
-    }
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-    }
-    
-    
-    
-    
-    
 }
 
 

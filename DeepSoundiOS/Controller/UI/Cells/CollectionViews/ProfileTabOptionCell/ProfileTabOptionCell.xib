@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Urbanist_SemiBold.ttf">
+            <string>Urbanist-SemiBold</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ProfileTabOptionCell" id="gTV-IL-0wX" customClass="ProfileTabOptionCell" customModule="DeepSoundiOS" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="75" height="48"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="75" height="48"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jBq-b9-MtL">
+                        <rect key="frame" x="0.0" y="0.0" width="75" height="48"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Videos" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Di-Tm-ClN">
+                                <rect key="frame" x="0.0" y="12" width="75" height="24"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="24" id="VW8-Ms-ejx"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Urbanist-SemiBold" family="Urbanist" pointSize="18"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cbG-NJ-WEy">
+                                <rect key="frame" x="0.0" y="45.666666666666664" width="75" height="2.3333333333333357"/>
+                                <color key="backgroundColor" name="Primary_UI_Primary"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="2.5" id="2wD-za-gg4"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="cbG-NJ-WEy" firstAttribute="leading" secondItem="jBq-b9-MtL" secondAttribute="leading" id="49G-Qu-irc"/>
+                            <constraint firstAttribute="bottom" secondItem="cbG-NJ-WEy" secondAttribute="bottom" id="CCc-hX-WZQ"/>
+                            <constraint firstItem="6Di-Tm-ClN" firstAttribute="leading" secondItem="jBq-b9-MtL" secondAttribute="leading" id="Ex6-AH-HK1"/>
+                            <constraint firstItem="6Di-Tm-ClN" firstAttribute="top" secondItem="jBq-b9-MtL" secondAttribute="top" constant="12" id="UPM-LU-H3D"/>
+                            <constraint firstAttribute="trailing" secondItem="cbG-NJ-WEy" secondAttribute="trailing" id="gjZ-AR-QWf"/>
+                            <constraint firstAttribute="bottom" secondItem="6Di-Tm-ClN" secondAttribute="bottom" constant="12" id="lW4-9Q-FjM"/>
+                            <constraint firstAttribute="trailing" secondItem="6Di-Tm-ClN" secondAttribute="trailing" id="mA4-uo-tml"/>
+                        </constraints>
+                    </view>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="jBq-b9-MtL" secondAttribute="trailing" id="36h-QV-YaA"/>
+                <constraint firstItem="jBq-b9-MtL" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="HlP-4m-BNa"/>
+                <constraint firstAttribute="bottom" secondItem="jBq-b9-MtL" secondAttribute="bottom" id="K02-mU-c3V"/>
+                <constraint firstItem="jBq-b9-MtL" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="TO0-Ac-J2N"/>
+            </constraints>
+            <connections>
+                <outlet property="borderHeight" destination="2wD-za-gg4" id="dbC-Gd-OhB"/>
+                <outlet property="bottomBorder" destination="cbG-NJ-WEy" id="Or1-eU-QvB"/>
+                <outlet property="titleLabel" destination="6Di-Tm-ClN" id="ZNR-Ba-3OD"/>
+            </connections>
+            <point key="canvasLocation" x="48.854961832061065" y="-32.394366197183103"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <namedColor name="Primary_UI_Primary">
+            <color red="0.058823529411764705" green="0.39215686274509803" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

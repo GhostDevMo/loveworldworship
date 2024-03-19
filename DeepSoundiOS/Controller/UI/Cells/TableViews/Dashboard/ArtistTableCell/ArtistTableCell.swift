@@ -9,43 +9,48 @@
 import UIKit
 
 class ArtistTableCell: UITableViewCell {
-
-    @IBOutlet weak var btnMore: UIButton!
-    @IBOutlet weak var lblSongsCount: UILabel!
+    
+    @IBOutlet weak var btnFollow: UIButton!
+    @IBOutlet weak var imageVerify: UIImageView!
     @IBOutlet weak var lblAlbumCount: UILabel!
     @IBOutlet weak var lblArtistName: UILabel!
     @IBOutlet weak var imgArtist: UIImageView!
-    var loggedHomeVC:Dashboard1VC?
+    
+    var delegate : followUserDelegate?
+    var indexPath:Int = 0
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
-        btnMore.backgroundColor = .ButtonColor
     }
-    func bind(_ object: ArtistModel.Datum){
-    if object.name ?? "" == ""{
-        lblArtistName.text = object.username ?? ""
-    }else{
-        lblArtistName.text =  object.name ?? ""
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.imgArtist.image = nil
     }
-    let url = URL.init(string:object.avatar ?? "")
-        imgArtist.sd_setImage(with: url , placeholderImage:R.image.imagePlacholder())
-      
-}
-    func bindSearchArtist(_ object:SearchModel.Artist){
-    if object.name ?? "" == ""{
-        lblArtistName.text = object.username ?? ""
-    }else{
-        lblArtistName.text =  object.name ?? ""
+    
+    func bind(_ object: Publisher) {
+        if object.name ?? "" == ""{
+            lblArtistName.text = object.username ?? ""
+        }else{
+            lblArtistName.text =  object.name ?? ""
+        }
+        let url = URL.init(string:object.avatar ?? "")
+        imgArtist.sd_setImage(with: url, placeholderImage:R.image.imagePlacholder())
+        self.lblAlbumCount.text = "Artists"
+        self.imageVerify.isHidden = object.verified == 0
+        if object.is_following {
+            self.btnFollow.setTitle("Following", for: .normal)
+            self.btnFollow.backgroundColor = .hexStringToUIColor(hex: "FFF8ED")
+            self.btnFollow.setTitleColor(.mainColor, for: .normal)
+        }else {
+            self.btnFollow.setTitle("Follow", for: .normal)
+            self.btnFollow.backgroundColor = .mainColor
+            self.btnFollow.setTitleColor(.white, for: .normal)
+        }
     }
-    let url = URL.init(string:object.avatar ?? "")
-        imgArtist.sd_setImage(with: url , placeholderImage:R.image.imagePlacholder())
-      
-}
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    
+    @IBAction func followingPressed(_ sender: UIButton) {
+        self.delegate?.followUser(sender.tag, sender)
     }
     
 }

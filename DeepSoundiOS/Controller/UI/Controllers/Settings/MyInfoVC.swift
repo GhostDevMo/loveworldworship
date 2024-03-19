@@ -9,15 +9,16 @@
 import UIKit
 import DeepSoundSDK
 import SwiftEventBus
-class MyInfoVC: UIViewController {
-    @IBOutlet weak var aboutLabel: UILabel!
-    @IBOutlet weak var trackLabel: UILabel!
+
+class MyInfoVC: BaseVC {
+    @IBOutlet weak var emailStackView: UIStackView!
+    @IBOutlet weak var genderStackView: UIStackView!
+    @IBOutlet weak var websiteStackView: UIView!
+    @IBOutlet weak var facebookStackView: UIView!
     
-    @IBOutlet weak var followingLabel: UILabel!
-    @IBOutlet weak var followersLabel: UILabel!
-    @IBOutlet weak var infoLabel: UILabel!
     @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var addressLabel: UILabel!
     @IBOutlet weak var genderLabel: UILabel!
     @IBOutlet weak var websiteLabel: UILabel!
     @IBOutlet weak var emailLabel: UILabel!
@@ -27,60 +28,143 @@ class MyInfoVC: UIViewController {
     @IBOutlet weak var trackCountLabel: UILabel!
     @IBOutlet weak var shadowView: UIView!
     
-    var pingStatus:Bool? = false
+    var userData: Publisher?
+    var publisher: Publisher?
+    var detailsDic: Details?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.setupUI()
-        SwiftEventBus.onMainThread(self, name:   EventBusConstants.EventBusConstantsUtils.EVENT_DISMISS_POPOVER) { result in
+        if publisher == nil {
+            self.setupUI()
+        }else {
+            self.setupPublisher()
+        }
+        SwiftEventBus.onMainThread(self, name: EventBusConstants.EventBusConstantsUtils.EVENT_DISMISS_POPOVER) { result in
             log.verbose("To dismiss the popover")
-            AppInstance.instance.player = nil
             self.tabBarController?.dismissPopupBar(animated: true, completion: nil)
         }
-        SwiftEventBus.onMainThread(self, name:   "PlayerReload") { result in
+        SwiftEventBus.onMainThread(self, name: "PlayerReload") { result in
             let stringValue = result?.object as? String
             self.view.makeToast(stringValue)
-            log.verbose(stringValue)
+            log.verbose(stringValue ?? "")
         }
-  
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tabBarController?.tabBar.isHidden = true
-        navigationItem.largeTitleDisplayMode = .never
-        navigationController?.setNavigationBarHidden(false, animated: false)
-    }
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-
-        self.tabBarController?.tabBar.isHidden = false
-         navigationItem.largeTitleDisplayMode = .automatic
-        navigationController?.setNavigationBarHidden(true, animated: false)
-    }
-      
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        self.shadowView.dropShadow()
     }
     
-    private func setupUI(){
-        self.infoLabel.text = (NSLocalizedString("Information about your profile ", comment: ""))
-        self.trackLabel.text = (NSLocalizedString("Tracks", comment: ""))
-        self.followersLabel.text = (NSLocalizedString("Followers", comment: ""))
-        self.followingLabel.text = (NSLocalizedString("Followings", comment: ""))
-        self.aboutLabel.text = AppInstance.instance.userProfile?.data?.about ?? ""
-        let profileImage = AppInstance.instance.userProfile?.data?.avatar ?? ""
-        let profileImageURL = URL.init(string:profileImage)
-        self.profileImage.sd_setImage(with: profileImageURL , placeholderImage:R.image.imagePlacholder())
-        self.nameLabel.text = AppInstance.instance.userProfile?.data?.name ?? ""
-        self.followingsCountLabel.text = "\(AppInstance.instance.userProfile?.details!["following"] ?? 0)"
-        self.followersCountLabel.text = "\(AppInstance.instance.userProfile?.details!["followers"] ?? 0)"
-          self.emailLabel.text = AppInstance.instance.userProfile?.data?.email ?? ""
-          self.genderLabel.text = AppInstance.instance.userProfile?.data?.gender ?? ""
-          self.websiteLabel.text = AppInstance.instance.userProfile?.data?.website ?? ""
-          self.facebookLabel.text = AppInstance.instance.userProfile?.data?.facebook ?? ""
-        self.trackCountLabel.text = "\(AppInstance.instance.userProfile?.data?.topSongs?.count ?? 0)"
-        
-        
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.tabBarController?.tabBar.isHidden = false
+    }
+    
+    @IBAction func websiteBtnAction(_ sender: UIButton) {
+        self.view.endEditing(true)
+        let data = URL(string: self.websiteLabel.text ?? "")!
+        goFacebook(url: data)
+    }
+    
+    @IBAction func facebookBtnAction(_ sender: UIButton) {
+        self.view.endEditing(true)
+        let data = URL(string: "https://www.facebook.com/\(self.facebookLabel.text ?? "")")!
+        goFacebook(url: data)
+    }
+    
+    func goFacebook(url: URL) {
+        let facebookURL = url
+        if UIApplication.shared.canOpenURL(facebookURL) {
+            UIApplication.shared.openURL(facebookURL)
+        }
+    }
+    
+    
+    private func setupUI() {
+        if userData == nil {
+            userData = AppInstance.instance.userProfile?.data
+            detailsDic = AppInstance.instance.userProfile?.details?.details
+        }
+        if let userData = userData {
+            self.shadowView.addShadow()
+            let profileImage = userData.avatar ?? ""
+            let profileImageURL = URL.init(string:profileImage)
+            self.profileImage.sd_setImage(with: profileImageURL , placeholderImage:R.image.imagePlacholder())
+            self.nameLabel.text = userData.name ?? ""
+            self.followingsCountLabel.text = "\(self.detailsDic?.following ?? 0)"
+            self.followersCountLabel.text = "\(self.detailsDic?.followers ?? 0)"
+            self.trackCountLabel.text = "\(self.detailsDic?.top_songs ?? 0)"
+            if userData.country_name != "" {
+                self.addressLabel.text = userData.country_name
+            }else {
+                self.addressLabel.text = "Unknown"
+            }
+            
+            if userData.email != "" {
+                self.emailLabel.text = userData.email ?? ""
+            }else {
+                self.emailStackView.isHidden = true
+            }
+            
+            if userData.gender != "" {
+                self.genderLabel.text = userData.gender ?? ""
+            }else {
+                self.genderStackView.isHidden = true
+            }
+            
+            if userData.website != "" {
+                self.websiteLabel.text = userData.website ?? ""
+            }else {
+                self.websiteStackView.isHidden = true
+            }
+            
+            if userData.facebook != "" {
+                self.facebookLabel.text = userData.facebook ?? ""
+            }else {
+                self.facebookStackView.isHidden = true
+            }
+        }
+    }
+    
+    private func setupPublisher() {
+        self.shadowView.addShadow()
+        if let publisher = publisher {
+            let profileImage = publisher.avatar ?? ""
+            let profileImageURL = URL.init(string:profileImage)
+            self.profileImage.sd_setImage(with: profileImageURL , placeholderImage:R.image.imagePlacholder())
+            self.nameLabel.text = publisher.name ?? ""
+            self.followingsCountLabel.text = "\(self.detailsDic?.following ?? 0)"
+            self.followersCountLabel.text = "\(self.detailsDic?.followers ?? 0)"
+            self.trackCountLabel.text = "\(self.detailsDic?.top_songs ?? 0)"
+            if publisher.country_name != "" {
+                self.addressLabel.text = publisher.country_name
+            }else {
+                self.addressLabel.text = "Unknown"
+            }
+            
+            if publisher.email != "" {
+                self.emailLabel.text = publisher.email ?? ""
+            }else {
+                self.emailStackView.isHidden = true
+            }
+            
+            if publisher.gender != "" {
+                self.genderLabel.text = publisher.gender ?? ""
+            }else {
+                self.genderStackView.isHidden = true
+            }
+            
+            if publisher.website != "" {
+                self.websiteLabel.text = publisher.website ?? ""
+            }else {
+                self.websiteStackView.isHidden = true
+            }
+            
+            if publisher.facebook != "" {
+                self.facebookLabel.text = publisher.facebook ?? ""
+            }else {
+                self.facebookStackView.isHidden = true
+            }
+        }
     }
 }

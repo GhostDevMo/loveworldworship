@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
-        <array key="Poppins-Regular.otf">
-            <string>Poppins-Regular</string>
-        </array>
-        <array key="Poppins-SemiBold.otf">
-            <string>Poppins-SemiBold</string>
+        <array key="urbanist_regular.ttf">
+            <string>Urbanist-Regular</string>
         </array>
     </customFonts>
     <scenes>
@@ -24,66 +23,95 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f5Z-cz-Mcn">
+                                <rect key="frame" x="0.0" y="48" width="414" height="60"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SLU-oq-1bg">
+                                        <rect key="frame" x="8" y="14" width="32" height="32"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="32" id="1qK-Fx-vKn"/>
+                                            <constraint firstAttribute="width" secondItem="SLU-oq-1bg" secondAttribute="height" id="UAe-zV-bL0"/>
+                                        </constraints>
+                                        <color key="tintColor" name="textColor"/>
+                                        <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" image="ic_action_back"/>
+                                        <connections>
+                                            <action selector="backButtonAction:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="Pz0-Vf-Yrh"/>
+                                        </connections>
+                                    </button>
+                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search....." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="mQk-x5-TXr">
+                                        <rect key="frame" x="64" y="10" width="334" height="40"/>
+                                        <color key="tintColor" name="mainColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="ASo-2O-KMv"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Urbanist-Regular" family="Urbanist" pointSize="16"/>
+                                        <textInputTraits key="textInputTraits" returnKeyType="search"/>
+                                    </textField>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m1P-Ua-Dz8">
+                                        <rect key="frame" x="0.0" y="59" width="414" height="1"/>
+                                        <color key="backgroundColor" systemColor="opaqueSeparatorColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="1" id="mzv-n8-5Ee"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="SLU-oq-1bg" firstAttribute="leading" secondItem="f5Z-cz-Mcn" secondAttribute="leading" constant="8" id="60r-8g-Wjq"/>
+                                    <constraint firstAttribute="bottom" secondItem="m1P-Ua-Dz8" secondAttribute="bottom" id="75y-LY-CK7"/>
+                                    <constraint firstAttribute="trailing" secondItem="mQk-x5-TXr" secondAttribute="trailing" constant="16" id="8AW-cr-tsu"/>
+                                    <constraint firstItem="mQk-x5-TXr" firstAttribute="leading" secondItem="SLU-oq-1bg" secondAttribute="trailing" constant="24" id="FVK-6F-QvE"/>
+                                    <constraint firstAttribute="bottom" secondItem="mQk-x5-TXr" secondAttribute="bottom" constant="10" id="Osx-sm-K9d"/>
+                                    <constraint firstAttribute="trailing" secondItem="m1P-Ua-Dz8" secondAttribute="trailing" id="RfE-z7-tUg"/>
+                                    <constraint firstItem="m1P-Ua-Dz8" firstAttribute="leading" secondItem="f5Z-cz-Mcn" secondAttribute="leading" id="YEz-yX-O8Q"/>
+                                    <constraint firstItem="SLU-oq-1bg" firstAttribute="centerY" secondItem="mQk-x5-TXr" secondAttribute="centerY" id="eAA-4t-YOP"/>
+                                </constraints>
+                            </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="0OZ-xd-xk1">
-                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <rect key="frame" x="0.0" y="108" width="414" height="788"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <connections>
                                     <outlet property="dataSource" destination="Y6W-OH-hqX" id="b7L-5c-tJQ"/>
                                     <outlet property="delegate" destination="Y6W-OH-hqX" id="a7d-zC-0AF"/>
                                 </connections>
                             </tableView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_searchBig" translatesAutoresizingMaskIntoConstraints="NO" id="6zy-3W-ya1">
-                                <rect key="frame" x="127" y="373" width="160" height="160"/>
-                                <color key="tintColor" red="1" green="0.57637232540000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="6zy-3W-ya1" secondAttribute="height" multiplier="1:1" id="clB-Zb-E0K"/>
-                                </constraints>
-                            </imageView>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Bro-Mp-E0k">
-                                <rect key="frame" x="16" y="549" width="382" height="84"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sad No Result" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Yr6-RZ-1Sd">
-                                        <rect key="frame" x="104" y="0.0" width="174" height="42"/>
-                                        <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="25"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="We cannot find keyword you are searching for maybe a little spelling mistake?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hht-0E-Mun">
-                                        <rect key="frame" x="16.5" y="42" width="349" height="42"/>
-                                        <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="15"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="0OZ-xd-xk1" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="2DI-7O-OH5"/>
-                            <constraint firstItem="6zy-3W-ya1" firstAttribute="width" secondItem="6zy-3W-ya1" secondAttribute="height" multiplier="1:1" id="47r-HA-PW5"/>
-                            <constraint firstItem="6zy-3W-ya1" firstAttribute="centerX" secondItem="0OZ-xd-xk1" secondAttribute="centerX" id="P70-LC-ui1"/>
-                            <constraint firstItem="6zy-3W-ya1" firstAttribute="centerY" secondItem="0OZ-xd-xk1" secondAttribute="centerY" id="Qer-7o-59j"/>
+                            <constraint firstItem="f5Z-cz-Mcn" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="Fiv-r4-pkO"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="top" secondItem="mQk-x5-TXr" secondAttribute="bottom" constant="-50" id="Jdb-FO-kb4"/>
+                            <constraint firstItem="f5Z-cz-Mcn" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="MNP-Mi-aOc"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="f5Z-cz-Mcn" secondAttribute="trailing" id="PsB-HB-vw2"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="0OZ-xd-xk1" secondAttribute="trailing" id="V4r-4l-UFV"/>
                             <constraint firstItem="0OZ-xd-xk1" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="Y2K-Xz-Og0"/>
-                            <constraint firstItem="Bro-Mp-E0k" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" constant="-16" id="ud0-iG-cBa"/>
-                            <constraint firstItem="Bro-Mp-E0k" firstAttribute="top" secondItem="6zy-3W-ya1" secondAttribute="bottom" constant="16" id="xRK-3s-aFs"/>
-                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="0OZ-xd-xk1" secondAttribute="bottom" id="yI5-YK-H0B"/>
-                            <constraint firstItem="vDu-zF-Fre" firstAttribute="leading" secondItem="Bro-Mp-E0k" secondAttribute="leading" constant="-16" id="zRN-wc-cVd"/>
+                            <constraint firstItem="0OZ-xd-xk1" firstAttribute="top" secondItem="f5Z-cz-Mcn" secondAttribute="bottom" id="rtQ-EQ-UAV"/>
+                            <constraint firstAttribute="bottom" secondItem="0OZ-xd-xk1" secondAttribute="bottom" id="yI5-YK-H0B"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="searchImage" destination="6zy-3W-ya1" id="yby-rI-UHN"/>
-                        <outlet property="showStack" destination="Bro-Mp-E0k" id="Bme-Fz-X5Q"/>
+                        <outlet property="searchTF" destination="mQk-x5-TXr" id="daU-nF-xve"/>
                         <outlet property="tableview" destination="0OZ-xd-xk1" id="Dka-5H-WCq"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="100" y="44"/>
+            <point key="canvasLocation" x="100.00000000000001" y="43.526785714285715"/>
         </scene>
     </scenes>
     <resources>
-        <image name="ic_searchBig" width="160" height="160"/>
+        <image name="ic_action_back" width="128" height="128"/>
+        <namedColor name="mainColor">
+            <color red="1" green="0.59607843137254901" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColor">
+            <color red="0.12941176470588237" green="0.12941176470588237" blue="0.12941176470588237" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="opaqueSeparatorColor">
+            <color red="0.77647058823529413" green="0.77647058823529413" blue="0.78431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

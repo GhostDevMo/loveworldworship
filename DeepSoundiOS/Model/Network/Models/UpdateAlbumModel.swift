@@ -14,5 +14,5 @@ struct UpdateAlbumModel {
     var description:String?
     var imageString:String?
     var genre:String?
-    var price:Double? 
+    var price:Int? 
 }

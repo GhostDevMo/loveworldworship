@@ -8,28 +8,25 @@
 
 import UIKit
 
+protocol ImageRemoveButtonDelegate {
+    func removeButton(_ indexPath: IndexPath,_ sender: UIButton)
+}
+
 class CreateProductCollectionItem: UICollectionViewCell {
     
     @IBOutlet weak var imageShow: UIImageView!
     @IBOutlet weak var cancelBtn: UIButton!
     
-    var cell:CreateProductTableItem?
-    var index:Int? = 0
+    var selectedIndexPath: IndexPath?
+    var delegate: ImageRemoveButtonDelegate?
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }
-    func bind(section:Int,indexpath:Int){
-        if section == 0{
-            self.cancelBtn.isHidden = true
-        }else{
-            self.cancelBtn.isHidden = false
-            self.index = indexpath
-        }
-        
-    }
 
-    @IBAction func cancelPressed(_ sender: Any) {
-        self.cell?.images.remove(at: self.index ?? 0)
-        self.cell?.collectionview.reloadData()
+    @IBAction func cancelPressed(_ sender: UIButton) {
+        if let selectedIndexPath = self.selectedIndexPath {
+            self.delegate?.removeButton(selectedIndexPath, sender)
+        }
     }
 }

@@ -1,17 +1,15 @@
 {
   "images" : [
     {
-      "filename" : "Paper Plus.png",
+      "filename" : "Close Square.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Paper Plus@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Paper Plus@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

@@ -9,11 +9,14 @@
 import UIKit
 import Async
 import DeepSoundSDK
+
 class EventsVC: BaseVC {
     
-
     @IBOutlet weak var tableView: UITableView!
-    private var EventlistArray = [[String:Any]]()
+    @IBOutlet weak var addButton: UIButton!
+    
+    var isLoading = true
+    private var eventlistArray = [Events]()
     private var refreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
@@ -22,62 +25,58 @@ class EventsVC: BaseVC {
         self.fetchMyEvents()
     }
     
-    @IBAction func createEventPressed(_ sender: Any) {
-        let storyBoard: UIStoryboard = UIStoryboard(name: "Events", bundle: nil)
-         let vc = storyBoard.instantiateViewController(withIdentifier: "CreateEventVC") as! CreateEventVC
-         self.navigationController?.pushViewController(vc, animated: true)
+    @IBAction func createEventPressed(_ sender: UIButton) {
+        self.view.endEditing(true)
+        let vc = R.storyboard.events.createEventVC()
+        self.navigationController?.pushViewController(vc!, animated: true)
     }
     
-    private func setupUI(){
+    private func setupUI() {
         self.tableView.separatorStyle = .none
-        self.tableView.register(EventShowTableItem.nib, forCellReuseIdentifier: EventShowTableItem.identifier)
-      
-        refreshControl.attributedTitle = NSAttributedString(string: (NSLocalizedString("Pull to refresh", comment: "")))
-              refreshControl.addTarget(self, action: #selector(self.refresh(sender:)), for: UIControl.Event.valueChanged)
-              self.tableView.addSubview(refreshControl)
-        
+        self.tableView.register(UINib(resource: R.nib.eventShowTableItem), forCellReuseIdentifier: R.reuseIdentifier.eventShowTableItem.identifier)
+        self.addButton.addShadow(offset: .init(width: 0, height: 4))
+        self.tableView.addPullToRefresh {
+            self.eventlistArray.removeAll()
+            self.isLoading = true
+            self.tableView.reloadData()
+            self.fetchMyEvents()
+        }
     }
-    @objc func refresh(sender:AnyObject) {
-          self.EventlistArray.removeAll()
-          self.tableView.reloadData()
-        self.fetchMyEvents()
-          refreshControl.endRefreshing()
-      }
-    private func fetchMyEvents(){
-        
+    
+    private func fetchMyEvents() {
         if Connectivity.isConnectedToNetwork(){
-            self.showProgressDialog(text: "Loading...")
             let accessToken = AppInstance.instance.accessToken ?? ""
-            let userId = AppInstance.instance.userId ?? 0
             Async.background({
-                EventManager.instance.getEvents(AccessToken: accessToken, limit: 10, offset: 56) { success, sessionError, error in
-                    if success != nil{
+                EventManager.instance.getEvents(AccessToken: accessToken, limit: 10, offset: 0) { success, sessionError, error in
+                    if success != nil {
+                        self.tableView.stopPullToRefresh()
                         Async.main({
                             self.dismissProgressDialog {
-                                
-                                self.EventlistArray = success ?? []
+                                let data = success?.data ?? []
+                                self.eventlistArray = data.filter { event in
+                                    print((event.time ?? 0))
+                                    return Int(Date().timeIntervalSince1970) < (event.time ?? 0)
+                                }
+                                self.isLoading = false
                                 self.tableView.reloadData()
                             }
                         })
-                    }else if sessionError != nil{
+                    }else if sessionError != nil {
                         Async.main({
                             self.dismissProgressDialog {
-                                
-                                self.view.makeToast((NSLocalizedString(sessionError ?? "", comment: "")))
-                                log.error("sessionError = \(sessionError ?? "")")
+                                self.view.makeToast((NSLocalizedString(sessionError?.error ?? "", comment: "")))
+                                log.error("sessionError = \(sessionError?.error ?? "")")
                             }
                         })
                     }else {
                         Async.main({
                             self.dismissProgressDialog {
-                                
                                 self.view.makeToast((NSLocalizedString(error?.localizedDescription ?? "", comment: "")))
                                 log.error("error = \(error?.localizedDescription ?? "")")
                             }
                         })
                     }
                 }
-
             })
         }else{
             log.error("internetError = \(InterNetError)")
@@ -85,24 +84,40 @@ class EventsVC: BaseVC {
         }
     }
 }
-extension EventsVC:UITableViewDelegate,UITableViewDataSource{
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
+
+extension EventsVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.EventlistArray.count ?? 0
+        if self.isLoading {
+            return 5
+        }else {
+            return self.eventlistArray.count
+        }
     }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: EventShowTableItem.identifier) as? EventShowTableItem
-        let object = self.EventlistArray[indexPath.row]
-        cell?.bind(object)
-        return cell!
+        if self.isLoading {
+        let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.eventShowTableItem.identifier) as? EventShowTableItem
+            cell?.startSkelting()
+            return cell!
+        }else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.eventShowTableItem.identifier) as? EventShowTableItem
+            cell?.stopSkelting()
+            cell?.selectionStyle = .none
+            let object = self.eventlistArray[indexPath.row]
+            cell?.bind(object)
+            return cell!
+        }
     }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = R.storyboard.products.eventDetailVC()
-        vc?.eventDetailObject = self.EventlistArray[indexPath.row]
-        self.navigationController?.pushViewController(vc!, animated: true)
+        if !isLoading {
+            let vc = R.storyboard.products.eventDetailVC()
+            vc?.eventDetailObject = self.eventlistArray[indexPath.row]
+            self.navigationController?.pushViewController(vc!, animated: true)
+        }
     }
     
-    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 300.0
+    }
 }

@@ -32,12 +32,14 @@ enum DashboardActionType: Int , CaseIterable {
     }
     
 }
+
 enum SuggestedSections : Int, CaseIterable {
    
     case topSongs
     case genres
-    case latestsongs
-    case resentlyplayed
+    case latestsongs    
+    case recentlyplayed
+    case topalbums
     case popular
     case artist
     
@@ -77,6 +79,7 @@ enum ArtistInfoSections : Int, CaseIterable {
     case header
     case latestsongs
     case topsongs
+    case albums
     case playlist
     case store
     case event
@@ -90,12 +93,12 @@ enum ArtistInfoSections : Int, CaseIterable {
         }
     }
 }
-enum FilterData: Int,CaseIterable{
+
+enum FilterData: Int, CaseIterable {
     
     case ascending = 0
     case descending
     case dateAdded
-   
     
     var type : String{
         switch self {

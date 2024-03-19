@@ -37,7 +37,7 @@ class GenresSongs_TableCell: UITableViewCell {
         
         
     }
-    @IBAction func morePressed(_ sender: Any) {
+    @IBAction func morePressed(_ sender: UIButton) {
         self.delegate!.showReportScreen(Status: true, IndexPath: IndexPath ?? 0, songLink: self.songLink ?? "")
     }
 }

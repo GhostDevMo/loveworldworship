@@ -2,17 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>BGTaskSchedulerPermittedIdentifiers</key>
-	<array>
-		<string>App processes data in the background</string>
-		<string>App plays audio or streams audio/video using AirPlay</string>
-		<string>App downloads content from the network</string>
-		<string>App communicates with an accessory</string>
-	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>LoveworldWorship</string>
+	<string>Deep Sound</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -24,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>4.0</string>
+	<string>1.0</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -32,7 +25,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>fb917401848654157</string>
+				<string>fb585259118607548</string>
 			</array>
 		</dict>
 		<dict>
@@ -55,11 +48,11 @@
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>FacebookAppID</key>
-	<string>917401848654157</string>
+	<string>585259118607548</string>
 	<key>FacebookAutoInitEnabled</key>
 	<false/>
 	<key>FacebookClientToken</key>
-	<string>917401848654157</string>
+	<string>585259118607548</string>
 	<key>FacebookDisplayName</key>
 	<string>DeepSound</string>
 	<key>GADApplicationIdentifier</key>
@@ -96,6 +89,10 @@
 	<string>This application would like to access your gallery in order to upload or take photos and video</string>
 	<key>UIAppFonts</key>
 	<array>
+		<string>urbanist_bold.ttf</string>
+		<string>urbanist_SemiBold.ttf</string>
+		<string>urbanist_regular.ttf</string>
+		<string>urbanist_medium.ttf</string>
 		<string>Poppins-SemiBoldItalic.otf</string>
 		<string>Poppins-ExtraBoldItalic.otf</string>
 		<string>Poppins-ExtraLight.otf</string>
@@ -118,9 +115,7 @@
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>
-		<string>external-accessory</string>
-		<string>fetch</string>
-		<string>processing</string>
+		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
@@ -133,13 +128,15 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>kTCCServiceMediaLibrary</key>
 	<string>This application would access to your Music library in order to upload audios</string>

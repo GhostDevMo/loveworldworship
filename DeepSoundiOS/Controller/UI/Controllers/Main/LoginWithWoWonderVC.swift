@@ -9,102 +9,161 @@
 import UIKit
 import DeepSoundSDK
 import Async
+import Toast_Swift
 
 class LoginWithWoWonderVC: BaseVC {
     
-    @IBOutlet weak var userNameField: BorderedTextField!
-    @IBOutlet weak var passwordField: BorderedTextField!
+    // MARK: - IBOutlets
     
-    var error = ""
+    @IBOutlet weak var userNameTextField: UITextField!
+    @IBOutlet weak var passwordTextField: UITextField!
+    
+    // MARK: - View Life Cycles
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        self.navigationController?.navigationBar.isHidden = true
-    }
-    
-    @IBAction func SignIn(_ sender: Any) {
         
-        if self.userNameField.text?.isEmpty == true {
+        self.initialConfig()
+    }
+    
+    // MARK: - Selectors
+    
+    // Back Button Action
+    @IBAction override func backButtonAction(_ sender: UIButton) {
+        self.view.endEditing(true)
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    // Sign In Button Action
+    @IBAction func signInButtonAction(_ sender: UIButton) {
+        self.view.endEditing(true)
+        if self.userNameTextField.text?.trimmingCharacters(in: .whitespaces).count == 0 {
             self.view.makeToast("Error, Required Username")
+            return
         }
-        else if self.passwordField.text?.isEmpty == true {
-            
+        if self.passwordTextField.text?.trimmingCharacters(in: .whitespaces).count == 0 {
             self.view.makeToast("Error, Required Password")
-            
+            return
         }
-        else {
-            self.loginAuthentication()
-        }
-        
+        self.loginAuthentication()
+    }
+    
+    // MARK: - Helper Functions
+    
+    // Initial Config
+    func initialConfig() {
+        self.textFieldSetUp()
+    }
+    
+    func textFieldSetUp() {
+        self.userNameTextField.attributedPlaceholder = NSAttributedString(
+            string: "Username",
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.white as Any]
+        )
+        self.passwordTextField.attributedPlaceholder = NSAttributedString(
+            string: "Password",
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.white as Any]
+        )
     }
     
     private func loginAuthentication () {
         self.showProgressDialog(text: "Loading...")
-        let username = self.userNameField.text ?? ""
-        let password = self.passwordField.text ?? ""
-        
-        Async.background({
+        let username = self.userNameTextField.text ?? ""
+        let password = self.passwordTextField.text ?? ""
+        Async.background {
             UserManager.instance.loginWithWoWonder(userName: username, password: password) { (success, sessionError, error) in
                 if success != nil {
-                    self.dismissProgressDialog {
-                        log.verbose("Login Succesfull =\(success?.accessToken)")
-                        self.WowonderSignIn(userID: success?.userID ?? "", accessToken: success?.accessToken ?? "")
+                    Async.main {
+                        log.verbose("Login Succesfull =\(success?.access_token ?? "")")
+                        self.wowonderSignIn(userID: success?.user_id ?? "", accessToken: success?.access_token ?? "")
                     }
-                }
-                else if sessionError != nil {
-                    self.dismissProgressDialog {
-                        self.error = sessionError?.errors.errorText ?? ""
-                        log.verbose(sessionError?.errors.errorText ?? "")
-                        self.view.makeToast(sessionError?.errors.errorText ?? "")
+                } else if sessionError != nil {
+                    Async.main {
+                        self.dismissProgressDialog {
+                            log.verbose(sessionError?.errors?.error_text ?? "")
+                            self.view.makeToast(sessionError?.errors?.error_text ?? "")
+                        }
                     }
-                }
-                else if error != nil{
-                    self.dismissProgressDialog {
-                        print("error - \(error?.localizedDescription)")
-                        self.view.makeToast(error?.localizedDescription)
+                } else if error != nil {
+                    Async.main {
+                        self.dismissProgressDialog {
+                            print("error - \(error?.localizedDescription ?? "")")
+                            self.view.makeToast(error?.localizedDescription)
+                        }
                     }
                 }
             }
-        })
+        }
     }
-    private func WowonderSignIn (userID:String, accessToken:String) {
-        self.showProgressDialog(text: "Loading...")
-        let username = self.userNameField.text ?? ""
-        let password = self.passwordField.text ?? ""
-        let deviceID = UserDefaults.standard.getDeviceId(Key: Local.DEVICE_ID.DeviceId) ?? ""
-
-        Async.background({
+    
+    private func wowonderSignIn(userID: String, accessToken: String) {
+        Async.background {
             WoWProfileManager.instance.WoWonderUserData(userId: userID, access_token: accessToken) { (success, sessionError, error) in
-                if success != nil {
-                    self.dismissProgressDialog {
-                        log.verbose("Login Succesfull =\(success?.accessToken)")
-                        log.verbose("Success = \(success?.accessToken ?? "")")
-                        AppInstance.instance.getUserSession()
-                        AppInstance.instance.fetchUserProfile()
-                              let vc = R.storyboard.dashboard.dashBoardTabbar()
-                                                                              vc?.modalPresentationStyle = .fullScreen
-                                                                              self.present(vc!, animated: true, completion: nil)
-                        self.view.makeToast("Login Successfull!!")
+                if let success = success {
+                    Async.main {
+                        self.wowonder(accessToken: success)
                     }
-                }
-                else if sessionError != nil {
-                    self.dismissProgressDialog {
-                        self.error = sessionError?.error ?? ""
-                        log.verbose(sessionError?.error ?? "")
-                        self.view.makeToast(sessionError?.error ?? "")
+                } else if sessionError != nil {
+                    Async.main {
+                        self.dismissProgressDialog {
+                            log.verbose(sessionError?.errors?.error_text ?? "")
+                            self.view.makeToast(sessionError?.errors?.error_text ?? "")
+                        }
                     }
-                }
-                else if error != nil{
-                    self.dismissProgressDialog {
-                        print("error - \(error?.localizedDescription)")
-                        self.view.makeToast(error?.localizedDescription)
+                } else if error != nil {
+                    Async.main {
+                        self.dismissProgressDialog {
+                            print("error - \(error?.localizedDescription ?? "")")
+                            self.view.makeToast(error?.localizedDescription)
+                        }
                     }
                 }
             }
-        })
+        }
+    }
+    
+    private func wowonder(accessToken: String) {
+        let deviceId = UIDevice.current.identifierForVendor?.uuidString ?? ""
+        Async.background {
+            UserManager.instance.socialLogin(Provider: "wowonder", AccessToken: accessToken, DeviceId: deviceId, completionBlock: { (success, sessionError, error) in
+                if success != nil{
+                    Async.main{
+                        self.dismissProgressDialog{
+                            log.verbose("Success = \(success?.accessToken ?? "")")
+                            AppInstance.instance.isLoginUser = AppInstance.instance.getUserSession()
+                            AppInstance.instance.fetchUserProfile(isNew: true) { isSuccess in
+                                print(isSuccess)
+                                if isSuccess {
+                                    let vc = R.storyboard.dashboard.tabBarNav()
+                                    self.appDelegate.window?.rootViewController = vc
+                                }
+                            }
+                            self.view.makeToast(NSLocalizedString("Login Successfull!!", comment: ""))
+                        }
+                    }
+                } else if sessionError != nil {
+                    Async.main {
+                        self.dismissProgressDialog {
+                            log.verbose("session Error = \(sessionError?.error ?? "")")
+                            let securityAlertVC = R.storyboard.popups.securityPopupVC()
+                            securityAlertVC?.titleText  = (NSLocalizedString("Security", comment: ""))
+                            securityAlertVC?.errorText = (NSLocalizedString(sessionError?.error ?? "", comment: ""))
+                            self.present(securityAlertVC!, animated: true, completion: nil)
+                        }
+                    }
+                } else {
+                    Async.main {
+                        self.dismissProgressDialog {
+                            log.verbose("error = \(error?.localizedDescription ?? "")")
+                            let securityAlertVC = R.storyboard.popups.securityPopupVC()
+                            securityAlertVC?.titleText  = (NSLocalizedString("Security", comment: ""))
+                            securityAlertVC?.errorText = (NSLocalizedString(error?.localizedDescription ?? "", comment: ""))
+                            self.present(securityAlertVC!, animated: true, completion: nil)
+                        }
+                    }
+                }
+            })
+        }
     }
     
 }

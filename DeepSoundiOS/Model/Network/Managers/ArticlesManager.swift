@@ -12,9 +12,11 @@ import DeepSoundSDK
 class ArticlesManager{
     static let instance = ArticlesManager()
     
-    func getArticles(AccessToken:String,limit:Int,offset:Int,completionBlock: @escaping (_ Success:GetArticlesModel.GetArticlesSuccessModel?,_ SessionError:GetArticlesModel.sessionErrorModel?, Error?) ->()){
+    func getArticles(AccessToken:String,
+                     limit:Int,
+                     offset:String,
+                     completionBlock: @escaping (_ Success:GetArticlesModel.GetArticlesSuccessModel?,_ SessionError:GetArticlesModel.sessionErrorModel?, Error?) ->()){
         let params = [
-            
             API.Params.AccessToken: AccessToken,
             API.Params.Limit: limit,
             API.Params.Offset: offset,
@@ -30,19 +32,27 @@ class ArticlesManager{
             
             if (response.value != nil){
                 guard let res = response.value as? [String:Any] else {return}
-                
                 guard let apiStatus = res["status"]  as? Int else {return}
-                if apiStatus ==  API.ERROR_CODES.E_TwoH{
-                    log.verbose("apiStatus Int = \(apiStatus)")
-                    let data = try! JSONSerialization.data(withJSONObject: response.value!, options: [])
-                    let result = try! JSONDecoder().decode(GetArticlesModel.GetArticlesSuccessModel.self, from: data)
-                    completionBlock(result,nil,nil)
+                log.verbose("apiStatus Int = \(apiStatus)")
+                if apiStatus == API.ERROR_CODES.E_TwoH {
+                    do {
+                        let data = try JSONSerialization.data(withJSONObject: response.value!, options: [])
+                        let result = try JSONDecoder().decode(GetArticlesModel.GetArticlesSuccessModel.self, from: data)
+                        completionBlock(result,nil,nil)
+                    }catch(let err){
+                        log.error("error = \(err.localizedDescription)")
+                        completionBlock(nil,nil,err)
+                    }
                 }else{
-                    log.verbose("apiStatus String = \(apiStatus)")
-                    let data = try! JSONSerialization.data(withJSONObject: response.value as Any, options: [])
-                    let result = try! JSONDecoder().decode(GetArticlesModel.sessionErrorModel.self, from: data)
-                    log.error("AuthError = \(result.error ?? "")")
-                    completionBlock(nil,result,nil)
+                    do {
+                        let data = try JSONSerialization.data(withJSONObject: response.value as Any, options: [])
+                        let result = try JSONDecoder().decode(GetArticlesModel.sessionErrorModel.self, from: data)
+                        log.error("AuthError = \(result.error ?? "")")
+                        completionBlock(nil,result,nil)
+                    }catch(let err) {
+                        log.error("error = \(err.localizedDescription)")
+                        completionBlock(nil,nil,err)
+                    }
                 }
             }else{
                 log.error("error = \(response.error?.localizedDescription ?? "")")
@@ -50,6 +60,7 @@ class ArticlesManager{
             }
         }
     }
+    
     func getArticlesComments(AccessToken:String,id:Int,limit:Int,offset:Int,completionBlock: @escaping (_ Success:GetArticlesCommentsModel.GetArticlesCommentsSuccessModel?,_ SessionError:GetArticlesCommentsModel.sessionErrorModel?, Error?) ->()){
         let params = [
             
@@ -68,19 +79,27 @@ class ArticlesManager{
             
             if (response.value != nil){
                 guard let res = response.value as? [String:Any] else {return}
-                
                 guard let apiStatus = res["status"]  as? Int else {return}
-                if apiStatus ==  API.ERROR_CODES.E_TwoH{
-                    log.verbose("apiStatus Int = \(apiStatus)")
-                    let data = try! JSONSerialization.data(withJSONObject: response.value!, options: [])
-                    let result = try! JSONDecoder().decode(GetArticlesCommentsModel.GetArticlesCommentsSuccessModel.self, from: data)
-                    completionBlock(result,nil,nil)
+                log.verbose("apiStatus Int = \(apiStatus)")
+                if apiStatus == API.ERROR_CODES.E_TwoH {
+                    do {
+                        let data = try JSONSerialization.data(withJSONObject: response.value!, options: [])
+                        let result = try JSONDecoder().decode(GetArticlesCommentsModel.GetArticlesCommentsSuccessModel.self, from: data)
+                        completionBlock(result,nil,nil)
+                    }catch(let err){
+                        log.error("error = \(err.localizedDescription)")
+                        completionBlock(nil,nil,err)
+                    }
                 }else{
-                    log.verbose("apiStatus String = \(apiStatus)")
-                    let data = try! JSONSerialization.data(withJSONObject: response.value as Any, options: [])
-                    let result = try! JSONDecoder().decode(GetArticlesCommentsModel.sessionErrorModel.self, from: data)
-                    log.error("AuthError = \(result.error ?? "")")
-                    completionBlock(nil,result,nil)
+                    do {
+                        let data = try JSONSerialization.data(withJSONObject: response.value as Any, options: [])
+                        let result = try JSONDecoder().decode(GetArticlesCommentsModel.sessionErrorModel.self, from: data)
+                        log.error("AuthError = \(result.error ?? "")")
+                        completionBlock(nil,result,nil)
+                    }catch(let err) {
+                        log.error("error = \(err.localizedDescription)")
+                        completionBlock(nil,nil,err)
+                    }
                 }
             }else{
                 log.error("error = \(response.error?.localizedDescription ?? "")")
@@ -106,19 +125,93 @@ class ArticlesManager{
         AF.request(API.Articles_Methods.CREATE_ARTICLES_COMMENT_API, method: .post, parameters: params, encoding:URLEncoding.default , headers: nil).responseJSON { (response) in
             if (response.value != nil){
                 guard let res = response.value as? [String:Any] else {return}
+                guard let apiStatus = res["status"]  as? Int else {return}
+                log.verbose("apiStatus Int = \(apiStatus)")
+                if apiStatus == API.ERROR_CODES.E_TwoH {
+                    do {
+                        let data = try JSONSerialization.data(withJSONObject: response.value!, options: [])
+                        let result = try JSONDecoder().decode(CreateArticleCommentModel.CreateArticleCommentSuccessModel.self, from: data)
+                        completionBlock(result,nil,nil)
+                    }catch(let err){
+                        log.error("error = \(err.localizedDescription)")
+                        completionBlock(nil,nil,err)
+                    }
+                }else{
+                    do {
+                        let data = try JSONSerialization.data(withJSONObject: response.value as Any, options: [])
+                        let result = try JSONDecoder().decode(CreateArticleCommentModel.sessionErrorModel.self, from: data)
+                        log.error("AuthError = \(result.error ?? "")")
+                        completionBlock(nil,result,nil)
+                    }catch(let err) {
+                        log.error("error = \(err.localizedDescription)")
+                        completionBlock(nil,nil,err)
+                    }
+                }
+            }else{
+                log.error("error = \(response.error?.localizedDescription ?? "")")
+                completionBlock(nil,nil,response.error)
+            }
+        }
+    }
+    
+    func addLikeOrUnlikeComment(id:Int, like:Bool, completionBlock: @escaping (_ Success: String?,_ SessionError: String?, Error?) ->()) {
+        let params = [
+            API.Params.AccessToken: AppInstance.instance.accessToken ?? "",
+            API.Params.Id: id,
+            API.Params.type: like ? "like" : "unlike",
+            API.Params.ServerKey: API.SERVER_KEY.Server_Key
+            
+        ] as [String : Any]
+        
+        let jsonData = try! JSONSerialization.data(withJSONObject: params, options: [])
+        let decoded = String(data: jsonData, encoding: .utf8)!
+        log.verbose("Targeted URL = \(API.Articles_Methods.ADD_LIKE_COMMENT_API)")
+        log.verbose("Decoded String = \(decoded)")
+        AF.request(API.Articles_Methods.ADD_LIKE_COMMENT_API, method: .post, parameters: params, encoding:URLEncoding.default , headers: nil).responseJSON { (response) in
+            if (response.value != nil){
+                guard let res = response.value as? [String:Any] else {return}
                 
                 guard let apiStatus = res["status"]  as? Int else {return}
-                if apiStatus ==  API.ERROR_CODES.E_TwoH{
+                if apiStatus ==  API.ERROR_CODES.E_TwoH {
                     log.verbose("apiStatus Int = \(apiStatus)")
-                    let data = try! JSONSerialization.data(withJSONObject: response.value!, options: [])
-                    let result = try! JSONDecoder().decode(CreateArticleCommentModel.CreateArticleCommentSuccessModel.self, from: data)
-                    completionBlock(result,nil,nil)
+                    let data = res["data"] as? String
+                    completionBlock(data,nil,nil)
                 }else{
                     log.verbose("apiStatus String = \(apiStatus)")
-                    let data = try! JSONSerialization.data(withJSONObject: response.value as Any, options: [])
-                    let result = try! JSONDecoder().decode(CreateArticleCommentModel.sessionErrorModel.self, from: data)
-                    log.error("AuthError = \(result.error ?? "")")
-                    completionBlock(nil,result,nil)
+                    let data = res["error"] as? String
+                    completionBlock(nil,data,nil)
+                }
+            }else{
+                log.error("error = \(response.error?.localizedDescription ?? "")")
+                completionBlock(nil,nil,response.error)
+            }
+        }
+    }
+    
+    func deleteCommentAPI(id:Int, completionBlock: @escaping (_ Success: String?,_ SessionError: String?, Error?) ->()) {
+        let params = [
+            API.Params.AccessToken: AppInstance.instance.accessToken ?? "",
+            API.Params.Id: id,
+            API.Params.ServerKey: API.SERVER_KEY.Server_Key
+        ] as [String : Any]
+        
+        let jsonData = try! JSONSerialization.data(withJSONObject: params, options: [])
+        let decoded = String(data: jsonData, encoding: .utf8)!
+        log.verbose("Targeted URL = \(API.Articles_Methods.CREATE_ARTICLES_COMMENT_API)")
+        log.verbose("Decoded String = \(decoded)")
+        
+        AF.request(API.Articles_Methods.DELETE_COMMENT_API, method: .post, parameters: params, encoding:URLEncoding.default , headers: nil).responseJSON { (response) in
+            if (response.value != nil){
+                guard let res = response.value as? [String:Any] else {return}
+                guard let apiStatus = res["status"]  as? Int else {return}
+                if apiStatus ==  API.ERROR_CODES.E_TwoH {
+                    log.verbose("apiStatus Int = \(apiStatus)")
+                    let data = res["data"] as? String
+                    completionBlock(data,nil,nil)
+                }else{
+                    log.verbose("apiStatus String = \(apiStatus)")
+                    let data = res["error"] as? String
+                    completionBlock(nil,data,nil)
                 }
             }else{
                 log.error("error = \(response.error?.localizedDescription ?? "")")
